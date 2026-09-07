@@ -8,6 +8,8 @@ __pycache__/
 .gaps_state
 current_wallpaper
 *.log
+.lastd
+.selection
 
 # Editor & OS temporary files
 *~
