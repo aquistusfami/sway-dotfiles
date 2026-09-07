@@ -22,6 +22,7 @@ configs=(
     "fontconfig"
     "mimeapps.list"
     "fastfetch"
+    "nvim"
 )
 
 for item in "${configs[@]}"; do
