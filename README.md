@@ -1,6 +1,6 @@
 # dotfiles
 
-Modular, minimalist Wayland desktop environment configured for Void Linux and Sway WM, featuring custom terminal-based connection managers, PipeWire audio routing, and low-latency workflows.
+Modular, minimalist Wayland desktop environment configured for Void Linux and Sway WM, featuring custom terminal-based connection managers, PipeWire audio routing, and low-latency workflows. Updated: 07/09/2026
 
 ## Overview
 
