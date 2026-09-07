@@ -23,6 +23,7 @@ configs=(
     "mimeapps.list"
     "fastfetch"
     "nvim"
+    "zathura"
 )
 
 for item in "${configs[@]}"; do
