@@ -4,8 +4,8 @@ export NO_AT_BRIDGE=1
 export MOZ_ENABLE_WAYLAND=1
 export XCURSOR_THEME=Adwaita
 export XCURSOR_SIZE=24
-export EDITOR=nano
-export VISUAL=nano
+export EDITOR=nvim
+export VISUAL=nvim
 
 # Input method (Fcitx5 for Wayland/Sway)
 export XMODIFIERS="@im=fcitx"

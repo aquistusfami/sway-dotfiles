@@ -58,6 +58,6 @@ case "$ext" in
 
     # Default: Text files / code / config in $EDITOR
     *)
-        ${EDITOR:-nano} "$file"
+        ${EDITOR:-nvim} "$file"
         ;;
 esac
