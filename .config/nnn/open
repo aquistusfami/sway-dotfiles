@@ -56,8 +56,10 @@ case "$ext" in
         tar -tvf "$file" | ${PAGER:-less}
         ;;
 
-    # Default: Text files / code / config in $EDITOR
+    # Default: Text files / code / config in nvim/EDITOR
     *)
-        ${EDITOR:-nvim} "$file"
+        ED="${EDITOR:-nvim}"
+        [ "$ED" = "nano" ] && ED="nvim"
+        exec "$ED" "$file"
         ;;
 esac

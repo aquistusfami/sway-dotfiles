@@ -13,7 +13,7 @@ export GTK_IM_MODULE="fcitx"
 export QT_IM_MODULE="fcitx"
 
 # nnn File Manager configuration
-export NNN_OPTS="eEdrx"
+export NNN_OPTS="eEd"
 export NNN_OPENER="$HOME/.config/nnn/open"
 export NNN_BMS="d:$HOME/Downloads;D:$HOME/Documents;p:$HOME/Pictures;s:$HOME/Pictures/Screenshots;w:$HOME/Pictures/wallpapers;c:$HOME/.config"
 export NNN_COLORS="5236"

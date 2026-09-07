@@ -4,6 +4,10 @@
 
 # Ensure environment variables are loaded
 [ -f "$HOME/.zprofile" ] && source "$HOME/.zprofile"
+export EDITOR="nvim"
+export VISUAL="nvim"
+export NNN_OPTS="eEd"
+export NNN_OPENER="${NNN_OPENER:-$HOME/.config/nnn/open}"
 
 # ------------------------------------------------------------------------------
 # 1. Directory Navigation & Shell Behavior
@@ -112,6 +116,10 @@ n() {
         return
     }
 
+    export EDITOR="nvim"
+    export VISUAL="nvim"
+    export NNN_OPTS="eEd"
+    export NNN_OPENER="${NNN_OPENER:-$HOME/.config/nnn/open}"
     export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
 
     nnn "$@"
