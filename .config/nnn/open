@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# High-performance, lightweight file opener for nnn
+set -euo pipefail
+
+file="$1"
+[ ! -e "$file" ] && exit 0
+
+# If directory, launch a new nnn instance or cd
+if [ -d "$file" ]; then
+    exit 0
+fi
+
+ext="${file##*.}"
+ext="$(printf '%s' "$ext" | tr '[:upper:]' '[:lower:]')"
+
+case "$ext" in
+    # Images: imv (native Wayland, 8MB RAM) -> fallback to firefox
+    png|jpg|jpeg|webp|gif|svg|bmp|ico|tiff|heic)
+        if command -v imv >/dev/null 2>&1; then
+            imv "$file" >/dev/null 2>&1 &
+        else
+            firefox "$file" >/dev/null 2>&1 &
+        fi
+        ;;
+
+    # Documents & PDFs: zathura -> fallback to firefox
+    pdf|epub|cbz|cbr)
+        if command -v zathura >/dev/null 2>&1; then
+            zathura "$file" >/dev/null 2>&1 &
+        else
+            firefox "$file" >/dev/null 2>&1 &
+        fi
+        ;;
+
+    # Videos & Audio: mpv (hardware-accelerated, 20MB RAM) -> fallback to firefox
+    mp4|mkv|webm|avi|mov|flv|wmv|mp3|flac|wav|ogg|m4a|aac|opus)
+        if command -v mpv >/dev/null 2>&1; then
+            mpv "$file" >/dev/null 2>&1 &
+        else
+            firefox "$file" >/dev/null 2>&1 &
+        fi
+        ;;
+
+    # Web files: firefox
+    html|htm|url)
+        firefox "$file" >/dev/null 2>&1 &
+        ;;
+
+    # Archives: list or extract with tar/unzip
+    zip)
+        if command -v unzip >/dev/null 2>&1; then
+            unzip -l "$file" | ${PAGER:-less}
+        fi
+        ;;
+    tar|gz|bz2|xz|zst|tgz)
+        tar -tvf "$file" | ${PAGER:-less}
+        ;;
+
+    # Default: Text files / code / config in $EDITOR
+    *)
+        ${EDITOR:-nano} "$file"
+        ;;
+esac

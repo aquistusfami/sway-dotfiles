@@ -1,0 +1,119 @@
+/* Acid Dark Waybar Theme (Optimized from eoli3n/dotfiles) */
+@define-color background rgba(34, 34, 34, 0.92);
+@define-color active rgba(68, 68, 68, 0.85);
+@define-color warning rgba(243, 249, 157, 1);
+@define-color alert rgba(255, 92, 87, 1);
+@define-color white rgba(239, 240, 235, 1);
+@define-color darkgrey rgba(73, 73, 73, 1);
+@define-color grey rgba(146, 146, 146, 1);
+
+@define-color red rgba(255, 92, 87, 1);
+@define-color yellow rgba(243, 249, 157, 1);
+@define-color blue rgba(87, 199, 255, 1);
+@define-color purple rgba(255, 106, 193, 1);
+@define-color green rgba(90, 247, 142, 1);
+@define-color cyan rgba(154, 237, 254, 1);
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrains Mono", "Font Awesome 6 Free", "Font Awesome 6 Brands", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    box-shadow: none;
+    text-shadow: none;
+    transition-duration: 0s;
+}
+
+window#waybar {
+    color: @white;
+    background: @background;
+    border: 1px solid rgba(68, 68, 68, 0.7);
+}
+
+tooltip {
+    border: 1px solid @warning;
+    border-radius: 4px;
+    background: @background;
+    font-size: 12px;
+}
+
+tooltip label {
+    color: @warning;
+}
+
+#workspaces {
+    padding-right: 15px;
+}
+
+#workspaces button {
+    background: transparent;
+    padding: 0 10px;
+    color: @white;
+    min-width: 20px;
+    border-top: 1px solid transparent;
+    border-bottom: 2px solid transparent;
+}
+
+#workspaces button.visible {
+    color: @white;
+}
+
+#workspaces button.focused {
+    border-top: 1px solid @active;
+    border-bottom: 2px solid @yellow;
+    background: @active;
+}
+
+#workspaces button.urgent {
+    color: @alert;
+}
+
+#mode, #battery, #cpu, #memory, #network, #bluetooth, #pulseaudio, #backlight, #clock {
+    margin: 0px 12px 0px 0px;
+    padding: 0 4px;
+}
+
+#clock {
+    border-bottom: 2px solid @blue;
+}
+
+#network {
+    border-bottom: 2px solid @purple;
+}
+
+#bluetooth {
+    border-bottom: 2px solid @cyan;
+}
+
+#battery {
+    border-bottom: 2px solid @yellow;
+}
+
+#battery.warning {
+    color: @warning;
+}
+
+#battery.critical {
+    color: @alert;
+}
+
+#pulseaudio {
+    border-bottom: 2px solid @green;
+}
+
+#backlight {
+    border-bottom: 2px solid @cyan;
+}
+
+#cpu {
+    border-bottom: 2px solid @red;
+}
+
+#memory {
+    border-bottom: 2px solid @purple;
+}
+
+#tray {
+    margin: 0px 10px 0px 0px;
+}

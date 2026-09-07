@@ -1,0 +1,77 @@
+# Starship Prompt - Acid Dark Minimal Theme
+# Optimized for high performance and clean aesthetics
+
+add_newline = true
+command_timeout = 500
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[❯](bold #5af78e)"
+error_symbol = "[❯](bold #ff5c57)"
+vimcmd_symbol = "[❮](bold #57c7ff)"
+
+[directory]
+style = "bold #57c7ff"
+truncation_length = 4
+truncation_symbol = "…/"
+home_symbol = "~"
+read_only = " 󰌾"
+read_only_style = "bold #ff5c57"
+format = "[$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+symbol = " "
+style = "bold #ff6ac1"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "bold #f3f99d"
+format = "([$all_status$ahead_behind]($style) )"
+conflicted = "󰞇 "
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "📦"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[cmd_duration]
+min_time = 2000
+style = "bold #686868"
+format = "took [$duration]($style) "
+
+# Disable slow/unnecessary cloud & runtime modules for sub-millisecond prompt speed
+[package]
+disabled = true
+[aws]
+disabled = true
+[gcloud]
+disabled = true
+[azure]
+disabled = true
+[docker_context]
+disabled = true
+[nodejs]
+disabled = true
+[rust]
+disabled = true
+[python]
+disabled = true
+[golang]
+disabled = true
+[ruby]
+disabled = true
+[java]
+disabled = true
+[php]
+disabled = true

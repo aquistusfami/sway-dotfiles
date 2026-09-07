@@ -1,0 +1,38 @@
+# Swaylock Configuration - Acid Dark Theme
+ignore-empty-password
+font=JetBrains Mono
+font-size=14
+
+# Background: Use current wallpaper with solid dark fallback
+image=/home/aquistus/.config/sway/current_wallpaper
+scaling=fill
+color=202020
+
+# Circle indicator sizing
+indicator-idle-visible
+indicator-radius=90
+indicator-thickness=6
+
+# Ring colors (Acid Dark pink #ff6ac1, cyan #57c7ff, red #ff5c57)
+ring-color=ff6ac1
+ring-ver-color=57c7ff
+ring-wrong-color=ff5c57
+ring-clear-color=5af78e
+
+# Inside circle colors
+inside-color=202020e6
+inside-ver-color=202020e6
+inside-wrong-color=202020e6
+inside-clear-color=202020e6
+
+# Key press highlights (Typing: green #5af78e, Backspace: red #ff5c57)
+key-hl-color=5af78e
+bs-hl-color=ff5c57
+line-color=00000000
+separator-color=00000000
+
+# Text colors
+text-color=eff0eb
+text-ver-color=57c7ff
+text-wrong-color=ff5c57
+text-clear-color=5af78e

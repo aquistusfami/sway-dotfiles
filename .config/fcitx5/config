@@ -1,0 +1,13 @@
+[Hotkey]
+# Enumerate when trigger
+EnumerateWithTriggerKeys=True
+# Enumerate forward
+EnumerateForwardKeys=
+# Enumerate backward
+EnumerateBackwardKeys=
+
+[Hotkey/TriggerKeys]
+0=Control+space
+
+[Hotkey/AltTriggerKeys]
+0=Shift_L+Control_L

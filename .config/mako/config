@@ -1,0 +1,28 @@
+# Mako Notification Configuration - Acid Dark Theme
+font=JetBrains Mono, Font Awesome 6 Free, Symbols Nerd Font 10
+background-color=#202020fa
+text-color=#eff0ebff
+border-color=#ff6ac1ff
+border-size=2
+border-radius=0
+width=340
+margin=12
+padding=12,16
+default-timeout=4000
+icons=1
+max-icon-size=32
+icon-border-radius=0
+icon-path=/usr/share/icons/Papirus-Dark:/usr/share/icons/Papirus:/usr/share/icons/hicolor
+progress-color=over #5af78eff
+
+[urgency=low]
+border-color=#57c7ffff
+default-timeout=3000
+
+[urgency=normal]
+border-color=#ff6ac1ff
+default-timeout=4500
+
+[urgency=critical]
+border-color=#ff5c57ff
+default-timeout=0

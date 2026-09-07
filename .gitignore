@@ -1,0 +1,20 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# State files & local caches
+.style_state
+.gaps_state
+current_wallpaper
+*.log
+
+# Editor & OS temporary files
+*~
+*.swp
+*.swo
+.DS_Store
+
+# Backups
+*.backup
+*.bak
