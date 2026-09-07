@@ -100,6 +100,8 @@ alias la='ls -lah --color=auto'
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
 alias ip='ip -color=auto'
+alias fetch='fastfetch'
+alias neofetch='fastfetch'
 
 # ------------------------------------------------------------------------------
 # 7. nnn File Manager (cd-on-quit wrapper)

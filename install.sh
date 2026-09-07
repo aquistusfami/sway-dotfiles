@@ -21,6 +21,7 @@ configs=(
     "fcitx5"
     "fontconfig"
     "mimeapps.list"
+    "fastfetch"
 )
 
 for item in "${configs[@]}"; do
