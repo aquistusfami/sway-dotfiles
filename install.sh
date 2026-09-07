@@ -20,6 +20,7 @@ configs=(
     "nnn"
     "fcitx5"
     "fontconfig"
+    "mimeapps.list"
 )
 
 for item in "${configs[@]}"; do
@@ -68,6 +69,21 @@ if [ -d "$DOTFILES_DIR/wallpapers" ]; then
     if [ ! -e "$HOME/Pictures/wallpapers" ]; then
         ln -sf "$DOTFILES_DIR/wallpapers" "$HOME/Pictures/wallpapers"
         echo "  [✓] Linked ~/Pictures/wallpapers -> $DOTFILES_DIR/wallpapers"
+    fi
+fi
+
+# Application Desktop entries
+if [ -d "$DOTFILES_DIR/.local/share/applications" ]; then
+    mkdir -p "$HOME/.local/share/applications"
+    for dfile in "$DOTFILES_DIR/.local/share/applications"/*.desktop; do
+        if [ -f "$dfile" ]; then
+            bname=$(basename "$dfile")
+            ln -sf "$dfile" "$HOME/.local/share/applications/$bname"
+            echo "  [✓] Linked ~/.local/share/applications/$bname -> $dfile"
+        fi
+    done
+    if command -v update-desktop-database >/dev/null 2>&1; then
+        update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
     fi
 fi
 

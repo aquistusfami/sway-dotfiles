@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=nnn
+Comment=Terminal file manager
+Exec=/home/aquistus/.config/nnn/nnn-desktop-wrapper.sh %u
+Terminal=false
+Icon=nnn
+MimeType=inode/directory;
+Categories=System;FileTools;FileManager;

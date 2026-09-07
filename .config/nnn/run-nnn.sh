@@ -4,7 +4,7 @@ set -euo pipefail
 # Ensure nnn environment variables are always present
 export EDITOR="${EDITOR:-nano}"
 export VISUAL="${VISUAL:-nano}"
-export NNN_OPTS="eEdrx"
+export NNN_OPTS="eEdrxH"
 export NNN_OPENER="${HOME}/.config/nnn/open"
 export NNN_BMS="d:${HOME}/Downloads;D:${HOME}/Documents;p:${HOME}/Pictures;s:${HOME}/Pictures/Screenshots;w:${HOME}/Pictures/wallpapers;c:${HOME}/.config"
 export NNN_COLORS="5236"
