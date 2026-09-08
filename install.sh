@@ -90,6 +90,27 @@ if [ -d "$DOTFILES_DIR/.local/share/applications" ]; then
     fi
 fi
 
+# Application Icons
+if [ -d "$DOTFILES_DIR/.local/share/icons" ]; then
+    mkdir -p "$HOME/.local/share/icons"
+    cp -rn "$DOTFILES_DIR/.local/share/icons/"* "$HOME/.local/share/icons/" 2>/dev/null || true
+    echo "  [✓] Synced ~/.local/share/icons"
+fi
+
+# Firefox Profile Deployment (if profiles exist)
+if [ -d "$DOTFILES_DIR/firefox" ] && [ -d "$HOME/.mozilla/firefox" ]; then
+    for prof in "$HOME/.mozilla/firefox/"*.default*; do
+        if [ -d "$prof" ]; then
+            echo "==> Deploying Firefox customizations to $(basename "$prof")..."
+            mkdir -p "$prof/chrome"
+            ln -sf "$DOTFILES_DIR/firefox/user.js" "$prof/user.js"
+            ln -sf "$DOTFILES_DIR/firefox/chrome/userChrome.css" "$prof/chrome/userChrome.css"
+            ln -sf "$DOTFILES_DIR/firefox/chrome/userContent.css" "$prof/chrome/userContent.css"
+            echo "  [✓] Linked Firefox Acid Dark theme and user.js"
+        fi
+    done
+fi
+
 # Make scripts executable
 find "$DOTFILES_DIR" -name "*.sh" -exec chmod +x {} +
 find "$DOTFILES_DIR" -name "*.py" -exec chmod +x {} +
