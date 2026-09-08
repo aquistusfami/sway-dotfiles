@@ -3,9 +3,13 @@
 Modular, minimalist Wayland desktop environment configured for Void Linux and Sway WM, featuring custom terminal-based connection managers, PipeWire audio routing, and low-latency workflows. Updated: 07/09/2026
 
 ## Preview 
-**Fastfetch, nnn file manager and waybar.** 
+**Fastfetch, nnn file manager and waybar.**
+
 ![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-08_07-59-35.png)
 
+**No gap preview, nvim, btop.**
+
+![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-08_08-08-52.png)
 ## Overview
 
 - **Operating System:** Void Linux (glibc, runit)
