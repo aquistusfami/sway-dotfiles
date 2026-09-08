@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Firefox Minimal Acid Dark Theme (userContent.css)
+   ========================================================================== */
+
+@-moz-document url("about:blank"), url("about:newtab"), url("about:home") {
+    body, #root, .activity-stream {
+        background-color: #202020 !important;
+        color: #eff0eb !important;
+    }
+}

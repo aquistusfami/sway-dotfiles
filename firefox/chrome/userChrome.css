@@ -1,0 +1,244 @@
+/* ==========================================================================
+   Firefox Minimal Acid Dark Theme (userChrome.css)
+   Tailored for Sway WM & Acid Dark theme (0px radius, compact, distraction-free)
+   ========================================================================== */
+
+:root {
+    --bg-dark: #202020 !important;
+    --bg-panel: #282a36 !important;
+    --bg-hover: #323544 !important;
+    --border-color: #44475a !important;
+    --accent-pink: #ff6ac1 !important;
+    --accent-green: #5af78e !important;
+    --text-main: #eff0eb !important;
+    --text-dim: #9aa0a6 !important;
+
+    --tab-min-height: 28px !important;
+    --urlbar-toolbar-height: 32px !important;
+    --urlbar-height: 26px !important;
+    --urlbar-min-height: 26px !important;
+    --tab-border-radius: 0px !important;
+    --toolbarbutton-border-radius: 0px !important;
+    --arrowpanel-border-radius: 0px !important;
+    font-family: "JetBrains Mono", monospace !important;
+}
+
+/* Global Typography: JetBrains Mono (matches Sway, Foot, Waybar) */
+*,
+#navigator-toolbox,
+#TabsToolbar,
+.tabbrowser-tab,
+.tab-label,
+#nav-bar,
+#urlbar,
+#urlbar-input,
+.urlbar-input,
+#PersonalToolbar,
+menupopup,
+panel,
+findbar,
+tooltip {
+    font-family: "JetBrains Mono", monospace !important;
+}
+
+/* 1. Hide Sway-redundant window controls & titlebar spacers */
+.titlebar-buttonbox-container,
+.titlebar-buttonbox,
+.titlebar-button,
+#window-controls,
+.titlebar-spacer,
+#TabsToolbar .titlebar-spacer {
+    display: none !important;
+}
+
+/* 2. Unified Dark Toolbars */
+#navigator-toolbox {
+    background-color: var(--bg-dark) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+}
+
+#TabsToolbar,
+#nav-bar,
+#PersonalToolbar {
+    background-color: var(--bg-dark) !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 3. Compact Flat Tabs */
+#TabsToolbar {
+    min-height: 28px !important;
+    height: 28px !important;
+}
+
+#tabbrowser-tabs {
+    --tab-min-height: 28px !important;
+    min-height: 28px !important;
+}
+
+.tabbrowser-tab {
+    min-height: 28px !important;
+    height: 28px !important;
+    padding-inline: 0px !important;
+}
+
+.tab-background {
+    border-radius: 0px !important;
+    margin-block: 0px !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-top: 2px solid transparent !important;
+}
+
+/* Inactive tabs: completely flat & muted */
+.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-background {
+    background-color: transparent !important;
+    border-top-color: transparent !important;
+}
+
+.tabbrowser-tab:not([selected]):not([visuallyselected]):hover .tab-background {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-label {
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 11.5px !important;
+    color: #777777 !important;
+    font-weight: 400 !important;
+}
+
+.tabbrowser-tab:not([selected]):not([visuallyselected]):hover .tab-label {
+    color: var(--text-main) !important;
+}
+
+/* Active tab: clean 2px top pink border, matching Sway focused container (#282a36) */
+.tabbrowser-tab[selected] .tab-background,
+.tabbrowser-tab[selected="true"] .tab-background,
+.tabbrowser-tab[visuallyselected] .tab-background {
+    background-color: var(--bg-panel) !important;
+    border-top: 2px solid var(--accent-pink) !important;
+    box-shadow: none !important;
+}
+
+.tabbrowser-tab[selected] .tab-label,
+.tabbrowser-tab[selected="true"] .tab-label,
+.tabbrowser-tab[visuallyselected] .tab-label {
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 11.5px !important;
+    color: var(--text-main) !important;
+    font-weight: 600 !important;
+}
+
+/* Tab close button: only show on hover, flat minimal */
+.tab-close-button {
+    border-radius: 0px !important;
+    padding: 2px !important;
+    margin-inline-end: 2px !important;
+    opacity: 0.5 !important;
+}
+
+.tabbrowser-tab:not(:hover) .tab-close-button {
+    display: none !important;
+}
+
+.tab-close-button:hover {
+    opacity: 1 !important;
+    background-color: rgba(255, 92, 87, 0.2) !important;
+    color: #ff5c57 !important;
+}
+
+/* Remove tab separators */
+.tabbrowser-tab::before,
+.tabbrowser-tab::after {
+    display: none !important;
+}
+
+/* 4. Compact Navbar & Narrow, Centered URL Bar */
+#nav-bar {
+    min-height: 32px !important;
+    height: 32px !important;
+    padding-block: 0px !important;
+    padding-inline: 4px !important;
+    margin: 0 !important;
+}
+
+/* Narrow & center URL bar container */
+#urlbar-container {
+    --urlbar-container-height: 32px !important;
+    min-height: 32px !important;
+    max-width: 520px !important;
+    margin-inline: auto !important;
+    padding: 2px 0 !important;
+}
+
+#urlbar {
+    min-height: 28px !important;
+    border-radius: 0px !important;
+}
+
+#urlbar-background {
+    background-color: var(--bg-panel) !important;
+    border-radius: 0px !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: none !important;
+}
+
+#urlbar[focused="true"] > #urlbar-background {
+    border-color: var(--accent-pink) !important;
+    box-shadow: none !important;
+}
+
+/* Center link in URL bar */
+#urlbar-input {
+    color: var(--text-main) !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: 12px !important;
+    text-align: center !important;
+}
+
+#urlbar[focused="true"] #urlbar-input {
+    text-align: left !important;
+}
+
+/* 5. Minimal Flat Buttons & Icons */
+toolbarbutton {
+    border-radius: 0px !important;
+}
+
+toolbarbutton:hover {
+    background-color: var(--bg-hover) !important;
+}
+
+/* 6. Dark Square Menus & Panels */
+menupopup,
+panel {
+    --panel-background: var(--bg-panel) !important;
+    --panel-border-color: var(--border-color) !important;
+    --panel-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
+
+menupopup menuitem,
+menupopup menu {
+    border-radius: 0px !important;
+}
+
+menupopup menuitem:hover,
+menupopup menu:hover {
+    background-color: var(--bg-hover) !important;
+    color: var(--accent-pink) !important;
+}
+
+/* 7. Findbar */
+findbar {
+    background-color: var(--bg-dark) !important;
+    border-top: 1px solid var(--accent-pink) !important;
+    border-radius: 0px !important;
+}
+
+/* 8. Thin Sleek Scrollbar */
+:root {
+    scrollbar-color: var(--border-color) var(--bg-dark) !important;
+    scrollbar-width: thin !important;
+}

@@ -9,6 +9,10 @@ export VISUAL="nvim"
 export NNN_OPTS="eEd"
 export NNN_OPENER="${NNN_OPENER:-$HOME/.config/nnn/open}"
 
+# .NET
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+
 # ------------------------------------------------------------------------------
 # 1. Directory Navigation & Shell Behavior
 # ------------------------------------------------------------------------------

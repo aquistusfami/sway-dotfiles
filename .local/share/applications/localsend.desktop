@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=LocalSend
+GenericName=File Transfer
+Comment=An open-source cross-platform alternative to AirDrop
+Exec=/home/aquistus/.local/bin/localsend
+Icon=localsend
+Terminal=false
+Type=Application
+Categories=Network;FileTransfer;Utility;
+Keywords=share;transfer;airdrop;localsend;
+StartupWMClass=localsend_app

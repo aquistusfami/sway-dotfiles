@@ -1,5 +1,6 @@
 # Environment variables for Zsh login shells
-export PATH="$HOME/.local/bin:$HOME/.gemini/antigravity-cli/bin:$PATH"
+export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="$HOME/.local/bin:$HOME/.gemini/antigravity-cli/bin:$DOTNET_ROOT:$DOTNET_ROOT/tools:$PATH"
 export NO_AT_BRIDGE=1
 export MOZ_ENABLE_WAYLAND=1
 export XCURSOR_THEME=Adwaita
