@@ -1,0 +1,50 @@
+/* Acid Dark Color Palette for GTK 3 & GTK 4 */
+
+/* Base & Window Backgrounds */
+@define-color theme_bg_color #202020;
+@define-color theme_fg_color #eff0eb;
+@define-color theme_base_color #202020;
+@define-color theme_text_color #eff0eb;
+
+/* HeaderBar & TitleBar */
+@define-color headerbar_bg_color #181818;
+@define-color headerbar_fg_color #eff0eb;
+@define-color headerbar_border_color #2a2a2a;
+
+/* Places Sidebar */
+@define-color sidebar_bg_color #161616;
+@define-color sidebar_fg_color #eff0eb;
+
+/* Selection & Accents (Vibrant Emerald Green with Pure White Text) */
+@define-color theme_selected_bg_color #238636;
+@define-color theme_selected_fg_color #ffffff;
+@define-color accent_color #238636;
+@define-color accent_bg_color #238636;
+@define-color accent_fg_color #ffffff;
+@define-color cyan_accent #57c7ff;
+@define-color pink_accent #ff6ac1;
+
+/* Borders & Dividers */
+@define-color borders #2e2e2e;
+@define-color unfocused_borders #242424;
+
+/* Inputs & Entries */
+@define-color entry_bg_color #262626;
+@define-color entry_fg_color #eff0eb;
+@define-color entry_border_color #383838;
+
+/* Buttons */
+@define-color button_bg_color #282828;
+@define-color button_fg_color #eff0eb;
+@define-color button_border_color #3a3a3a;
+@define-color button_hover_bg_color #323232;
+@define-color button_active_bg_color #3a3a3a;
+
+/* Tooltips */
+@define-color tooltip_bg_color #181818;
+@define-color tooltip_fg_color #eff0eb;
+
+/* Status Colors */
+@define-color success_color #5af78e;
+@define-color warning_color #f3f99d;
+@define-color error_color #ff5c57;
