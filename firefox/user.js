@@ -42,6 +42,10 @@ user_pref("network.http.max-persistent-connections-per-server", 10);
 user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
 user_pref("network.http.request.max-start-delay", 5);
 user_pref("network.dnsCacheExpiration", 3600);
+// Fix slow loading on networks without IPv6 WAN (bypasses AAAA queries & IPv6 timeouts)
+user_pref("network.dns.disableIPv6", true);
+// Disable HTTP/3 (QUIC/UDP) to avoid stalled handshakes from ISP UDP throttling
+user_pref("network.http.http3.enable", false);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
@@ -71,13 +75,13 @@ user_pref("browser.sessionstore.interval", 60000);
 /** SHUTDOWN & SANITIZING ***/
 user_pref("privacy.history.custom", true);
 
-/** SPECULATIVE LOADING ***/
-user_pref("network.http.speculative-parallel-limit", 0);
-user_pref("network.dns.disablePrefetch", true);
-user_pref("network.dns.disablePrefetchFromHTTPS", true);
-user_pref("browser.urlbar.speculativeConnect.enabled", false);
+/** SPECULATIVE LOADING & PREFETCH ***/
+user_pref("network.http.speculative-parallel-limit", 6);
+user_pref("network.dns.disablePrefetch", false);
+user_pref("network.dns.disablePrefetchFromHTTPS", false);
+user_pref("browser.urlbar.speculativeConnect.enabled", true);
 user_pref("browser.places.speculativeConnect.enabled", false);
-user_pref("network.prefetch-next", false);
+user_pref("network.prefetch-next", true);
 
 /** SEARCH / URL BAR ***/
 user_pref("browser.urlbar.trimHttps", true);
@@ -218,40 +222,37 @@ user_pref("general.smoothScroll.stopDecelerationWeighting", "0.6");
 /****************************************************************************
  * START: MY OVERRIDES - RAM USAGE OPTIMIZATIONS                            *
 ****************************************************************************/
-// Limit content processes to reduce multi-process memory overhead (~60-100MB per process)
-user_pref("dom.ipc.processCount.webIsolated", 2);
-user_pref("dom.ipc.processCount", 2);
+// Limit content processes (balanced for 8-core/16-thread AMD Ryzen)
+user_pref("dom.ipc.processCount.webIsolated", 8);
+user_pref("dom.ipc.processCount", 8);
 
-// Back-Forward Cache (bfcache): limits number of rendered pages cached in RAM per tab
-// Setting to 1 saves hundreds of MBs while retaining instant back-button navigation
-user_pref("browser.sessionhistory.max_total_viewers", 1);
-// Tab history navigation entries (default 50 -> 10)
-user_pref("browser.sessionhistory.max_entries", 10);
+// Back-Forward Cache (bfcache): allow instant back/forward navigation
+user_pref("browser.sessionhistory.max_total_viewers", 4);
+// Tab history navigation entries (default 50 -> 25)
+user_pref("browser.sessionhistory.max_entries", 25);
 
-// Memory & Disk Cache optimization:
-// Betterfox disables disk cache, causing all cached assets to sit in RAM.
-// Re-enabling a controlled disk cache and strictly capping memory cache avoids RAM ballooning!
+// Memory & Disk Cache optimization for 32GB RAM & NVMe SSD:
 user_pref("browser.cache.disk.enable", true);
-user_pref("browser.cache.disk.capacity", 262144); // 256 MB disk cache
+user_pref("browser.cache.disk.capacity", 1048576); // 1 GB NVMe disk cache (avoids re-downloading assets)
 user_pref("browser.cache.disk.smart_size.enabled", false);
 user_pref("browser.cache.memory.enable", true);
-user_pref("browser.cache.memory.capacity", 65536); // 64 MB cap on in-memory cache (instead of gigabytes)
-user_pref("browser.cache.memory.max_entry_size", 4096); // 4 MB per object cap
+user_pref("browser.cache.memory.capacity", 524288); // 512 MB in-memory cache
+user_pref("browser.cache.memory.max_entry_size", 32768); // 32 MB per object cap (accommodates modern JS bundles)
 
 // Proactive Tab Unloading on memory constraints
 user_pref("browser.tabs.unloadOnLowMemory", true);
-user_pref("browser.tabs.min_inactive_duration_before_unload", 300000); // 5 minutes
-user_pref("browser.low_commit_space_threshold_mb", 1024);
+user_pref("browser.tabs.min_inactive_duration_before_unload", 600000); // 10 minutes
+user_pref("browser.low_commit_space_threshold_mb", 2048);
 
 // Limit closed tab undo history retained in RAM
-user_pref("browser.sessionstore.max_tabs_undo", 4);
-user_pref("browser.sessionstore.max_windows_undo", 1);
-user_pref("browser.sessionstore.interval", 120000); // write session state every 2 mins instead of constantly
+user_pref("browser.sessionstore.max_tabs_undo", 8);
+user_pref("browser.sessionstore.max_windows_undo", 2);
+user_pref("browser.sessionstore.interval", 120000);
 
 // Image and Media RAM footprint
 user_pref("image.mem.surfacecache.max_size_kb", 524288); // 512MB max for decoded image surfaces
-user_pref("image.mem.surfacecache.discard_factor", 1); // discard decoded images when inactive
-user_pref("media.memory_cache_max_size", 32768); // 32MB max media in memory
+user_pref("image.mem.surfacecache.discard_factor", 1);
+user_pref("media.memory_cache_max_size", 131072); // 128MB media buffer
 
 // Disable Accessibility service overhead (~60-100MB RAM)
 user_pref("accessibility.force_disabled", 1);
@@ -289,3 +290,19 @@ user_pref("font.name.sans-serif.x-western", "Inter Variable");
 user_pref("font.name.sans-serif.vi", "Inter Variable");
 user_pref("font.name.monospace.x-western", "JetBrains Mono");
 user_pref("font.name.monospace.vi", "JetBrains Mono");
+
+/****************************************************************************
+ * SECTION: HARDWARE ACCELERATION & WAYLAND (ThinkPad P14s Gen 5 AMD)        *
+ ****************************************************************************/
+// AMD Radeon 780M / VCN 4.0 Hardware Video Decoding (AV1, VP9, H.264, HEVC)
+user_pref("media.ffmpeg.vaapi.enabled", true);
+user_pref("media.hardware-video-decoding.enabled", true);
+user_pref("media.rdd-ffmpeg.enabled", true);
+user_pref("media.av1.enabled", true);
+user_pref("gfx.webrender.all", true);
+
+// Wayland fractional scaling & crisp rendering
+user_pref("widget.wayland.fractional-scale.enabled", true);
+user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
+user_pref("widget.use-xdg-desktop-portal.mime-handler", 1);
+user_pref("apz.gtk.kinetic_scroll.enabled", true);
