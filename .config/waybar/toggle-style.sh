@@ -14,4 +14,4 @@ else
     swaymsg gaps outer all set 0 && swaymsg gaps inner all set 5
 fi
 
-pkill -USR2 -x waybar
+pkill -USR2 -x .waybar-wrapped 2>/dev/null || pkill -USR2 -x waybar 2>/dev/null || true

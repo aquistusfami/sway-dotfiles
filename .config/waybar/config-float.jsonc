@@ -22,7 +22,8 @@
         "memory",
         "battery",
         "clock",
-        "tray"
+        "tray",
+        "custom/power"
     ],
 
     "sway/mode": {
@@ -38,16 +39,16 @@
     },
     "clock": {
         "interval": 60,
-        "format": "<span foreground='#929292'></span> {:%d/%m %H:%M}",
+        "format": "<span foreground='#929292'></span>&#8195;{:%d/%m %H:%M}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "on-click": "/home/aquistus/.config/waybar/toggle-style.sh"
     },
     "battery": {
         "format-icons": ["", "", "", "", ""],
-        "format": "<span foreground='#929292'>{icon}</span> {capacity}%",
-        "format-charging": "<span foreground='#929292'></span> {capacity}%",
-        "format-discharging": "<span foreground='#929292'>{icon}</span> {capacity}%",
-        "format-full": "<span foreground='#929292'></span> {capacity}%",
+        "format": "<span foreground='#929292'>{icon}</span>&#8195;{capacity}%",
+        "format-charging": "<span foreground='#929292'></span>&#8195;{capacity}%",
+        "format-discharging": "<span foreground='#929292'>{icon}</span>&#8195;{capacity}%",
+        "format-full": "<span foreground='#929292'></span>&#8195;{capacity}%",
         "interval": 30,
         "states": {
             "warning": 25,
@@ -55,12 +56,12 @@
         }
     },
     "bluetooth": {
-        "format": "<span foreground='#929292'></span> {status}",
-        "format-disabled": "<span foreground='#929292'></span> off",
-        "format-off": "<span foreground='#929292'></span> off",
-        "format-on": "<span foreground='#929292'></span> on",
-        "format-connected": "<span foreground='#929292'></span> {num_connections} connected",
-        "format-connected-battery": "<span foreground='#929292'></span> {device_alias} {device_battery_percentage}%",
+        "format": "<span foreground='#929292'></span>&#8195;{status}",
+        "format-disabled": "<span foreground='#929292'></span>&#8195;off",
+        "format-off": "<span foreground='#929292'></span>&#8195;off",
+        "format-on": "<span foreground='#929292'></span>&#8195;on",
+        "format-connected": "<span foreground='#929292'></span>&#8195;onnections} connected",
+        "format-connected-battery": "<span foreground='#929292'></span>&#8195;{device_alias} {device_battery_percentage}%",
         "tooltip": true,
         "tooltip-format": "{controller_alias}\t{controller_address}\n\nStatus: {status}",
         "tooltip-format-disabled": "Bluetooth: off",
@@ -73,10 +74,10 @@
         "on-click-right": "rfkill toggle bluetooth"
     },
     "network": {
-        "format-wifi": "<span foreground='#929292'></span> {essid} <span foreground='#929292'>{signalStrength}%</span>",
-        "format-ethernet": "<span foreground='#929292'></span> wired",
-        "format-disconnected": "<span foreground='#929292'></span> disconnected",
-        "format-disabled": "<span foreground='#929292'></span> off",
+        "format-wifi": "<span foreground='#929292'></span>&#8195;{essid} <span foreground='#929292'>{signalStrength}%</span>",
+        "format-ethernet": "<span foreground='#929292'></span>&#8195;wired",
+        "format-disconnected": "<span foreground='#929292'></span>&#8195;disconnected",
+        "format-disabled": "<span foreground='#929292'></span>&#8195;off",
         "tooltip": true,
         "tooltip-format": "{ifname}",
         "tooltip-format-wifi": " {essid} ({signalStrength}%)\n\nIP: {ipaddr}/{cidr}\nInterface: {ifname}\nGateway: {gwaddr}",
@@ -87,8 +88,8 @@
         "on-click-right": "rfkill toggle wifi"
     },
     "pulseaudio": {
-        "format": "<span foreground='#929292'>{icon}</span> {volume}%",
-        "format-muted": "<span foreground='#ff5c57'></span>",
+        "format": "<span foreground='#929292'>{icon}</span>&#8195;{volume}%",
+        "format-muted": "<span foreground='#ff5c57'>󰝟</span>&#8195;{volume}%",
         "format-icons": {
             "default": [""],
             "headphones": [""]
@@ -100,20 +101,26 @@
         "tooltip": false
     },
     "backlight": {
-        "format": "<span foreground='#929292'></span> {percent}%",
+        "format": "<span foreground='#929292'></span>&#8195;{percent}%",
         "on-scroll-up": "brightnessctl set 5%+",
         "on-scroll-down": "brightnessctl set 5%-",
         "tooltip": false
     },
     "cpu": {
         "interval": 3,
-        "format": "<span foreground='#929292'></span> {usage}%"
+        "format": "<span foreground='#929292'></span>&#8195;{usage}%"
     },
     "memory": {
         "interval": 5,
-        "format": "<span foreground='#929292'></span> {percentage}%"
+        "format": "<span foreground='#929292'></span>&#8195;{percentage}%"
     },
     "tray": {
         "spacing": 8
+    },
+    "custom/power": {
+        "format": "󰐥",
+        "tooltip": true,
+        "tooltip-format": "Power Menu",
+        "on-click": "/home/aquistus/.config/sway/powermenu.sh"
     }
 }

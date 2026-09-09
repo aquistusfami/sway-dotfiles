@@ -17,7 +17,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "JetBrains Mono", "Font Awesome 6 Free", "Font Awesome 6 Brands", monospace;
+    font-family: "Geist", "JetBrainsMono Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif;
     font-size: 12px;
     font-weight: 500;
     box-shadow: none;
@@ -117,3 +117,19 @@ tooltip label {
 #tray {
     margin: 0px 10px 0px 0px;
 }
+
+#custom-power {
+    color: @red;
+    font-size: 13px;
+    padding: 0 6px;
+    margin: 0px 4px 0px 4px;
+    border-bottom: 2px solid @red;
+    transition: all 0.2s ease-in-out;
+}
+
+#custom-power:hover {
+    color: #282a36;
+    background: @red;
+    border-radius: 4px;
+}
+

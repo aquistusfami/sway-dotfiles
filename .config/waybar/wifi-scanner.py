@@ -501,7 +501,10 @@ def curses_main(stdscr):
                 status_msg = "Opening Captive Portal..."
                 subprocess.Popen(["firefox", "http://neverssl.com"])
             elif ch in (ord('n'), ord('N')):
-                subprocess.Popen(["foot", "--app-id=termfloat", "-T", "Network Manager (NMTUI)", "-e", "nmtui"])
+                try:
+                    subprocess.Popen(["footclient", "-a", "termfloat", "-T", "Network Manager (NMTUI)", "nmtui"])
+                except Exception:
+                    subprocess.Popen(["foot", "--app-id=termfloat", "-T", "Network Manager (NMTUI)", "-e", "nmtui"])
             elif ch in (curses.KEY_UP, ord('k')):
                 selected_idx = max(0, selected_idx - 1)
             elif ch in (curses.KEY_DOWN, ord('j')):
