@@ -110,6 +110,7 @@ alias diff='diff --color=auto'
 alias ip='ip -color=auto'
 alias fetch='fastfetch'
 alias neofetch='fastfetch'
+alias fc='footclient'
 
 # ------------------------------------------------------------------------------
 # 7. nnn File Manager (cd-on-quit wrapper)
@@ -135,8 +136,28 @@ n() {
 }
 
 # ------------------------------------------------------------------------------
-# 8. Starship Prompt Initialization
+# 8. Starship Prompt Initialization (Smart Newline between commands)
 # ------------------------------------------------------------------------------
+precmd() {
+    if [ -z "$_NEWLINE_FIRST" ]; then
+        _NEWLINE_FIRST=1
+    else
+        print ""
+    fi
+}
+
+clear() {
+    _NEWLINE_FIRST=
+    command clear
+}
+
+clear-screen-and-reset() {
+    _NEWLINE_FIRST=
+    zle clear-screen
+}
+zle -N clear-screen-and-reset
+bindkey '^L' clear-screen-and-reset
+
 if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
 fi
