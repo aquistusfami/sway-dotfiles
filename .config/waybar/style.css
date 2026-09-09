@@ -28,7 +28,7 @@
 window#waybar {
     color: @white;
     background: @background;
-    border: 1px solid rgba(68, 68, 68, 0.7);
+    border-bottom: 1px solid rgba(68, 68, 68, 0.6);
 }
 
 tooltip {
