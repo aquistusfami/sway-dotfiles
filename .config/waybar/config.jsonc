@@ -41,6 +41,23 @@
         "interval": 60,
         "format": "<span foreground='#929292'></span>&#8195;{:%d/%m %H:%M}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "month",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#57c7ff'><b>{}</b></span>",
+                "days": "<span color='#eff0eb'>{}</span>",
+                "weeks": "<span color='#929292'><b>W{}</b></span>",
+                "weekdays": "<span color='#929292'><b>{}</b></span>",
+                "today": "<span color='#181818' background='#5af78e'><b>{}</b></span>"
+            }
+        },
+        "actions": {
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        },
         "on-click": "/home/aquistus/.config/waybar/toggle-style.sh"
     },
     "battery": {
@@ -50,6 +67,11 @@
         "format-discharging": "<span foreground='#929292'>{icon}</span>&#8195;{capacity}%",
         "format-full": "<span foreground='#929292'></span>&#8195;{capacity}%",
         "interval": 30,
+        "tooltip": true,
+        "tooltip-format": "Pin: {capacity}%\nSức khỏe: {health}%",
+        "tooltip-format-charging": "Đang sạc: {capacity}%\nThời gian sạc đầy: {time}\nSức khỏe: {health}%",
+        "tooltip-format-discharging": "Pin: {capacity}%\nThời gian còn lại: {time}\nSức khỏe: {health}%",
+        "tooltip-format-full": "Đã sạc đầy: 100%\nSức khỏe: {health}%",
         "states": {
             "warning": 25,
             "critical": 10
@@ -60,7 +82,7 @@
         "format-disabled": "<span foreground='#929292'></span>&#8195;off",
         "format-off": "<span foreground='#929292'></span>&#8195;off",
         "format-on": "<span foreground='#929292'></span>&#8195;on",
-        "format-connected": "<span foreground='#929292'></span>&#8195;onnections} connected",
+        "format-connected": "<span foreground='#929292'></span>&#8195;{num_connections} connected",
         "format-connected-battery": "<span foreground='#929292'></span>&#8195;{device_alias} {device_battery_percentage}%",
         "tooltip": true,
         "tooltip-format": "{controller_alias}\t{controller_address}\n\nStatus: {status}",
@@ -98,21 +120,26 @@
         "on-click-right": "pavucontrol",
         "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
         "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
-        "tooltip": false
+        "tooltip": true,
+        "tooltip-format": "Âm lượng: {volume}%\nThiết bị: {desc}"
     },
     "backlight": {
         "format": "<span foreground='#929292'></span>&#8195;{percent}%",
         "on-scroll-up": "brightnessctl set 5%+",
         "on-scroll-down": "brightnessctl set 5%-",
-        "tooltip": false
+        "tooltip": true,
+        "tooltip-format": "Độ sáng: {percent}%"
     },
     "cpu": {
         "interval": 3,
-        "format": "<span foreground='#929292'></span>&#8195;{usage}%"
+        "format": "<span foreground='#929292'></span>&#8195;{usage}%",
+        "tooltip": false
     },
     "memory": {
         "interval": 5,
-        "format": "<span foreground='#929292'></span>&#8195;{percentage}%"
+        "format": "<span foreground='#929292'></span>&#8195;{percentage}%",
+        "tooltip": true,
+        "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB ({percentage}%)\nSwap: {swapUsed:0.1f}GB / {swapTotal:0.1f}GB ({swapPercentage}%)"
     },
     "tray": {
         "spacing": 8

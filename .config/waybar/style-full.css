@@ -32,14 +32,17 @@ window#waybar {
 }
 
 tooltip {
-    border: 1px solid @warning;
-    border-radius: 4px;
-    background: @background;
-    font-size: 12px;
+    border: 1px solid #333333;
+    border-radius: 0px;
+    background: #181818;
+    box-shadow: none;
+    padding: 8px 12px;
 }
 
 tooltip label {
-    color: @warning;
+    font-family: "Geist", "JetBrainsMono Nerd Font", monospace;
+    font-size: 12px;
+    color: #eff0eb;
 }
 
 #workspaces {
