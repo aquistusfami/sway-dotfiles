@@ -68,10 +68,10 @@
         "format-full": "<span foreground='#929292'></span>&#8195;{capacity}%",
         "interval": 30,
         "tooltip": true,
-        "tooltip-format": "Pin: {capacity}%\nSức khỏe: {health}%",
-        "tooltip-format-charging": "Đang sạc: {capacity}%\nThời gian sạc đầy: {time}\nSức khỏe: {health}%",
-        "tooltip-format-discharging": "Pin: {capacity}%\nThời gian còn lại: {time}\nSức khỏe: {health}%",
-        "tooltip-format-full": "Đã sạc đầy: 100%\nSức khỏe: {health}%",
+        "tooltip-format": "Battery: {capacity}%\nHealth: {health}%",
+        "tooltip-format-charging": "Charging: {capacity}%\nTime to full: {time}\nHealth: {health}%",
+        "tooltip-format-discharging": "Discharging: {capacity}%\nTime remaining: {time}\nHealth: {health}%",
+        "tooltip-format-full": "Fully charged: 100%\nHealth: {health}%",
         "states": {
             "warning": 25,
             "critical": 10
@@ -102,7 +102,7 @@
         "format-disabled": "<span foreground='#929292'></span>&#8195;off",
         "tooltip": true,
         "tooltip-format": "{ifname}",
-        "tooltip-format-wifi": " {essid} ({signalStrength}%)\n\nIP: {ipaddr}/{cidr}\nInterface: {ifname}\nGateway: {gwaddr}",
+        "tooltip-format-wifi": "&#8195;{essid} ({signalStrength}%)\n\nIP: {ipaddr}/{cidr}\nInterface: {ifname}\nGateway: {gwaddr}",
         "tooltip-format-ethernet": " {ifname}\n\nIP: {ipaddr}/{cidr}\nGateway: {gwaddr}",
         "tooltip-format-disconnected": "Wi-Fi: disconnected",
         "tooltip-format-disabled": "Wi-Fi: off",
@@ -121,14 +121,14 @@
         "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
         "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
         "tooltip": true,
-        "tooltip-format": "Âm lượng: {volume}%\nThiết bị: {desc}"
+        "tooltip-format": "Volume: {volume}%\nDevice: {desc}"
     },
     "backlight": {
         "format": "<span foreground='#929292'></span>&#8195;{percent}%",
         "on-scroll-up": "brightnessctl set 5%+",
         "on-scroll-down": "brightnessctl set 5%-",
         "tooltip": true,
-        "tooltip-format": "Độ sáng: {percent}%"
+        "tooltip-format": "Brightness: {percent}%"
     },
     "cpu": {
         "interval": 3,

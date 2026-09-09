@@ -369,15 +369,20 @@ check:checked {
 }
 
 /* Tooltip */
-tooltip,
-tooltip * {
+tooltip {
     background-color: #181818;
     background-image: none;
     box-shadow: none;
     color: #eff0eb;
     border: 1px solid #333333;
     border-radius: 0px;
-    padding: 4px 8px;
+    padding: 6px 10px;
+}
+
+tooltip * {
+    background-color: transparent;
+    border: none;
+    padding: 0;
 }
 
 /* Popover & Menus */
