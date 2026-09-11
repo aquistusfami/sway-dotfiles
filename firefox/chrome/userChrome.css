@@ -20,7 +20,7 @@
     --tab-border-radius: 0px !important;
     --toolbarbutton-border-radius: 0px !important;
     --arrowpanel-border-radius: 0px !important;
-    font-family: "JetBrains Mono", monospace !important;
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
 }
 
 /* Global Typography: JetBrains Mono (matches Sway, Foot, Waybar) */
@@ -38,7 +38,7 @@ menupopup,
 panel,
 findbar,
 tooltip {
-    font-family: "JetBrains Mono", monospace !important;
+    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
 }
 
 /* 1. Hide Sway-redundant window controls & titlebar spacers */

@@ -4,6 +4,26 @@ local map = vim.keymap.set
 map("n", "<leader>w", "<cmd>w<cr>", { desc = "Save File" })
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
 
+-- Ctrl+S: Lưu file & Tự động biên dịch (nếu là file LaTeX)
+local function save_and_compile()
+  vim.cmd("silent! write")
+  if vim.bo.filetype == "tex" then
+    local is_running = (vim.fn.exists("*vimtex#compiler#is_running") == 1)
+      and (vim.fn["vimtex#compiler#is_running"]() == 1)
+    if is_running then
+      vim.notify("Đã lưu & đang cập nhật PDF...", vim.log.levels.INFO, { title = "VimTeX" })
+    else
+      vim.cmd("silent! VimtexCompileSS")
+      vim.notify("Đã lưu & biên dịch PDF!", vim.log.levels.INFO, { title = "VimTeX" })
+    end
+  end
+end
+
+map({ "i", "x", "n", "s" }, "<C-s>", function()
+  save_and_compile()
+  vim.cmd("stopinsert")
+end, { desc = "Save File & Compile (LaTeX)" })
+
 -- Fast Java Single-file / Project Runner (<leader>rr)
 map("n", "<leader>rr", function()
   vim.cmd("write")

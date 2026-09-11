@@ -1,5 +1,6 @@
 [Default Applications]
 inode/directory=nnn.desktop
+x-scheme-handler/jetbrains=jetbrainsd.desktop
 
 [Added Associations]
 inode/directory=nnn.desktop;

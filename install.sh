@@ -99,8 +99,8 @@ fi
 
 # Firefox Profile Deployment (if profiles exist)
 if [ -d "$DOTFILES_DIR/firefox" ] && [ -d "$HOME/.mozilla/firefox" ]; then
-    for prof in "$HOME/.mozilla/firefox/"*.default*; do
-        if [ -d "$prof" ]; then
+    for prof in "$HOME/.mozilla/firefox/"*; do
+        if [ -d "$prof" ] && [ -f "$prof/prefs.js" ]; then
             echo "==> Deploying Firefox customizations to $(basename "$prof")..."
             mkdir -p "$prof/chrome"
             ln -sf "$DOTFILES_DIR/firefox/user.js" "$prof/user.js"
