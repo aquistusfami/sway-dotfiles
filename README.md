@@ -4,13 +4,13 @@ Modular, minimalist Wayland desktop environment configured for Void Linux and Sw
 
 ## Preview 
 
-**Fastfetch, nnn file manager and waybar.**
+**Fastfetch, nnn file manager, btop and waybar.**
 
-![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-08_07-59-35.png)
+![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-12_07-37-28.png)
 
-**No gap preview, nvim, btop.**
+**No gap preview, nvim, fastfetch.**
 
-![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-08_08-08-52.png)
+![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-12_07-34-55.png)
 
 ## Overview
 

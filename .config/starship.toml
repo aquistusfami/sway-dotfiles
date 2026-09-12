@@ -1,7 +1,7 @@
 # Starship Prompt - Acid Dark Minimal Theme
 # Optimized for high performance and clean aesthetics
 
-add_newline = true
+add_newline = false
 command_timeout = 500
 
 format = """

@@ -1,0 +1,409 @@
+/* Acid Dark Theme - Strict Minimal, Square & 100% Flat (No Gradients) */
+@import 'colors.css';
+
+/* Universal Reset: Sharp corners, flat, no gradients, no shadows */
+* {
+    border-radius: 0px;
+    -gtk-outline-radius: 0px;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+/* Window & Base Dialog */
+window, dialog {
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
+    border-radius: 0px;
+}
+
+/* HeaderBar */
+headerbar {
+    background-color: @headerbar_bg_color;
+    border-bottom: 1px solid @headerbar_border_color;
+    box-shadow: none;
+    background-image: none;
+    padding: 6px 8px;
+    border-radius: 0px;
+}
+
+headerbar .title {
+    font-weight: 600;
+    color: @theme_fg_color;
+}
+
+headerbar .subtitle {
+    color: #888888;
+    font-size: 10px;
+}
+
+/* Normal Buttons (Cancel, Search... vuông vắn, phẳng tuyệt đối) */
+headerbar button,
+dialog button,
+.dialog-action-area button,
+button {
+    background-color: #262626;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    color: #eff0eb;
+    border: 1px solid #3a3a3a;
+    border-radius: 0px;
+    padding: 6px 14px;
+    font-weight: 500;
+    transition: background-color 60ms ease;
+}
+
+headerbar button:hover,
+dialog button:hover,
+.dialog-action-area button:hover,
+button:hover {
+    background-color: #333333;
+    background-image: none;
+    border-color: #555555;
+    color: #ffffff;
+}
+
+headerbar button:active,
+dialog button:active,
+button:active {
+    background-color: #3e3e3e;
+    background-image: none;
+    border-color: #5af78e;
+    color: #ffffff;
+}
+
+/* ========================================================================== */
+/* Nút Open / Select: Phẳng 100%, không gradient, chữ màu TRẮNG */
+/* ========================================================================== */
+headerbar button.suggested-action,
+button.suggested-action,
+.dialog-action-area button.suggested-action,
+button.default {
+    background-color: #238636;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    color: #ffffff;
+    border: 1px solid #3fb950;
+    border-radius: 0px;
+    font-weight: 600;
+    padding: 6px 18px;
+}
+
+headerbar button.suggested-action:hover,
+button.suggested-action:hover,
+.dialog-action-area button.suggested-action:hover,
+button.default:hover {
+    background-color: #2ea043;
+    background-image: none;
+    border-color: #5af78e;
+    color: #ffffff;
+}
+
+headerbar button.suggested-action:active,
+button.suggested-action:active {
+    background-color: #1e702e;
+    background-image: none;
+    border-color: #3fb950;
+    color: #ffffff;
+}
+
+headerbar button.suggested-action:disabled,
+button.suggested-action:disabled,
+.dialog-action-area button.suggested-action:disabled,
+button.default:disabled {
+    background-color: #242a26;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    color: #9aa8a0;
+    border: 1px solid #333d36;
+}
+
+/* Nút Cancel / Destructive */
+headerbar button.destructive-action,
+button.destructive-action {
+    background-color: #352323;
+    background-image: none;
+    box-shadow: none;
+    text-shadow: none;
+    color: #ff5c57;
+    border: 1px solid #ff5c57;
+    border-radius: 0px;
+}
+
+/* Text Entries & Search */
+entry,
+searchbar entry {
+    background-color: #242424;
+    background-image: none;
+    box-shadow: none;
+    color: #eff0eb;
+    border: 1px solid #383838;
+    border-radius: 0px;
+    padding: 6px 10px;
+}
+
+entry:focus,
+searchbar entry:focus {
+    border-color: #5af78e;
+    background-image: none;
+    box-shadow: none;
+}
+
+/* Path Bar (Breadcrumbs thư mục) */
+pathbar button,
+.path-bar button {
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+    border-radius: 0px;
+    color: #eff0eb;
+    padding: 4px 8px;
+}
+
+pathbar button:hover,
+.path-bar button:hover {
+    background-color: #282828;
+    border-color: #383838;
+    color: #57c7ff;
+}
+
+pathbar button:checked,
+.path-bar button:checked {
+    background-color: #1c2e22;
+    border-color: #5af78e;
+    color: #5af78e;
+    font-weight: 600;
+}
+
+/* Places Sidebar */
+placessidebar,
+placessidebar.frame,
+.placessidebar {
+    background-color: #161616;
+    border-right: 1px solid #282828;
+    border-radius: 0px;
+}
+
+placessidebar row {
+    padding: 7px 12px;
+    margin: 0;
+    border-radius: 0px;
+    border-left: 2px solid transparent;
+    color: #b0b3b2;
+    transition: background-color 60ms ease;
+}
+
+placessidebar row:hover {
+    background-color: #222222;
+    color: #eff0eb;
+}
+
+placessidebar row:selected {
+    background-color: #1c2b21;
+    border-left: 2px solid #5af78e;
+    color: #5af78e;
+    font-weight: 500;
+}
+
+placessidebar row:selected image,
+placessidebar row:selected label {
+    color: #5af78e;
+}
+
+placessidebar separator {
+    background-color: #252525;
+    margin: 4px 0;
+}
+
+/* ========================================================================== */
+/* Danh sách tệp tin (TreeView & File Chooser List) */
+/* ========================================================================== */
+treeview.view,
+.view {
+    background-color: #202020;
+    color: #eff0eb;
+    border: none;
+    -GtkTreeView-vertical-separator: 6;
+    -GtkTreeView-horizontal-separator: 8;
+}
+
+treeview.view:hover,
+.view:hover {
+    background-color: #202020;
+}
+
+/* Column Headers */
+treeview.view header button {
+    background-color: #181818;
+    background-image: none;
+    box-shadow: none;
+    color: #888888;
+    font-size: 11px;
+    font-weight: 600;
+    border-top: none;
+    border-bottom: 1px solid #282828;
+    border-left: none;
+    border-right: 1px solid #242424;
+    border-radius: 0px;
+    padding: 7px 10px;
+}
+
+treeview.view header button:hover {
+    background-color: #222222;
+    color: #eff0eb;
+}
+
+/* Normal File Rows */
+treeview.view row,
+.view row {
+    padding: 6px 8px;
+    color: #eff0eb;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    border-radius: 0px;
+}
+
+treeview.view row:nth-child(even),
+.view row:nth-child(even) {
+    background-color: #222222;
+}
+
+treeview.view row:nth-child(odd),
+.view row:nth-child(odd) {
+    background-color: #202020;
+}
+
+treeview.view row:hover,
+.view row:hover {
+    background-color: #2a2a2a;
+}
+
+/* ========================================================================== */
+/* HIỂN THỊ KHI CHỌN FILE (Selection Highlight NỔI BẬT & RÕ RÀNG) */
+/* ========================================================================== */
+treeview.view:selected,
+treeview.view:selected:focus,
+treeview.view:selected:hover,
+treeview.view:selected:backdrop,
+.view:selected,
+.view:selected:focus,
+.view:selected:backdrop,
+row:selected,
+row:selected:focus,
+row:selected:backdrop {
+    background-color: #238636;
+    background-image: none;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 0px;
+}
+
+/* Icon / Thumbnail Grid View */
+iconview {
+    background-color: #202020;
+    color: #eff0eb;
+}
+
+iconview:selected,
+iconview:selected:focus,
+iconview:selected:backdrop {
+    background-color: #238636;
+    background-image: none;
+    color: #ffffff;
+    border-radius: 0px;
+}
+
+/* Minimalist Flat Scrollbar */
+scrollbar {
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    min-width: 4px;
+    min-height: 4px;
+}
+
+scrollbar trough {
+    background-color: transparent;
+    border: none;
+}
+
+scrollbar slider {
+    background-color: #383838;
+    background-image: none;
+    border-radius: 0px;
+    min-width: 4px;
+    min-height: 24px;
+    border: none;
+    margin: 0px;
+}
+
+scrollbar slider:hover {
+    background-color: #5af78e;
+}
+
+scrollbar slider:active {
+    background-color: #6ef99d;
+}
+
+/* Checkboxes */
+checkbutton check,
+check {
+    border: 1px solid #444444;
+    background-color: #242424;
+    background-image: none;
+    box-shadow: none;
+    border-radius: 0px;
+    min-width: 14px;
+    min-height: 14px;
+}
+
+checkbutton check:checked,
+check:checked {
+    background-color: #238636;
+    color: #ffffff;
+    border-color: #5af78e;
+}
+
+/* Tooltip */
+tooltip {
+    background-color: #181818;
+    background-image: none;
+    box-shadow: none;
+    color: #eff0eb;
+    border: 1px solid #333333;
+    border-radius: 0px;
+    padding: 6px 10px;
+}
+
+tooltip * {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* Popover & Menus */
+popover, menu {
+    background-color: #202020;
+    background-image: none;
+    box-shadow: none;
+    color: #eff0eb;
+    border: 1px solid #333333;
+    border-radius: 0px;
+    padding: 2px;
+}
+
+popover menuitem,
+menu menuitem {
+    border-radius: 0px;
+    padding: 6px 10px;
+}
+
+popover menuitem:hover,
+menu menuitem:hover {
+    background-color: #238636;
+    color: #ffffff;
+}

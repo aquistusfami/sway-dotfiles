@@ -17,7 +17,7 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator (uses ultra-lightweight client, falls back to standalone)
-set $term footclient zsh || foot zsh
+set $term footclient || foot
 # Your preferred application launcher
 set $menu fuzzel
 # Your preferred web browser
@@ -25,26 +25,38 @@ set $browser firefox
 
 ### Autostart
 exec dbus-update-activation-environment --all
-exec /usr/bin/pipewire
-exec /usr/bin/pipewire-pulse
-exec /usr/bin/wireplumber
+# exec /usr/bin/pipewire
+# exec /usr/bin/pipewire-pulse
+# exec /usr/bin/wireplumber
 exec foot --server
 exec fcitx5 -d
 
 ### Output & Appearance configuration
-# Display scaling & background
-output eDP-1 scale 1.25
+# Màn hình rời (Lenovo Q27q-20 qua HDMI): 2560x1440 @ 60Hz, Scale 1.25
+output HDMI-A-1 {
+    mode 2560x1440@59.951Hz
+    scale 1.25
+    pos 0 0
+}
+
+# Màn hình chính laptop ThinkPad P14s: 2880x1800 @ 60Hz, Scale 1.5
+output eDP-1 {
+    mode 2880x1800@60Hz
+    scale 1.5
+    pos 2048 0
+}
+
 output * bg ~/.config/sway/current_wallpaper fill
 
 # Font
-font pango:JetBrains Mono, Font Awesome 6 Free 10
+font pango:Geist, JetBrainsMono Nerd Font, Font Awesome 6 Free 10
 
 # Gaps & Borders (Acid Dark)
 default_border pixel 2
 default_floating_border pixel 2
 hide_edge_borders none
 smart_borders on
-gaps inner 5
+gaps inner 0
 gaps outer 0
 
 # Floating windows rules
@@ -53,6 +65,7 @@ for_window [app_id="termfloat"] floating enable, resize set width 750 px height 
 # Image viewers (imv, swayimg, feh, viewnior)
 for_window [app_id="imv"] floating enable, resize set width 900 px height 650 px
 for_window [app_id="swayimg"] floating enable, resize set width 900 px height 650 px
+for_window [app_id="wallpaper-picker"] floating enable
 for_window [app_id="viewnior"] floating enable, resize set width 900 px height 650 px
 for_window [class="(?i)feh"] floating enable, resize set width 900 px height 650 px
 
@@ -71,6 +84,8 @@ for_window [app_id="(?i)pavucontrol"] floating enable, resize set width 720 px h
 for_window [app_id="(?i)blueman.*"] floating enable, resize set width 720 px height 480 px
 
 # File choosers, popups & dialogs
+for_window [app_id="xdg-desktop-portal-gtk"] floating enable, resize set width 960 px height 640 px, move position center
+for_window [title="(?i)(open|save|select) (file|folder)"] floating enable, resize set width 960 px height 640 px, move position center
 for_window [window_role="pop-up"] floating enable
 for_window [window_role="bubble"] floating enable
 for_window [window_role="dialog"] floating enable
@@ -92,7 +107,8 @@ client.placeholder      #202020 #202020 #eff0eb #202020   #202020
 ### Idle & Screen Lock configuration (swayidle + swaylock)
 exec swayidle -w \
     timeout 300 'swaylock -f' \
-    timeout 600 'swaymsg "output * power off"' \
+    timeout 330 'swaymsg "output * power off"' \
+    timeout 600 'systemctl suspend' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f'
 
@@ -354,7 +370,7 @@ bindsym $mod+r mode "resize"
 # Status Bar (Waybar) & Notification Daemon (Mako)
 exec waybar
 exec mako
-bindsym $mod+o exec pkill -USR1 -x waybar || waybar
+bindsym $mod+o exec ~/.config/sway/toggle-waybar.sh
 
 # Toggle window gaps (Ruixi-rebirth style: 0px <-> 5px)
 bindsym $mod+g exec ~/.config/sway/toggle-gaps.sh

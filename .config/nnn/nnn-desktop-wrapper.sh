@@ -16,4 +16,4 @@ if [ ! -e "$target" ]; then
     target="$HOME"
 fi
 
-exec foot --app-id=termfloat -T "nnn File Manager" /home/aquistus/.config/nnn/run-nnn.sh "$target"
+exec footclient -a termfloat -T "nnn File Manager" /home/aquistus/.config/nnn/run-nnn.sh "$target" 2>/dev/null || exec foot --app-id=termfloat -T "nnn File Manager" /home/aquistus/.config/nnn/run-nnn.sh "$target"

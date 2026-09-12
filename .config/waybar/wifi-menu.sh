@@ -12,4 +12,4 @@ rfkill unblock wifi 2>/dev/null || true
 nmcli radio wifi on >/dev/null 2>&1 || true
 
 # Launch dedicated Real-time Continuous Scanner & Connection Manager
-foot --app-id=termfloat -T "Wi-Fi Manager" "$HOME/.config/waybar/wifi-scanner.py" &
+footclient -a termfloat -T "Wi-Fi Manager" "$HOME/.config/waybar/wifi-scanner.py" || foot --app-id=termfloat -T "Wi-Fi Manager" "$HOME/.config/waybar/wifi-scanner.py" &

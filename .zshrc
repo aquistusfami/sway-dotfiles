@@ -2,16 +2,20 @@
 # ZSH Configuration - Optimized for Foot Terminal & Acid Dark Theme
 # ==============================================================================
 
-# Ensure environment variables are loaded
-[ -f "$HOME/.zprofile" ] && source "$HOME/.zprofile"
+# Ensure cache directory exists for history and completions
+[[ -d "$HOME/.cache/zsh" ]] || mkdir -p "$HOME/.cache/zsh"
+
 export EDITOR="nvim"
 export VISUAL="nvim"
 export NNN_OPTS="eEd"
 export NNN_OPENER="${NNN_OPENER:-$HOME/.config/nnn/open}"
+export NNN_BMS="d:$HOME/Downloads;D:$HOME/Documents;p:$HOME/Pictures;s:$HOME/Pictures/Screenshots;w:$HOME/Pictures/wallpapers;c:$HOME/.config"
+export NNN_COLORS="5236"
+export NNN_FCOLORS="c1e2272e006033f7c6d6abc4"
 
-# .NET
+# Paths
 export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools"
+export PATH="$HOME/.local/bin:$HOME/.gemini/antigravity-cli/bin:$DOTNET_ROOT:$DOTNET_ROOT/tools:$PATH"
 
 # ------------------------------------------------------------------------------
 # 1. Directory Navigation & Shell Behavior
@@ -46,11 +50,13 @@ setopt HIST_VERIFY            # Do not execute immediately when using history ex
 # 3. High-Performance Tab Completion (Caching)
 # ------------------------------------------------------------------------------
 autoload -Uz compinit
-# Rebuild zcompdump once per day only for instant shell startup
-if [[ -n "$HOME/.cache/zsh/zcompdump"(#qN.mh+24) ]]; then
-    compinit -d "$HOME/.cache/zsh/zcompdump"
+compdump="$HOME/.cache/zsh/zcompdump"
+# Rebuild cache once every 24h, otherwise use compiled dump for instant startup (<5ms)
+if [[ -n "$compdump"(#qN.mh+24) || ! -s "$compdump" ]]; then
+    compinit -d "$compdump"
+    zcompile -R "${compdump}.zwc" "$compdump" 2>/dev/null
 else
-    compinit -C -d "$HOME/.cache/zsh/zcompdump"
+    compinit -C -d "$compdump"
 fi
 
 # Case-insensitive tab completion & colored list
@@ -75,32 +81,7 @@ bindkey '^A' beginning-of-line            # Ctrl + A
 bindkey '^E' end-of-line                  # Ctrl + E
 
 # ------------------------------------------------------------------------------
-# 5. Native XBPS Plugins (Direct Sourcing for Zero Latency)
-# ------------------------------------------------------------------------------
-# zsh-autosuggestions
-if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#686868'
-    ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-fi
-
-# zsh-history-substring-search (Up/Down arrow substring search)
-if [ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]; then
-    source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-    bindkey '^[[A' history-substring-search-up
-    bindkey '^[[B' history-substring-search-down
-    bindkey '^P' history-substring-search-up
-    bindkey '^N' history-substring-search-down
-fi
-
-# zsh-syntax-highlighting (Must be sourced last among plugins)
-if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-fi
-
-# ------------------------------------------------------------------------------
-# 6. Aliases & Enhancements
+# 5. Aliases & Enhancements
 # ------------------------------------------------------------------------------
 alias ls='ls --color=auto'
 alias ll='ls -lh --color=auto'
@@ -110,6 +91,7 @@ alias diff='diff --color=auto'
 alias ip='ip -color=auto'
 alias fetch='fastfetch'
 alias neofetch='fastfetch'
+alias fc='footclient'
 
 # ------------------------------------------------------------------------------
 # 7. nnn File Manager (cd-on-quit wrapper)
@@ -135,8 +117,25 @@ n() {
 }
 
 # ------------------------------------------------------------------------------
-# 8. Starship Prompt Initialization
 # ------------------------------------------------------------------------------
-if command -v starship &>/dev/null; then
-    eval "$(starship init zsh)"
-fi
+# 7. Terminal Utilities
+# ------------------------------------------------------------------------------
+precmd() {
+    if [ -z "$_NEWLINE_FIRST" ]; then
+        _NEWLINE_FIRST=1
+    else
+        print ""
+    fi
+}
+
+clear() {
+    _NEWLINE_FIRST=
+    command clear
+}
+
+clear-screen-and-reset() {
+    _NEWLINE_FIRST=
+    zle clear-screen
+}
+zle -N clear-screen-and-reset
+bindkey '^L' clear-screen-and-reset

@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 # Font & Display
-set font "JetBrains Mono 10.5"
+set font "JetBrainsMono Nerd Font 10.5"
 set default-bg "#222222"
 set default-fg "#eff0eb"
 
