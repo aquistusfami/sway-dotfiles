@@ -1,6 +1,6 @@
 # Swaylock Configuration - Acid Dark Theme
 ignore-empty-password
-font=Iosevka Nerd Font
+font=GeistMono Nerd Font
 font-size=14
 
 # Background: Use current wallpaper with solid dark fallback

@@ -9,7 +9,7 @@ swayimg.gallery.border_color = 0xff5af78e
 swayimg.gallery.window_color = 0xf0202020
 
 -- Font & Text style matching Waybar
-swayimg.text.font = "Iosevka Nerd Font"
+swayimg.text.font = "GeistMono Nerd Font"
 swayimg.text.size = 13
 swayimg.text.color = 0xffeff0eb
 swayimg.text.shadow = 0xcc181818
