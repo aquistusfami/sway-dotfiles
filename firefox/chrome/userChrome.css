@@ -20,10 +20,10 @@
     --tab-border-radius: 0px !important;
     --toolbarbutton-border-radius: 0px !important;
     --arrowpanel-border-radius: 0px !important;
-    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
+    font-family: "Iosevka Nerd Font", "Iosevka", monospace !important;
 }
 
-/* Global Typography: JetBrains Mono (matches Sway, Foot, Waybar) */
+/* Global Typography: Iosevka (matches Sway, Foot, Waybar) */
 *,
 #navigator-toolbox,
 #TabsToolbar,
@@ -38,7 +38,7 @@ menupopup,
 panel,
 findbar,
 tooltip {
-    font-family: "JetBrainsMono Nerd Font", "JetBrains Mono", monospace !important;
+    font-family: "Iosevka Nerd Font", "Iosevka", monospace !important;
 }
 
 /* 1. Hide Sway-redundant window controls & titlebar spacers */
@@ -102,7 +102,7 @@ tooltip {
 }
 
 .tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-label {
-    font-family: "JetBrains Mono", monospace !important;
+    font-family: "Iosevka", monospace !important;
     font-size: 11.5px !important;
     color: #777777 !important;
     font-weight: 400 !important;
@@ -124,7 +124,7 @@ tooltip {
 .tabbrowser-tab[selected] .tab-label,
 .tabbrowser-tab[selected="true"] .tab-label,
 .tabbrowser-tab[visuallyselected] .tab-label {
-    font-family: "JetBrains Mono", monospace !important;
+    font-family: "Iosevka", monospace !important;
     font-size: 11.5px !important;
     color: var(--text-main) !important;
     font-weight: 600 !important;
@@ -192,7 +192,7 @@ tooltip {
 /* Center link in URL bar */
 #urlbar-input {
     color: var(--text-main) !important;
-    font-family: "JetBrains Mono", monospace !important;
+    font-family: "Iosevka", monospace !important;
     font-size: 12px !important;
     text-align: center !important;
 }

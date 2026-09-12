@@ -288,8 +288,8 @@ user_pref("font.default.x-western", "sans-serif");
 user_pref("font.default.vi", "sans-serif");
 user_pref("font.name.sans-serif.x-western", "Inter Variable");
 user_pref("font.name.sans-serif.vi", "Inter Variable");
-user_pref("font.name.monospace.x-western", "JetBrains Mono");
-user_pref("font.name.monospace.vi", "JetBrains Mono");
+user_pref("font.name.monospace.x-western", "Iosevka");
+user_pref("font.name.monospace.vi", "Iosevka");
 
 /****************************************************************************
  * SECTION: HARDWARE ACCELERATION & WAYLAND (ThinkPad P14s Gen 5 AMD)        *

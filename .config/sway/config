@@ -49,7 +49,7 @@ output eDP-1 {
 output * bg ~/.config/sway/current_wallpaper fill
 
 # Font
-font pango:Geist, JetBrainsMono Nerd Font, Font Awesome 6 Free 10
+font pango:Geist, Iosevka Nerd Font, Font Awesome 6 Free 10
 
 # Gaps & Borders (Acid Dark)
 default_border pixel 2

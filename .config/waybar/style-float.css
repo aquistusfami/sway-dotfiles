@@ -17,7 +17,7 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: "Geist", "JetBrainsMono Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif;
+    font-family: "Geist", "Iosevka Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif;
     font-size: 12px;
     font-weight: 500;
     box-shadow: none;
@@ -45,7 +45,7 @@ tooltip * {
 }
 
 tooltip label {
-    font-family: "Geist", "JetBrainsMono Nerd Font", monospace;
+    font-family: "Geist", "Iosevka Nerd Font", monospace;
     font-size: 12px;
     color: #eff0eb;
 }
