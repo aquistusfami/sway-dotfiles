@@ -9,6 +9,7 @@
 
     "modules-left": [
         "sway/workspaces",
+        "idle_inhibitor",
         "sway/mode",
         "sway/window"
     ],
@@ -26,6 +27,16 @@
         "custom/power"
     ],
 
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        },
+        "tooltip": true,
+        "tooltip-format-activated": "Focus Mode: ON (Display kept awake)",
+        "tooltip-format-deactivated": "Focus Mode: OFF (Auto suspend enabled)"
+    },
     "sway/mode": {
         "format": "<span foreground='#ff5c57'></span> {}"
     },

@@ -51,7 +51,7 @@ tooltip label {
 }
 
 #workspaces {
-    padding-right: 15px;
+    padding-right: 4px;
 }
 
 #workspaces button {
@@ -80,6 +80,17 @@ tooltip label {
 #mode, #battery, #cpu, #memory, #network, #bluetooth, #pulseaudio, #backlight, #clock {
     margin: 0px 12px 0px 0px;
     padding: 0 4px;
+}
+
+#idle_inhibitor {
+    margin: 0px 14px 0px 8px;
+    padding: 0 4px;
+    color: @grey;
+    font-size: 13px;
+}
+
+#idle_inhibitor.activated {
+    color: @yellow;
 }
 
 #clock {

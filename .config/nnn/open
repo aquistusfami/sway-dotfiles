@@ -14,13 +14,9 @@ ext="${file##*.}"
 ext="$(printf '%s' "$ext" | tr '[:upper:]' '[:lower:]')"
 
 case "$ext" in
-    # Images: imv (native Wayland, 8MB RAM) -> fallback to firefox
+    # Images: swayimg (native Wayland viewer)
     png|jpg|jpeg|webp|gif|svg|bmp|ico|tiff|heic)
-        if command -v imv >/dev/null 2>&1; then
-            imv "$file" >/dev/null 2>&1 &
-        else
-            firefox "$file" >/dev/null 2>&1 &
-        fi
+        swayimg "$file" >/dev/null 2>&1 &
         ;;
 
     # Documents & PDFs: zathura -> fallback to firefox

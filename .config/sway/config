@@ -65,6 +65,7 @@ for_window [app_id="termfloat"] floating enable, resize set width 750 px height 
 # Image viewers (imv, swayimg, feh, viewnior)
 for_window [app_id="imv"] floating enable, resize set width 900 px height 650 px
 for_window [app_id="swayimg"] floating enable, resize set width 900 px height 650 px
+for_window [app_id="wallpaper-picker"] floating enable
 for_window [app_id="viewnior"] floating enable, resize set width 900 px height 650 px
 for_window [class="(?i)feh"] floating enable, resize set width 900 px height 650 px
 
@@ -106,7 +107,8 @@ client.placeholder      #202020 #202020 #eff0eb #202020   #202020
 ### Idle & Screen Lock configuration (swayidle + swaylock)
 exec swayidle -w \
     timeout 300 'swaylock -f' \
-    timeout 600 'swaymsg "output * power off"' \
+    timeout 330 'swaymsg "output * power off"' \
+    timeout 600 'systemctl suspend' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f'
 
