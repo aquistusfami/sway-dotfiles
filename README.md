@@ -1,6 +1,6 @@
 # dotfiles
 
-Modular, minimalist Wayland desktop environment configured for Void Linux and Sway WM, featuring custom terminal-based connection managers, PipeWire audio routing, hardware-accelerated Firefox styling, and low-latency development workflows. Updated: 08/09/2026
+Modular, minimalist Wayland desktop environment configured for NixOS and Sway WM, featuring custom terminal-based connection managers, PipeWire audio routing, hardware-accelerated Firefox styling, and low-latency development workflows. Updated: 12/09/2026
 
 ## Preview 
 
@@ -14,18 +14,20 @@ Modular, minimalist Wayland desktop environment configured for Void Linux and Sw
 
 ## Overview
 
-- **Operating System:** Void Linux (glibc, runit)
+- **Operating System:** NixOS (Flakes, Linux 6.18+, systemd)
+- **Hardware Platform:** Lenovo ThinkPad P14s Gen 5 AMD (Ryzen 7 PRO 8840HS / Radeon 780M)
 - **Compositor:** Sway (Wayland i3-compatible tiling window manager)
-- **Status Bar:** Waybar (modular, multi-layout support with 5px margins)
-- **Terminal Emulator:** Foot (server/client architecture)
-- **Shell & Prompt:** Zsh with Starship
-- **Code Editor:** Neovim (LazyVim, JDT.LS for Java OOP, Tectonic/Zathura SyncTeX)
+- **Status Bar:** Waybar (modular, dual-layout support with Focus Mode / idle inhibitor)
+- **Terminal Emulator:** Foot (server/client architecture via `footclient`)
+- **Shell & Prompt:** Zsh (sub-100ms startup with compiled `.zwc` cache) + Starship
+- **Code Editor:** Neovim (LazyVim, LaTeX/SyncTeX, Data Engineering stack)
+- **Image Viewer & Gallery:** Swayimg (native Wayland image viewer & wallpaper gallery)
 - **Web Browser:** Firefox (Custom Acid Dark minimal theme, Betterfox, VA-API hardware acceleration)
 - **Application Launcher:** Fuzzel
 - **File Transfer:** LocalSend (AirDrop cross-platform alternative)
 - **Notification Daemon:** Mako
 - **Document Viewer:** Zathura (minimalist PDF viewer with SyncTeX support)
-- **Power & Thermal:** TLP (ASUS battery health 90% charge threshold, silent fan, turbo-boost throttling)
+- **Power & Thermal:** TLP (75-80% battery threshold) & Thinkfan active curve (~40°C target)
 - **Audio Stack:** PipeWire, WirePlumber, PipeWire-Pulse (`libspa-bluetooth`)
 - **Input Method:** Fcitx5 (Bamboo Vietnamese engine)
 - **Color Palette:** Acid Dark
@@ -62,21 +64,31 @@ Customized Firefox profile tailored specifically for Sway and the Acid Dark aest
 - **LaTeX & Documentation:** Integrated with Tectonic compiler and Zathura PDF viewer featuring bidirectional SyncTeX synchronization.
 - **File Navigation:** Customized `nnn` terminal file manager wrapper (`n`) with POSIX fallback (`mv`/`cp`), cd-on-quit, and custom file opener script.
 
-### Battery & Thermal Management (TLP)
-- **Battery Longevity:** ASUS Battery Health Charging threshold set to stop charging at **90%** (`STOP_CHARGE_THRESH_BAT0=90`) to prolong battery lifecycle.
+### Battery & Thermal Management (TLP & Thinkfan)
+- **Battery Longevity:** ThinkPad battery charging thresholds set to stop at **80%** and resume at **75%** (`STOP_CHARGE_THRESH_BAT0=80`, `START_CHARGE_THRESH_BAT0=75`) to prolong battery lifespan.
 - **Cool & Silent Operation:**
-  - Disabled aggressive Turbo Boost on AC and Battery (`CPU_BOOST=0`) to prevent temperature spikes over 45°C and eliminate fan noise.
-  - `powersave` governor paired with `balance_power` / `power` Energy Performance Preference (EPP).
+  - Disabled aggressive Turbo Boost on AC and Battery (`CPU_BOOST=0`) to eliminate unnecessary heat spikes.
+  - `powersave` governor paired with `power` Energy Performance Preference (EPP).
+  - Native **`thinkfan`** active cooling profile: activates whisper-quiet Level 1 (~1800 RPM) at 38°C to keep the AMD Zen 4 APU sitting comfortably at ~40°C.
 
 ### Audio & Bluetooth Routing
 - Fully integrated with PipeWire 1.6+ and WirePlumber.
 - Out-of-the-box support for SBC, AAC, and LDAC Bluetooth audio codecs via `libspa-bluetooth`.
 - Automatic audio stream handoff to paired headsets (e.g., Sony WH-CH520) upon connection.
 
-### Waybar Multi-Style Layouts
-- Dual style switching (`toggle-style.sh`):
+### Waybar Multi-Style Layouts & Focus Mode
+- **Dual Layout Switcher (`toggle-style.sh`):**
   - `full`: Edge-to-edge system panel.
   - `float`: Island/pill floating bar with 5px margins and border framing.
+- **Focus Mode (`idle_inhibitor`):** One-touch toggle on the left of Waybar:
+  - **Active (``):** Suppresses all idle timeouts; display remains permanently awake.
+  - **Inactive (``):** Standard power-saving (locks screen at 5m, powers display off at 5.5m, suspends system at 10m).
+
+### Visual Wallpaper Gallery (Swayimg)
+- Native Wayland gallery picker (`swayimg`) spawned centered on the active monitor.
+- Instant 250px thumbnail grid browsing via arrow keys or mouse hover.
+- Interactive scaling mode switcher (`m` or `Tab` cycles: `fill` ⇄ `fit` ⇄ `stretch` ⇄ `center` ⇄ `tile`).
+- One-click or `Enter` to apply and persist across sessions.
 
 ## Keybindings
 
@@ -85,11 +97,11 @@ Default modifier (`$mod`) is `Super` (Windows key).
 ### Application Shortcuts
 | Keybinding | Target | Description |
 | :--- | :--- | :--- |
-| `$mod + Return` | `foot` | Spawn new terminal instance |
+| `$mod + Return` | `footclient` | Spawn instant terminal instance (<30ms via daemon) |
 | `$mod + d` | `fuzzel` | Application launcher |
 | `$mod + b` | `firefox` | Web browser |
-| `$mod + e` | `nnn` | Terminal file manager |
-| `$mod + w` | `wallpaper-picker.sh` | Interactive wallpaper selection menu |
+| `$mod + e` | `nnn` | Terminal file manager (with native `swayimg` viewer) |
+| `$mod + Shift + w` | `wallpaper-picker.sh` | Visual wallpaper gallery picker & mode switcher |
 
 ### Window Management
 | Keybinding | Action |
@@ -127,39 +139,26 @@ chmod +x install.sh
 ./install.sh
 ```
 
-## Package Requirements (Void Linux)
+## Package Requirements (NixOS)
 
-Install core desktop and productivity packages:
+Under NixOS, all packages and system daemons are managed declaratively via `/etc/nixos/configuration.nix` and Flakes:
 
-```bash
-sudo xbps-install -S \
-    sway \
-    waybar \
-    foot \
-    fuzzel \
-    mako \
-    swaylock \
-    starship \
-    zsh \
-    btop \
-    nnn \
-    neovim \
-    zathura \
-    zathura-pdf-mupdf \
-    fastfetch \
-    tlp \
-    intel-media-driver \
-    libva-utils \
-    pipewire \
-    wireplumber \
-    libspa-bluetooth \
-    NetworkManager \
-    bluez \
-    brightnessctl \
-    grim \
-    slurp \
-    wl-clipboard \
-    jq
+```nix
+environment.systemPackages = with pkgs; [
+  # Compositor & Wayland Utilities
+  sway waybar foot fuzzel mako swaylock swayimg
+  brightnessctl grim slurp wl-clipboard jq yq
+
+  # Shell, Prompt & Monitoring
+  zsh starship fastfetch btop nnn
+
+  # Media, Docs & Code
+  neovim zathura mpv
+];
+
+# Hardware Services
+services.tlp.enable = true;
+services.thinkfan.enable = true;
 ```
 
 ## Directory Structure
@@ -175,9 +174,9 @@ dotfiles/
 │   ├── fuzzel/         # Application launcher configuration
 │   ├── mako/           # Notification styles
 │   ├── nnn/            # Terminal file manager integration & scripts
-│   ├── nvim/           # Neovim (LazyVim, Java OOP, TeX/SyncTeX)
+│   ├── nvim/           # Neovim (LazyVim, TeX/SyncTeX, Data Engineering)
 │   ├── starship.toml   # Cross-shell prompt configuration
-│   ├── sway/           # Sway compositor rules, keybindings, and scripts
+│   ├── sway/           # Sway rules, keybinds, and visual wallpaper picker
 │   ├── swaylock/       # Screen lock styling
 │   ├── waybar/         # Status bar configurations, stylesheets, and TUI scripts
 │   └── zathura/        # Minimalist PDF viewer configuration
