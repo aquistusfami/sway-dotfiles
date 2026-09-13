@@ -137,65 +137,19 @@ tooltip label {
     margin: 0px 10px 0px 0px;
 }
 
-#group-power {
-    margin: 0px 4px 0px 4px;
-    padding: 0;
-}
-
-#custom-power,
-#custom-reboot,
-#custom-suspend,
-#custom-lock,
-#custom-quit {
+#custom-power {
+    color: @red;
     font-size: 13px;
-    padding: 0 7px;
-    margin: 0 1px;
+    padding: 0 8px;
+    margin: 0px 4px 0px 4px;
+    border-bottom: none;
     border-radius: 0px;
     transition: all 0.15s ease-in-out;
 }
 
-#custom-power {
-    color: @red;
-    border-bottom: 2px solid @red;
-}
 #custom-power:hover {
     color: #181818;
     background: @red;
-}
-
-#custom-reboot {
-    color: @yellow;
-    border-bottom: 2px solid @yellow;
-}
-#custom-reboot:hover {
-    color: #181818;
-    background: @yellow;
-}
-
-#custom-suspend {
-    color: @cyan;
-    border-bottom: 2px solid @cyan;
-}
-#custom-suspend:hover {
-    color: #181818;
-    background: @cyan;
-}
-
-#custom-lock {
-    color: @purple;
-    border-bottom: 2px solid @purple;
-}
-#custom-lock:hover {
-    color: #181818;
-    background: @purple;
-}
-
-#custom-quit {
-    color: @blue;
-    border-bottom: 2px solid @blue;
-}
-#custom-quit:hover {
-    color: #181818;
-    background: @blue;
+    border-radius: 0px;
 }
 
