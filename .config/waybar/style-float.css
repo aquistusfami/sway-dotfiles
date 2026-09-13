@@ -93,44 +93,12 @@ tooltip label {
     color: @yellow;
 }
 
-#clock {
-    border-bottom: 2px solid @blue;
-}
-
-#network {
-    border-bottom: 2px solid @purple;
-}
-
-#bluetooth {
-    border-bottom: 2px solid @cyan;
-}
-
-#battery {
-    border-bottom: 2px solid @yellow;
-}
-
 #battery.warning {
     color: @warning;
 }
 
 #battery.critical {
     color: @alert;
-}
-
-#pulseaudio {
-    border-bottom: 2px solid @green;
-}
-
-#backlight {
-    border-bottom: 2px solid @cyan;
-}
-
-#cpu {
-    border-bottom: 2px solid @red;
-}
-
-#memory {
-    border-bottom: 2px solid @purple;
 }
 
 #tray {
