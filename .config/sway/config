@@ -83,6 +83,9 @@ for_window [app_id="(?i)pavucontrol"] floating enable, resize set width 720 px h
 # Bluetooth manager (Blueman)
 for_window [app_id="(?i)blueman.*"] floating enable, resize set width 720 px height 480 px
 
+# Dictionary (GoldenDict)
+for_window [app_id="(?i).*goldendict.*"] floating enable, resize set width 800 px height 600 px, move position center
+
 # File choosers, popups & dialogs
 for_window [app_id="xdg-desktop-portal-gtk"] floating enable, resize set width 960 px height 640 px, move position center
 for_window [title="(?i)(open|save|select) (file|folder)"] floating enable, resize set width 960 px height 640 px, move position center

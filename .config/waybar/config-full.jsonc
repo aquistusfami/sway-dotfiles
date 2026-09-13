@@ -20,7 +20,7 @@
         "battery",
         "clock",
         "tray",
-        "custom/power"
+        "group/power"
     ],
 
     "idle_inhibitor": {
@@ -151,10 +151,49 @@
     "tray": {
         "spacing": 8
     },
+    "group/power": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "children-class": "drawer-child",
+            "transition-left-to-right": false
+        },
+        "modules": [
+            "custom/power",
+            "custom/reboot",
+            "custom/suspend",
+            "custom/lock",
+            "custom/quit"
+        ]
+    },
     "custom/power": {
-        "format": "󰐥",
+        "format": "",
         "tooltip": true,
-        "tooltip-format": "Power Menu",
-        "on-click": "/home/aquistus/.config/sway/powermenu.sh"
+        "tooltip-format": "Shutdown",
+        "on-click": "systemctl poweroff"
+    },
+    "custom/reboot": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Reboot",
+        "on-click": "systemctl reboot"
+    },
+    "custom/suspend": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Suspend",
+        "on-click": "swaylock -f && systemctl suspend"
+    },
+    "custom/lock": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Lock Screen",
+        "on-click": "swaylock -f"
+    },
+    "custom/quit": {
+        "format": "",
+        "tooltip": true,
+        "tooltip-format": "Logout",
+        "on-click": "swaymsg exit"
     }
 }
