@@ -140,16 +140,18 @@ tooltip label {
 #custom-power {
     color: @red;
     font-size: 12px;
-    padding: 0 6px;
-    margin: 4px 10px 4px 4px;
+    min-width: 22px;
+    min-height: 22px;
+    padding: 0;
+    margin: 3px 10px 3px 4px;
     border-bottom: none;
-    border-radius: 0px;
+    border-radius: 999px;
     transition: all 0.15s ease-in-out;
 }
 
 #custom-power:hover {
     color: #181818;
     background: @red;
-    border-radius: 0px;
+    border-radius: 999px;
 }
 
