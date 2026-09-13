@@ -25,13 +25,13 @@ case "$chosen" in
     *"Suspend"*)
         swaylock -f
         sleep 0.5
-        systemctl suspend
+        loginctl suspend 2>/dev/null || sudo zzz 2>/dev/null || zzz 2>/dev/null || systemctl suspend
         ;;
     *"Reboot"*)
-        systemctl reboot
+        loginctl reboot 2>/dev/null || sudo reboot 2>/dev/null || reboot 2>/dev/null || systemctl reboot
         ;;
     *"Shutdown"*)
-        systemctl poweroff
+        loginctl poweroff 2>/dev/null || sudo poweroff 2>/dev/null || poweroff 2>/dev/null || systemctl poweroff
         ;;
     *"Logout"*)
         swaymsg exit

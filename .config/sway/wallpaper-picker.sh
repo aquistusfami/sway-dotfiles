@@ -13,6 +13,11 @@ read -r ox oy ow oh < <(swaymsg -t get_outputs | jq -r '.[] | select(.focused) |
 pos_x=$(( ox + (ow - ww) / 2 ))
 pos_y=$(( oy + (oh - wh) / 2 ))
 
+if ! command -v swayimg >/dev/null 2>&1; then
+    notify-send -a "Wallpaper" "swayimg is not installed" "Please install swayimg via: sudo xbps-install -S swayimg"
+    exit 1
+fi
+
 exec swayimg -g \
   --appid=wallpaper-picker \
   -S "${ww},${wh}" \

@@ -24,6 +24,8 @@ configs=(
     "fastfetch"
     "nvim"
     "zathura"
+    "gtk-3.0"
+    "gtk-4.0"
 )
 
 for item in "${configs[@]}"; do

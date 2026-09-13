@@ -2,6 +2,9 @@
 # ZSH Configuration - Optimized for Foot Terminal & Acid Dark Theme
 # ==============================================================================
 
+# Ensure environment variables are loaded
+[ -f "$HOME/.zprofile" ] && source "$HOME/.zprofile"
+
 # Ensure cache directory exists for history and completions
 [[ -d "$HOME/.cache/zsh" ]] || mkdir -p "$HOME/.cache/zsh"
 
@@ -139,3 +142,32 @@ clear-screen-and-reset() {
 }
 zle -N clear-screen-and-reset
 bindkey '^L' clear-screen-and-reset
+
+# ------------------------------------------------------------------------------
+# 8. Native Plugins (Auto-load if present on Void / standard distros)
+# ------------------------------------------------------------------------------
+if [ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#686868'
+    ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+fi
+
+if [ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh ]; then
+    source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+    bindkey '^[[A' history-substring-search-up
+    bindkey '^[[B' history-substring-search-down
+    bindkey '^P' history-substring-search-up
+    bindkey '^N' history-substring-search-down
+fi
+
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+fi
+
+# ------------------------------------------------------------------------------
+# 9. Starship Prompt Initialization
+# ------------------------------------------------------------------------------
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi

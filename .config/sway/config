@@ -108,7 +108,7 @@ client.placeholder      #202020 #202020 #eff0eb #202020   #202020
 exec swayidle -w \
     timeout 300 'swaylock -f' \
     timeout 330 'swaymsg "output * power off"' \
-    timeout 600 'systemctl suspend' \
+    timeout 600 'loginctl suspend 2>/dev/null || systemctl suspend' \
     resume 'swaymsg "output * power on"' \
     before-sleep 'swaylock -f'
 
