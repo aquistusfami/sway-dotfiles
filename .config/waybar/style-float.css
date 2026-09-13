@@ -140,8 +140,8 @@ tooltip label {
 #custom-power {
     color: @red;
     font-size: 13px;
-    padding: 0 8px;
-    margin: 0px 4px 0px 4px;
+    padding: 0 6px;
+    margin: 0px 10px 0px 4px;
     border-bottom: none;
     border-radius: 0px;
     transition: all 0.15s ease-in-out;
