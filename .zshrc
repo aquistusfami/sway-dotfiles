@@ -96,6 +96,13 @@ alias fetch='fastfetch'
 alias neofetch='fastfetch'
 alias fc='footclient'
 
+# iCTSV & DRL Tool
+ctsv() {
+    (xdg-open /home/aquistus/bktouch_analysis/activities_2026_1.html &) 2>/dev/null
+    python3 /home/aquistus/bktouch_analysis/export_html_scored.py "$@"
+}
+alias drl='ctsv'
+
 # ------------------------------------------------------------------------------
 # 7. nnn File Manager (cd-on-quit wrapper)
 # ------------------------------------------------------------------------------

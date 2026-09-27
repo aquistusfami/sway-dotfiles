@@ -36,13 +36,18 @@ exec fcitx5 -d
 output HDMI-A-1 {
     mode 2560x1440@59.951Hz
     scale 1.25
+    scale_filter smart
     pos 0 0
 }
 
-# Màn hình chính laptop ThinkPad P14s: 2880x1800 @ 60Hz, Scale 1.5
+# Màn hình chính laptop ThinkPad P14s: 2880x1800 @ 120Hz, Scale 1.5 (2.8K OLED)
 output eDP-1 {
-    mode 2880x1800@60Hz
+    mode 2880x1800@120Hz
     scale 1.5
+    scale_filter smart
+    subpixel none
+    render_bit_depth 10
+    color_profile --device-primaries srgb
     pos 2048 0
 }
 
@@ -384,5 +389,8 @@ bindsym $mod+Shift+w exec ~/.config/sway/wallpaper-picker.sh
 
 # Toggle Night Light (wlsunset / gammastep)
 bindsym $mod+n exec ~/.config/sway/toggle-nightlight.sh
+
+# Toggle OLED Color Profile: DCI-P3 (Vibrant) <-> sRGB (Accurate)
+bindsym $mod+c exec ~/.config/sway/toggle-color-profile.sh
 
 include /etc/sway/config.d/*

@@ -26,7 +26,3 @@ if [ ! -S "${XDG_RUNTIME_DIR:-/run/user/$UID}/bus" ]; then
     dbus-daemon --session --address="$DBUS_SESSION_BUS_ADDRESS" --fork --nopidfile 2>/dev/null || true
 fi
 
-# Auto-start Sway on TTY1 login
-if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty 2>/dev/null)" = "/dev/tty1" ]; then
-    exec sway
-fi

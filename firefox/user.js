@@ -44,14 +44,15 @@ user_pref("network.http.request.max-start-delay", 5);
 user_pref("network.dnsCacheExpiration", 3600);
 // Fix slow loading on networks without IPv6 WAN (bypasses AAAA queries & IPv6 timeouts)
 user_pref("network.dns.disableIPv6", true);
-// Disable HTTP/3 (QUIC/UDP) to avoid stalled handshakes from ISP UDP throttling
-user_pref("network.http.http3.enable", false);
+// Enable HTTP/3 (QUIC/UDP) for Meta/Facebook multi-stream asset acceleration
+user_pref("network.http.http3.enable", true);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
 ****************************************************************************/
 /** TRACKING PROTECTION ***/
-user_pref("browser.contentblocking.category", "strict");
+// Use standard instead of strict to avoid breaking Facebook/React SPA dynamic feeds
+user_pref("browser.contentblocking.category", "standard");
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 user_pref("browser.uitour.enabled", false);
 user_pref("privacy.globalprivacycontrol.enabled", true);
@@ -107,7 +108,8 @@ user_pref("editor.truncate_user_pastes", false);
 user_pref("extensions.enabledScopes", 5);
 
 /** HEADERS / REFERERS ***/
-user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
+// 0 = default (send full referer), avoids breaking cross-origin GraphQL/CDN asset handshakes
+user_pref("network.http.referer.XOriginTrimmingPolicy", 0);
 
 /** CONTAINERS ***/
 user_pref("privacy.userContext.ui.enabled", true);
@@ -306,3 +308,8 @@ user_pref("widget.wayland.fractional-scale.enabled", true);
 user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
 user_pref("widget.use-xdg-desktop-portal.mime-handler", 1);
 user_pref("apz.gtk.kinetic_scroll.enabled", true);
+
+// OLED Wide Gamut (DCI-P3) Color Management & Crisp Text Rendering
+user_pref("gfx.color_management.mode", 1);
+user_pref("gfx.color_management.enablev4", true);
+user_pref("gfx.font_rendering.cleartype_params.subpixel_structure", 0);

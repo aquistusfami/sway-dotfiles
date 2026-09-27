@@ -6,11 +6,11 @@ Modular, minimalist Wayland desktop environment configured for NixOS and Sway WM
 
 **Fastfetch, nnn file manager, btop and waybar.**
 
-![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-12_07-37-28.png)
+![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-27_11-54-07.png)
 
 **No gap preview, nvim, fastfetch.**
 
-![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-12_07-34-55.png)
+![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-27_11-55-44.png)
 
 ## Overview
 
