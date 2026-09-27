@@ -1,6 +1,8 @@
 # dotfiles
 
-Modular, minimalist Wayland desktop environment configured for NixOS and Sway WM, featuring custom terminal-based connection managers, PipeWire audio routing, hardware-accelerated Firefox styling, and low-latency development workflows. Updated: 12/09/2026
+Modular, minimalist Wayland desktop environment configured for NixOS and **Niri** (scrollable-tiling Wayland compositor), featuring custom terminal-based connection managers, PipeWire audio routing, hardware-accelerated Firefox styling, and low-latency development workflows.
+
+> **AI agents deploying this:** Read [`AGENT.md`](./AGENT.md) first — it contains machine profile, design system tokens, exact deployment commands, and NixOS-specific gotchas.
 
 ## Preview 
 
@@ -16,16 +18,16 @@ Modular, minimalist Wayland desktop environment configured for NixOS and Sway WM
 
 - **Operating System:** NixOS (Flakes, Linux 6.18+, systemd)
 - **Hardware Platform:** Lenovo ThinkPad P14s Gen 5 AMD (Ryzen 7 PRO 8840HS / Radeon 780M)
-- **Compositor:** Sway (Wayland i3-compatible tiling window manager)
-- **Status Bar:** Waybar (modular, dual-layout support with Focus Mode / idle inhibitor)
-- **Terminal Emulator:** Foot (server/client architecture via `footclient`)
+- **Compositor:** Niri (scrollable-tiling Wayland compositor)
+- **Status Bar:** Waybar (4 floating glass capsule pills, dual mode: float / full)
+- **Terminal Emulator:** Foot (standalone, no server daemon)
 - **Shell & Prompt:** Zsh (sub-100ms startup with compiled `.zwc` cache) + Starship
 - **Code Editor:** Neovim (LazyVim, LaTeX/SyncTeX, Data Engineering stack)
 - **Image Viewer & Gallery:** Swayimg (native Wayland image viewer & wallpaper gallery)
 - **Web Browser:** Firefox (Custom Acid Dark minimal theme, Betterfox, VA-API hardware acceleration)
-- **Application Launcher:** Fuzzel
+- **Application Launcher:** Fuzzel (glass theme, 8px radius)
 - **File Transfer:** LocalSend (AirDrop cross-platform alternative)
-- **Notification Daemon:** Mako
+- **Notification Daemon:** Mako (JetBrainsMono Nerd Font, glass hairline borders)
 - **Document Viewer:** Zathura (minimalist PDF viewer with SyncTeX support)
 - **Power & Thermal:** TLP (75-80% battery threshold) & Thinkfan active curve (~40°C target)
 - **Audio Stack:** PipeWire, WirePlumber, PipeWire-Pulse (`libspa-bluetooth`)
