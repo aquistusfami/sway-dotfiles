@@ -8,6 +8,8 @@ swayimg.gallery.border_size = 3
 swayimg.gallery.border_color = 0xff5af78e
 swayimg.gallery.window_color = 0xf0202020
 
+swayimg.gallery.hover = true
+
 -- Font & Text style matching Waybar
 swayimg.text.font = "GeistMono Nerd Font"
 swayimg.text.size = 13
@@ -62,7 +64,6 @@ update_mode_display()
 local function apply_wallpaper()
   local img = swayimg.gallery.get_image()
   if img and img.path then
-    local dest = home .. "/.config/niri/current_wallpaper"
     local cur_mode = modes[mode_idx]
 
     local mf = io.open(mode_file, "w")
@@ -71,12 +72,8 @@ local function apply_wallpaper()
       mf:close()
     end
 
-    os.execute("ln -sf '" .. img.path .. "' '" .. dest .. "'")
-    os.execute("ln -sf '" .. img.path .. "' '" .. home .. "/.config/sway/current_wallpaper'")
-    -- Update wallpaper dynamically via niri spawn (prevents swaybg dying on swayimg.exit)
-    os.execute("pkill -f swaybg 2>/dev/null || true; sleep 0.1; niri msg action spawn -- swaybg -i '" .. dest .. "' -m '" .. cur_mode .. "'")
-    local fname = img.path:match("([^/]+)$") or "wallpaper"
-    os.execute("notify-send -i '" .. img.path .. "' -a 'Wallpaper' 'Wallpaper Changed (" .. cur_mode:upper() .. ")' '" .. fname .. "'")
+    local cmd = string.format("'%s/.config/niri/scripts/apply-wallpaper.sh' %q %q", home, img.path, cur_mode)
+    os.execute(cmd)
     swayimg.exit()
   end
 end
