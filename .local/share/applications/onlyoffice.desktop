@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=ONLYOFFICE
+GenericName=Document Editor
+Comment=Edit office documents
+Type=Application
+Exec=/home/aquistus/.config/niri/scripts/onlyoffice.sh %U
+Terminal=false
+Icon=onlyoffice-desktopeditors
+Keywords=Text;Document;Spreadsheet;Presentation;
+Categories=Office;WordProcessor;Spreadsheet;Presentation;
+StartupWMClass=ONLYOFFICE
