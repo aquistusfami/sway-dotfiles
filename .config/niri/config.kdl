@@ -105,7 +105,6 @@ window-rule {
 
 // --- AUTOSTART ---
 spawn-at-startup "dbus-update-activation-environment" "--all"
-spawn-at-startup "foot" "--server"
 spawn-at-startup "fcitx5" "-d"
 spawn-at-startup "waybar"
 spawn-at-startup "mako"
