@@ -8,7 +8,7 @@ Modular, minimalist Wayland desktop environment configured for NixOS and Sway WM
 
 ![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-27_11-54-07.png)
 
-**No gap preview, nvim, fastfetch.**
+**Fuzzel.**
 
 ![alt tag](https://github.com/aquistusfami/sway-dotfiles/blob/main/preview/Screenshot_2026-09-27_11-55-44.png)
 
