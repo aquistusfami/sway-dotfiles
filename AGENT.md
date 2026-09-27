@@ -249,6 +249,17 @@ There is NO foot server daemon in autostart. Each `foot` call spawns its own pro
 `wallpaper-picker.lua` updates it on selection.
 `swaylock/config` reads from this path for the lock screen image.
 
+### X11 apps (OnlyOffice, etc.) require XWayland managed by Niri
+`programs.xwayland.enable = true` is set in `configuration.nix`.
+After `nixos-rebuild switch`, **logout and log back into Niri** — Niri will then
+manage XWayland automatically and X11 apps work normally from Mod+D.
+
+Do NOT launch `Xwayland` manually as a standalone process — it will not integrate
+with Niri's compositor and windows will be invisible.
+
+The wrapper script `.config/niri/scripts/onlyoffice.sh` exists as a fallback but
+is only needed if XWayland is not being managed by Niri (i.e., before rebuild).
+
 ---
 
 ## 7. Services Running at Niri Startup
