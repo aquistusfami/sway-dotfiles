@@ -1,9 +1,6 @@
 // Niri configuration - Dedicated Setup for ThinkPad P14s Gen 5 AMD
 // Independent configuration ported from Sway dotfiles
 
-// --- XWAYLAND (for X11 apps: OnlyOffice, etc.) ---
-xwayland
-
 // --- INPUT CONFIGURATION ---
 input {
     keyboard {
