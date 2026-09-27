@@ -1,7 +1,7 @@
 # Mako Notification Configuration - Acid Dark Theme
 # Unified styling with Niri window borders and Waybar floating capsules
 
-font=Geist, GeistMono Nerd Font, Font Awesome 6 Free 10.5
+font=JetBrainsMono Nerd Font 10.5
 background-color=#141419f2
 text-color=#f5f5f7ff
 border-color=#ffffff40
