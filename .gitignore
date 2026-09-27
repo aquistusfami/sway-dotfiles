@@ -6,6 +6,7 @@ __pycache__/
 # State files & local caches
 .style_state
 .gaps_state
+.wallpaper_mode
 current_wallpaper
 *.log
 .lastd

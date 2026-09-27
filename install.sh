@@ -10,6 +10,7 @@ mkdir -p "$HOME/.config"
 # Config folders and files
 configs=(
     "sway"
+    "niri"
     "waybar"
     "foot"
     "fuzzel"
@@ -26,6 +27,8 @@ configs=(
     "zathura"
     "gtk-3.0"
     "gtk-4.0"
+    "swayimg"
+    "mpv"
 )
 
 for item in "${configs[@]}"; do

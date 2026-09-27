@@ -1,11 +1,11 @@
 /* Acid Dark Waybar Theme (Optimized from eoli3n/dotfiles) */
-@define-color background rgba(34, 34, 34, 0.92);
+@define-color background transparent;
 @define-color active rgba(68, 68, 68, 0.85);
 @define-color warning rgba(243, 249, 157, 1);
 @define-color alert rgba(255, 92, 87, 1);
-@define-color white rgba(239, 240, 235, 1);
+@define-color white rgba(245, 245, 247, 1);
 @define-color darkgrey rgba(73, 73, 73, 1);
-@define-color grey rgba(146, 146, 146, 1);
+@define-color grey rgba(197, 200, 212, 1);
 
 @define-color red rgba(255, 92, 87, 1);
 @define-color yellow rgba(243, 249, 157, 1);
@@ -22,20 +22,21 @@
     font-weight: 500;
     box-shadow: none;
     text-shadow: none;
-    transition-duration: 0s;
+    transition-duration: 0.1s;
 }
 
 window#waybar {
     color: @white;
-    background: @background;
-    border-bottom: 1px solid rgba(68, 68, 68, 0.6);
+    background: transparent;
+    background-color: transparent;
+    border: none;
 }
 
 tooltip {
     border: 1px solid #333333;
-    border-radius: 0px;
+    border-radius: 6px;
     background: #181818;
-    box-shadow: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     padding: 8px 12px;
 }
 
@@ -48,45 +49,67 @@ tooltip label {
     font-family: "Geist", "GeistMono Nerd Font", monospace;
     font-size: 12px;
     color: #eff0eb;
+    text-shadow: none;
 }
 
-#workspaces {
-    padding-right: 4px;
+.modules-left {
+    margin-left: 4px;
 }
 
-#workspaces button {
-    background: transparent;
-    padding: 0 10px;
-    color: @white;
-    min-width: 20px;
-    border-top: 1px solid transparent;
-    border-bottom: 2px solid transparent;
+.modules-right {
+    margin-right: 4px;
 }
 
-#workspaces button.visible {
-    color: @white;
+#window-box, #system, #tray, #clock-power {
+    margin: 0px 4px;
+    padding: 1px 10px;
+    background: rgba(20, 20, 25, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
 }
 
-#workspaces button.focused {
-    border-top: 1px solid @active;
-    border-bottom: 2px solid @yellow;
-    background: @active;
+#window-box {
+    margin-left: 0px;
 }
 
-#workspaces button.urgent {
-    color: @alert;
+#clock-power {
+    margin-right: 0px;
+}
+
+#window {
+    margin: 0px 4px 0px 0px;
+    padding: 0 2px;
+    font-weight: 500;
 }
 
 #mode, #battery, #cpu, #memory, #network, #bluetooth, #pulseaudio, #backlight, #clock {
-    margin: 0px 12px 0px 0px;
-    padding: 0 4px;
+    margin: 0px 8px 0px 0px;
+    padding: 0 2px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: @white;
 }
 
 #idle_inhibitor {
-    margin: 0px 14px 0px 8px;
+    min-width: 18px;
+    margin: 0px 10px 0px 2px;
     padding: 0 4px;
+    background: transparent;
+    border: none;
     color: @grey;
     font-size: 13px;
+}
+
+window#waybar.empty #idle_inhibitor {
+    min-width: 18px;
+    margin: 0px;
+    padding: 0 4px;
+}
+
+window#waybar.empty #window-box {
+    padding: 1px 6px;
+    margin-left: 0px;
 }
 
 #idle_inhibitor.activated {
@@ -101,25 +124,42 @@ tooltip label {
     color: @alert;
 }
 
-#tray {
-    margin: 0px 10px 0px 0px;
+#cpu, #memory, #backlight, #pulseaudio, #bluetooth, #network {
+    margin: 0px 8px 0px 0px;
+    padding: 0 2px;
+}
+
+#battery {
+    margin: 0px 0px 0px 0px;
+    padding: 0 2px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+#clock {
+    margin: 0px 8px 0px 2px;
+    padding: 0 2px;
+    font-weight: 500;
 }
 
 #custom-power {
     color: @red;
-    font-size: 12px;
-    min-width: 22px;
-    min-height: 22px;
-    padding: 0 2px 1px 0;
-    margin: 3px 10px 3px 4px;
-    border-bottom: none;
-    border-radius: 999px;
-    transition: all 0.15s ease-in-out;
+    font-size: 13px;
+    margin: 0px 2px 0px 4px;
+    padding: 0 6px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
 }
 
 #custom-power:hover {
-    color: #181818;
-    background: @red;
-    border-radius: 999px;
+    color: #ff8580;
+    background: transparent;
 }
 

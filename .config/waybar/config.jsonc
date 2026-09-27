@@ -1,27 +1,47 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 28,
+    "height": 20,
+    "margin-top": 4,
 
     "modules-left": [
-        "sway/workspaces",
-        "idle_inhibitor",
-        "sway/mode",
-        "sway/window"
+        "group/window-box"
     ],
     "modules-center": [],
     "modules-right": [
-        "pulseaudio",
-        "bluetooth",
-        "network",
-        "backlight",
-        "cpu",
-        "memory",
-        "battery",
-        "clock",
+        "group/system",
         "tray",
-        "custom/power"
+        "group/clock-power"
     ],
+
+    "group/window-box": {
+        "orientation": "horizontal",
+        "modules": [
+            "idle_inhibitor",
+            "niri/window"
+        ]
+    },
+
+    "group/clock-power": {
+        "orientation": "horizontal",
+        "modules": [
+            "clock",
+            "custom/power"
+        ]
+    },
+
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "memory",
+            "backlight",
+            "pulseaudio",
+            "bluetooth",
+            "network",
+            "battery"
+        ]
+    },
 
     "idle_inhibitor": {
         "format": "{icon}",
@@ -40,13 +60,20 @@
         "format": "{name}",
         "disable-scroll": true
     },
-    "sway/window": {
+    "niri/workspaces": {
+        "format": "{index}",
+        "disable-scroll": true
+    },
+    "niri/window": {
         "max-length": 45,
-        "tooltip": false
+        "tooltip": false,
+        "rewrite": {
+            "^$": "Desktop"
+        }
     },
     "clock": {
         "interval": 60,
-        "format": "<span foreground='#929292'></span>&#8195;{:%d/%m %H:%M}",
+        "format": "<span foreground='#f3f99d'></span>&#8195;{:%d/%m %H:%M}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode": "month",
@@ -69,10 +96,10 @@
     },
     "battery": {
         "format-icons": ["", "", "", "", ""],
-        "format": "<span foreground='#929292'>{icon}</span>&#8195;{capacity}%",
-        "format-charging": "<span foreground='#929292'></span>&#8195;{capacity}%",
-        "format-discharging": "<span foreground='#929292'>{icon}</span>&#8195;{capacity}%",
-        "format-full": "<span foreground='#929292'></span>&#8195;{capacity}%",
+        "format": "<span foreground='#f3f99d'>{icon}</span>&#8195;{capacity}%",
+        "format-charging": "<span foreground='#f3f99d'></span>&#8195;{capacity}%",
+        "format-discharging": "<span foreground='#f3f99d'>{icon}</span>&#8195;{capacity}%",
+        "format-full": "<span foreground='#f3f99d'></span>&#8195;{capacity}%",
         "interval": 30,
         "tooltip": true,
         "tooltip-format": "Battery: {capacity}%\nHealth: {health}%",
@@ -85,12 +112,12 @@
         }
     },
     "bluetooth": {
-        "format": "<span foreground='#929292'></span>&#8195;{status}",
-        "format-disabled": "<span foreground='#929292'></span>&#8195;off",
-        "format-off": "<span foreground='#929292'></span>&#8195;off",
-        "format-on": "<span foreground='#929292'></span>&#8195;on",
-        "format-connected": "<span foreground='#929292'></span>&#8195;{num_connections} connected",
-        "format-connected-battery": "<span foreground='#929292'></span>&#8195;{device_alias} {device_battery_percentage}%",
+        "format": "<span foreground='#f3f99d'></span>&#8195;{status}",
+        "format-disabled": "<span foreground='#f3f99d'></span>&#8195;off",
+        "format-off": "<span foreground='#f3f99d'></span>&#8195;off",
+        "format-on": "<span foreground='#f3f99d'></span>&#8195;on",
+        "format-connected": "<span foreground='#f3f99d'></span>&#8195;{num_connections} connected",
+        "format-connected-battery": "<span foreground='#f3f99d'></span>&#8195;{device_alias} {device_battery_percentage}%",
         "tooltip": true,
         "tooltip-format": "{controller_alias}\t{controller_address}\n\nStatus: {status}",
         "tooltip-format-disabled": "Bluetooth: off",
@@ -103,10 +130,10 @@
         "on-click-right": "rfkill toggle bluetooth"
     },
     "network": {
-        "format-wifi": "<span foreground='#929292'></span>&#8195;{essid} <span foreground='#929292'>{signalStrength}%</span>",
-        "format-ethernet": "<span foreground='#929292'></span>&#8195;wired",
-        "format-disconnected": "<span foreground='#929292'></span>&#8195;disconnected",
-        "format-disabled": "<span foreground='#929292'></span>&#8195;off",
+        "format-wifi": "<span foreground='#f3f99d'></span>&#8195;{essid} <span foreground='#f3f99d'>{signalStrength}%</span>",
+        "format-ethernet": "<span foreground='#f3f99d'></span>&#8195;wired",
+        "format-disconnected": "<span foreground='#f3f99d'></span>&#8195;disconnected",
+        "format-disabled": "<span foreground='#f3f99d'></span>&#8195;off",
         "tooltip": true,
         "tooltip-format": "{ifname}",
         "tooltip-format-wifi": "&#8195;{essid} ({signalStrength}%)\n\nIP: {ipaddr}/{cidr}\nInterface: {ifname}\nGateway: {gwaddr}",
@@ -117,7 +144,7 @@
         "on-click-right": "rfkill toggle wifi"
     },
     "pulseaudio": {
-        "format": "<span foreground='#929292'>{icon}</span>&#8195;{volume}%",
+        "format": "<span foreground='#f3f99d'>{icon}</span>&#8195;{volume}%",
         "format-muted": "<span foreground='#ff5c57'>󰝟</span>&#8195;{volume}%",
         "format-icons": {
             "default": [""],
@@ -131,7 +158,7 @@
         "tooltip-format": "Volume: {volume}%\nDevice: {desc}"
     },
     "backlight": {
-        "format": "<span foreground='#929292'></span>&#8195;{percent}%",
+        "format": "<span foreground='#f3f99d'></span>&#8195;{percent}%",
         "on-scroll-up": "brightnessctl set 5%+",
         "on-scroll-down": "brightnessctl set 5%-",
         "tooltip": true,
@@ -139,22 +166,26 @@
     },
     "cpu": {
         "interval": 3,
-        "format": "<span foreground='#929292'></span>&#8195;{usage}%",
-        "tooltip": false
+        "format": "<span foreground='#f3f99d'></span>&#8195;{usage}%",
+        "tooltip": false,
+        "rewrite": {
+            "^$": "Desktop"
+        }
     },
     "memory": {
         "interval": 5,
-        "format": "<span foreground='#929292'></span>&#8195;{percentage}%",
+        "format": "<span foreground='#f3f99d'></span>&#8195;{percentage}%",
         "tooltip": true,
         "tooltip-format": "RAM: {used:0.1f}GB / {total:0.1f}GB ({percentage}%)\nSwap: {swapUsed:0.1f}GB / {swapTotal:0.1f}GB ({swapPercentage}%)"
     },
     "tray": {
-        "spacing": 8
+        "icon-size": 15,
+        "spacing": 10
     },
     "custom/power": {
         "format": "",
         "tooltip": true,
         "tooltip-format": "Power Menu",
-        "on-click": "/home/aquistus/.config/sway/powermenu.sh"
+        "on-click": "/home/aquistus/.config/niri/scripts/powermenu.sh"
     }
 }
