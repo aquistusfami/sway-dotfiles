@@ -4,7 +4,7 @@ font=GeistMono Nerd Font
 font-size=14
 
 # Background: Use current wallpaper with solid dark fallback
-image=/home/aquistus/.config/sway/current_wallpaper
+image=/home/aquistus/.config/niri/current_wallpaper
 scaling=fill
 color=202020
 

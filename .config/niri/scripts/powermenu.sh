@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Dedicated Power Menu for Niri on NixOS
 menu="󰌾  Lock
 󰒲  Suspend
 󰜉  Reboot
@@ -24,17 +25,17 @@ case "$chosen" in
         ;;
     *"Suspend"*)
         swaylock -f
-        sleep 0.5
-        loginctl suspend 2>/dev/null || sudo zzz 2>/dev/null || zzz 2>/dev/null || systemctl suspend
+        sleep 0.3
+        systemctl suspend
         ;;
     *"Reboot"*)
-        loginctl reboot 2>/dev/null || sudo reboot 2>/dev/null || reboot 2>/dev/null || systemctl reboot
+        systemctl reboot
         ;;
     *"Shutdown"*)
-        loginctl poweroff 2>/dev/null || sudo poweroff 2>/dev/null || poweroff 2>/dev/null || systemctl poweroff
+        systemctl poweroff
         ;;
     *"Logout"*)
-        niri msg action quit --skip-confirmation 2>/dev/null || niri msg action quit
+        niri msg action quit --skip-confirmation
         ;;
     *"Cancel"*)
         exit 0
