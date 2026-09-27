@@ -73,8 +73,8 @@ local function apply_wallpaper()
 
     os.execute("ln -sf '" .. img.path .. "' '" .. dest .. "'")
     os.execute("ln -sf '" .. img.path .. "' '" .. home .. "/.config/sway/current_wallpaper'")
-    -- Update wallpaper dynamically via swaybg (killing wrapped process on NixOS)
-    os.execute("pkill -f swaybg 2>/dev/null || true; sleep 0.1; swaybg -i '" .. dest .. "' -m '" .. cur_mode .. "' >/dev/null 2>&1 &")
+    -- Update wallpaper dynamically via niri spawn (prevents swaybg dying on swayimg.exit)
+    os.execute("pkill -f swaybg 2>/dev/null || true; sleep 0.1; niri msg action spawn -- swaybg -i '" .. dest .. "' -m '" .. cur_mode .. "'")
     local fname = img.path:match("([^/]+)$") or "wallpaper"
     os.execute("notify-send -i '" .. img.path .. "' -a 'Wallpaper' 'Wallpaper Changed (" .. cur_mode:upper() .. ")' '" .. fname .. "'")
     swayimg.exit()

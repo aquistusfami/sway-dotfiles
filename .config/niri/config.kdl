@@ -29,7 +29,7 @@ gestures {
 
 // --- MONITORS (P14s OLED 120Hz + External HDMI) ---
 output "HDMI-A-1" {
-    mode "2560x1440@74.991"
+    mode "2560x1440@59.951"
     scale 1.25
     position x=0 y=0
 }
