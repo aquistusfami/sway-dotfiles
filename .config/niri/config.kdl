@@ -17,7 +17,14 @@ input {
         tap-button-map "left-right-middle"
     }
     warp-mouse-to-focus
-    focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse
+}
+
+// --- GESTURES & HOT CORNERS ---
+gestures {
+    hot-corners {
+        off
+    }
 }
 
 // --- MONITORS (P14s OLED 120Hz + External HDMI) ---
