@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Dừng phát nhạc và giải phóng audio
+if command -v rmpc >/dev/null 2>&1; then
+    rmpc stop >/dev/null 2>&1 || true
+fi
+
+# Tắt tiến trình nền MPD và MPRIS
+pkill -x mpd >/dev/null 2>&1 || true
+mpd --kill >/dev/null 2>&1 || true
+pkill -f mpd-mpris >/dev/null 2>&1 || true
+pkill -x rmpc >/dev/null 2>&1 || true
+
+notify-send -t 1500 -i audio-speakers "Music Player" "Đã tắt hoàn toàn MPD & dừng nhạc." 2>/dev/null || true
+echo "✓ Đã tắt hoàn toàn MPD và dừng phát nhạc."

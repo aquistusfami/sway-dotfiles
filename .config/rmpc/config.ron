@@ -60,4 +60,14 @@
         (name: "Playlists", pane: Pane(Playlists)),
         (name: "Search", pane: Pane(Search)),
     ],
+    keybinds: (
+        global: {
+            "[": ExternalCommand(command: ["/home/aquistus/.local/bin/lrc-offset", "-500"], description: "Delay lyrics 500ms"),
+            "]": ExternalCommand(command: ["/home/aquistus/.local/bin/lrc-offset", "+500"], description: "Advance lyrics 500ms"),
+            "{": ExternalCommand(command: ["/home/aquistus/.local/bin/lrc-offset", "-2000"], description: "Delay lyrics 2000ms"),
+            "}": ExternalCommand(command: ["/home/aquistus/.local/bin/lrc-offset", "+2000"], description: "Advance lyrics 2000ms"),
+            "=": ExternalCommand(command: ["/home/aquistus/.local/bin/lrc-offset", "=0"], description: "Reset lyrics offset"),
+            "Q": ExternalCommand(command: ["/home/aquistus/.local/bin/stop-music"], description: "Stop music and kill MPD completely"),
+        },
+    ),
 )
