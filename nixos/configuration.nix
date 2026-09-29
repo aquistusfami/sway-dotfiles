@@ -216,6 +216,7 @@
   };
 
   services.udev.extraRules = ''
+    KERNEL=="uinput", MODE="0660", GROUP="input", OPTIONS+="static_node=uinput"
     SUBSYSTEM=="power_supply", KERNEL=="AC", ATTR{online}=="0", RUN+="${pkgs.systemd}/bin/systemctl stop thinkfan.service"
     SUBSYSTEM=="power_supply", KERNEL=="AC", ATTR{online}=="1", RUN+="${pkgs.systemd}/bin/systemctl start thinkfan.service"
   '';
@@ -359,6 +360,9 @@
   # Niri Window Manager (Scrollable-tiling Wayland compositor)
   programs.niri.enable = true;
 
+  # XWayland — needed for X11 apps (OnlyOffice, etc.) inside Niri
+  programs.xwayland.enable = true;
+
   # Swaylock PAM authentication
   security.pam.services.swaylock = {};
 
@@ -373,6 +377,7 @@
       "networkmanager"
       "wheel"
       "input"
+      "uinput"
       "video"
       "docker"
     ];
@@ -483,6 +488,9 @@
     zathura
     swayimg
     mpv
+    mpd
+    rmpc
+    mpd-mpris
     yazi
     yt-dlp
     cava
@@ -522,6 +530,7 @@
 
     # --- LaTeX & Academic Publishing ---
     tectonic
+    texmaker
     (texliveMedium.withPackages (ps: with ps; [
       xargs
       bigfoot
@@ -532,6 +541,11 @@
       moderncv
       fontspec
       latexmk
+      titlesec
+      mdframed
+      thmtools
+      needspace
+      zref
     ]))
 
     # --- DevOps, Cloud & Databases ---
@@ -548,6 +562,9 @@
     # --- Desktop Applications ---
     vesktop
     localsend
+    onlyoffice-desktopeditors
+    xwayland-satellite
+    rnote
     kdePackages.kdenlive
     obsidian
     logseq
@@ -577,10 +594,17 @@
   services.cloudflare-warp.enable = true;
   # services.openssh.enable = true;
   # programs.steam.enable = true;
-  # programs.gamemode.enable = true;
+  # ============================================================================
+  # 15. HARDWARE / DRAWING TABLET (XP-Pen Deco Fun XS)
+  # ============================================================================
+  hardware.opentabletdriver = {
+    enable = true;
+    daemon.enable = true;
+  };
+  hardware.uinput.enable = true;
 
   # ============================================================================
-  # 15. NIXOS RELEASE STATE VERSION
+  # 16. NIXOS RELEASE STATE VERSION
   # ============================================================================
   system.stateVersion = "26.05";
 }

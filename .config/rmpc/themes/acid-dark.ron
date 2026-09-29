@@ -1,0 +1,54 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    default_album_art_path: None,
+    format_tag_separator: " • ",
+    browser_column_widths: [20, 38, 42],
+    background_color: None,
+    text_color: "#f5f5f7",
+    header_background_color: None,
+    modal_background_color: "#141419",
+    modal_backdrop: true,
+    preview_label_style: (fg: "#f3f99d"),
+    preview_metadata_group_style: (fg: "#f3f99d", modifiers: "Bold"),
+    highlighted_item_style: (fg: "#f3f99d", modifiers: "Bold"),
+    current_item_style: (fg: "#141419", bg: "#f3f99d", modifiers: "Bold"),
+    borders_style: (fg: "#555555"),
+    highlight_border_style: (fg: "#f3f99d"),
+    symbols: (
+        song: "󰎈",
+        dir: "",
+        playlist: "󰲸",
+        marker: "󰐊",
+        ellipsis: "…",
+        song_style: (fg: "#f3f99d"),
+        dir_style: (fg: "#5af78e"),
+        playlist_style: (fg: "#ff6ac1"),
+    ),
+    level_styles: (
+        info: (fg: "#f3f99d", bg: "#141419"),
+        warn: (fg: "#f3f99d", bg: "#141419"),
+        error: (fg: "#ff6ac1", bg: "#141419"),
+        debug: (fg: "#5af78e", bg: "#141419"),
+        trace: (fg: "#ff6ac1", bg: "#141419"),
+    ),
+    progress_bar: (
+        symbols: ["█", "█", "█", "░", "█"],
+        track_style: (fg: "#333333"),
+        elapsed_style: (fg: "#f3f99d"),
+        thumb_style: (fg: "#f3f99d"),
+        use_track_when_empty: true,
+    ),
+    scrollbar: (
+        symbols: ["│", "█", "▲", "▼"],
+        track_style: (fg: "#222222"),
+        ends_style: (fg: "#444444"),
+        thumb_style: (fg: "#f3f99d"),
+    ),
+    tab_bar: (
+        enabled: true,
+        active_style: (fg: "#141419", bg: "#f3f99d", modifiers: "Bold"),
+        inactive_style: (fg: "#888888"),
+    ),
+)

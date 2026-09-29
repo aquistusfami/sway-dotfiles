@@ -30,6 +30,8 @@ configs=(
     "swayimg"
     "mpv"
     "kanshi"
+    "mpd"
+    "rmpc"
 )
 
 for item in "${configs[@]}"; do
