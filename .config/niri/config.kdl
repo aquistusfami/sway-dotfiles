@@ -119,6 +119,7 @@ window-rule {
 // --- AUTOSTART ---
 spawn-at-startup "dbus-update-activation-environment" "--all"
 spawn-at-startup "fcitx5" "-d"
+spawn-at-startup "kanshi"
 spawn-at-startup "waybar"
 spawn-at-startup "mako"
 spawn-at-startup "swaybg" "-i" "/home/aquistus/.config/niri/current_wallpaper" "-m" "fill"

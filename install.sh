@@ -29,6 +29,7 @@ configs=(
     "gtk-4.0"
     "swayimg"
     "mpv"
+    "kanshi"
 )
 
 for item in "${configs[@]}"; do

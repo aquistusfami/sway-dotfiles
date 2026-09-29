@@ -1,0 +1,16 @@
+# Kanshi Display Profile Configuration
+# Handles hotplugging, docking, and wake-from-sleep for ThinkPad P14s Gen 5
+
+profile dual {
+    output HDMI-A-1 mode 2560x1440@59.951Hz position 0,0 scale 1.25
+    output eDP-1 mode 2880x1800@120Hz position 2048,0 scale 1.5
+}
+
+profile docked {
+    output eDP-1 disable
+    output HDMI-A-1 mode 2560x1440@59.951Hz position 0,0 scale 1.25
+}
+
+profile single {
+    output eDP-1 mode 2880x1800@120Hz position 0,0 scale 1.5
+}
