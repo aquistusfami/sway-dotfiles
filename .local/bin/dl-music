@@ -43,8 +43,23 @@ yt-dlp \
     -o "${DEST}/%(title)s.%(ext)s" \
     "$TARGET_URL"
 
+# Tự động tìm và tải lời bài hát đồng bộ (.lrc)
+echo "Đang tìm lời bài hát đồng bộ (Synced Lyrics)..."
+SONG_TITLE=$(yt-dlp --print "%(title)s" "$PLAYLIST_FLAG" "$TARGET_URL" 2>/dev/null | head -1 || true)
+if [ -n "$SONG_TITLE" ]; then
+    CLEAN_QUERY=$(echo "$SONG_TITLE" | sed -E 's/\(Official [^)]*\)//gi; s/\[Official [^]]*\]//gi; s/\(Lyric[^)]*\)//gi; s/\[Lyric[^]]*\]//gi; s/【[^】]*】//g' | xargs)
+    LYRICS=$(curl -sG --data-urlencode "q=$CLEAN_QUERY" "https://lrclib.net/api/search" 2>/dev/null | jq -r '.[0].syncedLyrics // empty' 2>/dev/null || true)
+    if [ -n "$LYRICS" ] && [ "$LYRICS" != "null" ]; then
+        echo "$LYRICS" > "${DEST}/${SONG_TITLE}.lrc"
+        echo "✓ Đã tải lời bài hát đồng bộ vào: ${DEST}/${SONG_TITLE}.lrc"
+    else
+        echo "○ Không tìm thấy lời đồng bộ trên LRCLIB (sẽ hiển thị tag nếu có)"
+    fi
+fi
+
 echo "Tải xong! Cập nhật thư viện MPD..."
 if command -v rmpc >/dev/null 2>&1; then
     rmpc update >/dev/null 2>&1 || true
+    rmpc lyricsindex >/dev/null 2>&1 || true
 fi
-notify-send -i audio-speakers "Music Downloader" "Đã tải xong vào ~/Music" 2>/dev/null || true
+notify-send -i audio-speakers "Music Downloader" "Đã tải xong: $SONG_TITLE" 2>/dev/null || true
