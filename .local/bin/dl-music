@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ -z "${1:-}" ]; then
+    echo "Sử dụng: dl-music [-p|--playlist] <link-youtube-hoặc-soundcloud>"
+    echo "Mặc định: Chỉ tải 1 bài (tự động bỏ qua playlist dù link có &list=)."
+    echo "Thêm cờ -p hoặc --playlist nếu bạn thực sự muốn tải toàn bộ playlist."
+    exit 1
+fi
+
+PLAYLIST_FLAG="--no-playlist"
+TARGET_URL=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -p|--playlist)
+            PLAYLIST_FLAG="--yes-playlist"
+            shift
+            ;;
+        *)
+            TARGET_URL="$1"
+            shift
+            ;;
+    esac
+done
+
+if [ -z "$TARGET_URL" ]; then
+    echo "Lỗi: Chưa cung cấp đường dẫn bài hát."
+    exit 1
+fi
+
+DEST="${HOME}/Music"
+mkdir -p "$DEST"
+
+echo "Đang tải bài hát chất lượng cao kèm ảnh bìa vào ~/Music..."
+yt-dlp \
+    -x \
+    --audio-format mp3 \
+    --audio-quality 0 \
+    --embed-thumbnail \
+    --embed-metadata \
+    "$PLAYLIST_FLAG" \
+    -o "${DEST}/%(title)s.%(ext)s" \
+    "$TARGET_URL"
+
+echo "Tải xong! Cập nhật thư viện MPD..."
+if command -v rmpc >/dev/null 2>&1; then
+    rmpc update >/dev/null 2>&1 || true
+fi
+notify-send -i audio-speakers "Music Downloader" "Đã tải xong vào ~/Music" 2>/dev/null || true
