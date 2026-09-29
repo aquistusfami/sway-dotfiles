@@ -27,6 +27,12 @@ gestures {
     }
 }
 
+// --- CURSOR THEME ---
+cursor {
+    xcursor-theme "Adwaita"
+    xcursor-size 24
+}
+
 // --- MONITORS (P14s OLED 120Hz + External HDMI) ---
 output "HDMI-A-1" {
     mode "2560x1440@59.951"
