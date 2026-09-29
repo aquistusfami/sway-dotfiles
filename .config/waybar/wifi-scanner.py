@@ -322,12 +322,13 @@ def curses_main(stdscr):
 
     curses.start_color()
     curses.use_default_colors()
-    curses.init_pair(1, curses.COLOR_MAGENTA, -1) # Title / Pink
-    curses.init_pair(2, curses.COLOR_GREEN, -1)   # Connected
-    curses.init_pair(3, curses.COLOR_CYAN, -1)    # SSID
-    curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_WHITE) # Selected
-    curses.init_pair(5, curses.COLOR_YELLOW, -1)  # Status / Key
-    curses.init_pair(6, curses.COLOR_WHITE, -1)   # Subtle
+    curses.init_pair(1, curses.COLOR_YELLOW, -1)   # Accent / Yellow (Acid Dark)
+    curses.init_pair(2, curses.COLOR_GREEN, -1)    # Connected / Green
+    curses.init_pair(3, curses.COLOR_CYAN, -1)     # Saved / Cyan
+    curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_YELLOW) # Selected row (Acid Dark Highlight)
+    curses.init_pair(5, curses.COLOR_MAGENTA, -1)  # Security / Alerts / Pink
+    curses.init_pair(6, curses.COLOR_WHITE, -1)    # Normal text
+    curses.init_pair(7, curses.COLOR_BLUE, -1)     # Secondary headers
 
     # Start background scanner
     scan_thread = threading.Thread(target=scan_worker, daemon=True)
@@ -367,8 +368,8 @@ def curses_main(stdscr):
             items.sort(key=sort_key)
             total_items = len(items)
 
-            list_start_y = 4
-            visible_rows = max(1, max_y - 7)
+            list_start_y = 5
+            visible_rows = max(1, max_y - 8)
 
             # Clamp selection and auto-scroll viewport
             if total_items == 0:
@@ -385,35 +386,43 @@ def curses_main(stdscr):
 
             visible_slice = items[scroll_offset : scroll_offset + visible_rows]
 
-            # Header Line 0
-            header = f"   WI-FI NETWORKS {spinner[spin_idx]} (Live Continuous Scan) "
+            # Header Line 0: Title & Meta Info
             stdscr.attron(curses.color_pair(1) | curses.A_BOLD)
-            stdscr.addstr(0, 0, header[:max_x-1])
+            stdscr.addstr(0, 1, f"  WI-FI MANAGER {spinner[spin_idx]}")
             stdscr.attroff(curses.color_pair(1) | curses.A_BOLD)
 
-            # Header Line 1: Active Connection Status
+            dev_label = f"Dev: {cur_dev}  •  " if cur_dev else ""
+            meta_str = f"{dev_label}{total_items} Networks"
+            if max_x - len(meta_str) - 2 > 24:
+                stdscr.addstr(0, max_x - len(meta_str) - 2, meta_str, curses.A_DIM)
+
+            # Header Line 1: Active Connection Capsule
             if cur_active_conn:
                 act_ssid, act_band = cur_active_conn
-                ip_str = f"  IP: {cur_ip}" if cur_ip else ""
-                conn_header = f" ✔ Connected: {act_ssid} [{act_band}]{ip_str}"
+                ip_part = f" • {cur_ip}" if cur_ip else ""
+                conn_header = f" ● Connected: {act_ssid} ({act_band}){ip_part}"
                 stdscr.attron(curses.color_pair(2) | curses.A_BOLD)
-                stdscr.addstr(1, 0, conn_header[:max_x-1])
+                stdscr.addstr(1, 1, conn_header[:max_x-2])
                 stdscr.attroff(curses.color_pair(2) | curses.A_BOLD)
             else:
-                stdscr.addstr(1, 0, " 󰤮 Disconnected (No active network)"[:max_x-1], curses.A_DIM)
+                stdscr.addstr(1, 1, " ○ Disconnected (No active network)"[:max_x-2], curses.A_DIM)
 
-            # Header Line 2: General Info & Scrolling
-            scroll_info = ""
-            if total_items > visible_rows:
-                scroll_info = f" | {selected_idx + 1}/{total_items} (▲/▼ to scroll)"
-            dev_label = f" | Dev: {cur_dev}" if cur_dev else ""
-            sub_header = f" Active networks: {total_items}{dev_label}{scroll_info}"
-            stdscr.addstr(2, 0, sub_header[:max_x-1], curses.A_DIM)
+            # Header Line 2: Divider
+            stdscr.addstr(2, 1, "─" * (max_x - 2), curses.A_DIM)
+
+            # Header Line 3: Table Column Headers
+            col_header = "   SIG   SEC   SSID                      BAND     SECURITY      STATUS          SIGNAL"
+            stdscr.attron(curses.color_pair(7) | curses.A_BOLD)
+            stdscr.addstr(3, 0, col_header[:max_x-1])
+            stdscr.attroff(curses.color_pair(7) | curses.A_BOLD)
+
+            # Header Line 4: Sub-divider
+            stdscr.addstr(4, 1, "─" * (max_x - 2), curses.A_DIM)
 
             if not items:
-                stdscr.attron(curses.color_pair(5))
-                stdscr.addstr(4, 3, "Scanning for Wi-Fi networks... Please wait...")
-                stdscr.attroff(curses.color_pair(5))
+                stdscr.attron(curses.color_pair(1))
+                stdscr.addstr(6, 3, "Scanning for Wi-Fi networks... Please wait...")
+                stdscr.attroff(curses.color_pair(1))
 
             # Render rows
             for row_i, ((ssid, band), data) in enumerate(visible_slice):
@@ -424,50 +433,65 @@ def curses_main(stdscr):
                 idx = scroll_offset + row_i
                 is_connected = data["in_use"]
                 is_saved = ssid in cur_saved
-                sig_icon = get_wifi_icons(data["signal"], data["is_secured"])
+                sig = data["signal"]
+                sig_icon = get_wifi_icons(sig, data["is_secured"])
                 lock_icon = "" if data["is_secured"] else ""
                 sec_label = data["security"] if data["security"] and data["security"] != "--" else "Open"
                 if len(sec_label) > 12:
                     sec_label = sec_label[:12]
 
+                # Signal visual meter (4 bars)
+                if sig >= 75:
+                    bars = "▂▄▆█"
+                elif sig >= 50:
+                    bars = "▂▄▆_"
+                elif sig >= 25:
+                    bars = "▂▄__"
+                else:
+                    bars = "▂___"
+
                 status_tag = ""
                 if is_connected:
-                    status_tag = " ✔ Connected"
+                    status_tag = "✔ Connected"
                 elif is_saved:
-                    status_tag = " [Saved]"
+                    status_tag = "★ Saved"
 
                 display_ssid = ssid[:24]
-                line_str = f"{sig_icon} {lock_icon}  {display_ssid:<24}  {band:<7}  {sec_label:<12}{status_tag:<14}  [{data['signal']:>3}%]"
-                line_str = line_str[:max_x - 4]
+                row_content = f"{sig_icon} {bars}  {lock_icon}   {display_ssid:<24}  {band:<7}  {sec_label:<12}  {status_tag:<14} [{sig:>3}%]"
+                row_content = row_content[:max_x - 4]
 
                 if idx == selected_idx:
                     stdscr.attron(curses.color_pair(4) | curses.A_BOLD)
-                    stdscr.addstr(row_y, 0, f" ▶ {line_str:<{max_x-4}} ")
+                    stdscr.addstr(row_y, 0, f" ▶ {row_content:<{max_x-4}} ")
                     stdscr.attroff(curses.color_pair(4) | curses.A_BOLD)
                 else:
                     if is_connected:
                         stdscr.attron(curses.color_pair(2) | curses.A_BOLD)
                     elif is_saved:
-                        stdscr.attron(curses.color_pair(3) | curses.A_BOLD)
+                        stdscr.attron(curses.color_pair(3))
                     else:
                         stdscr.attron(curses.color_pair(6))
 
-                    stdscr.addstr(row_y, 0, f"   {line_str}")
+                    stdscr.addstr(row_y, 0, f"   {row_content}")
 
                     if is_connected:
                         stdscr.attroff(curses.color_pair(2) | curses.A_BOLD)
                     elif is_saved:
-                        stdscr.attroff(curses.color_pair(3) | curses.A_BOLD)
+                        stdscr.attroff(curses.color_pair(3))
                     else:
                         stdscr.attroff(curses.color_pair(6))
 
-            # Footer
-            stdscr.attron(curses.color_pair(5))
-            stdscr.addstr(max_y - 2, 0, f" 󰋼 {status_msg}"[:max_x-1])
-            stdscr.attroff(curses.color_pair(5))
+            # Bottom Divider
+            stdscr.addstr(max_y - 3, 1, "─" * (max_x - 2), curses.A_DIM)
 
-            footer = " [Enter/Click] Connect  [d] Disconnect  [u] Forget  [p] Portal  [r] Rescan  [q] Exit "
-            stdscr.addstr(max_y - 1, 0, footer[:max_x-1], curses.A_DIM)
+            # Footer Line -2: Status message
+            stdscr.attron(curses.color_pair(1))
+            stdscr.addstr(max_y - 2, 1, f"󰋼 {status_msg}"[:max_x-2])
+            stdscr.attroff(curses.color_pair(1))
+
+            # Footer Line -1: Keyboard shortcuts with bracket styling
+            footer = " [Enter] Connect  [d] Disconnect  [u] Forget  [p] Portal  [r] Rescan  [q] Exit "
+            stdscr.addstr(max_y - 1, 1, footer[:max_x-2], curses.A_DIM)
 
             stdscr.refresh()
 
