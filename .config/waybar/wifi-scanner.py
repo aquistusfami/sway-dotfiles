@@ -75,9 +75,14 @@ def fetch_saved_connections():
 
 def scan_worker():
     global running, active_conn
+    loop_count = 0
+    first_run = True
+
     while running:
-        fetch_saved_connections()
-        get_wifi_device_and_ip()
+        # Only query saved conns and device IP occasionally (every ~30s or on startup)
+        if first_run or loop_count % 4 == 0:
+            fetch_saved_connections()
+            get_wifi_device_and_ip()
 
         # Query currently active connection name from NetworkManager
         nm_active_ssid = None
@@ -93,10 +98,13 @@ def scan_worker():
         except Exception:
             pass
 
-        try:
-            subprocess.run(["nmcli", "dev", "wifi", "rescan"], capture_output=True, timeout=3)
-        except Exception:
-            pass
+        # Only trigger hardware radio rescan on first start or explicit manual trigger (r key)
+        if first_run or trigger_rescan_event.is_set():
+            try:
+                subprocess.run(["nmcli", "dev", "wifi", "rescan"], capture_output=True, timeout=4)
+            except Exception:
+                pass
+            first_run = False
 
         try:
             out = subprocess.check_output(
@@ -168,10 +176,10 @@ def scan_worker():
                 for k, v in scan_results.items():
                     networks[k] = v
 
-                # Prune networks not seen for > 10s (unless connected or saved)
+                # Prune networks not seen for > 25s (unless connected or saved)
                 expired = [
                     k for k, v in list(networks.items())
-                    if not v["in_use"] and (k[0] not in saved_conns) and (now - v["updated"] > 10.0)
+                    if not v["in_use"] and (k[0] not in saved_conns) and (now - v["updated"] > 25.0)
                 ]
                 for k in expired:
                     del networks[k]
@@ -179,7 +187,8 @@ def scan_worker():
         except Exception:
             pass
 
-        trigger_rescan_event.wait(timeout=3.5)
+        loop_count += 1
+        trigger_rescan_event.wait(timeout=8.0)
         trigger_rescan_event.clear()
 
 def connect_network(ssid, password=None):
@@ -499,7 +508,7 @@ def curses_main(stdscr):
                 trigger_rescan_event.set()
             elif ch in (ord('p'), ord('P')):
                 status_msg = "Opening Captive Portal..."
-                subprocess.Popen(["firefox", "http://neverssl.com"])
+                subprocess.Popen(["firefox", "http://connectivitycheck.gstatic.com/generate_204"])
             elif ch in (ord('n'), ord('N')):
                 subprocess.Popen(["foot", "-a", "termfloat", "-T", "Network Manager (NMTUI)", "nmtui"])
             elif ch in (curses.KEY_UP, ord('k')):
