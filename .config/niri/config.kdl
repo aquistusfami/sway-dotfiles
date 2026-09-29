@@ -134,7 +134,7 @@ binds {
     Mod+Return { spawn "foot"; }
     Mod+B { spawn "firefox"; }
     Mod+E { spawn "foot" "-a" "termfloat" "-T" "nnn File Manager" "/home/aquistus/.config/nnn/run-nnn.sh"; }
-    Mod+M { spawn "foot" "-a" "rmpc" "-T" "rmpc Music Player" "-w" "980x620" "rmpc"; }
+    Mod+M { spawn "foot" "-a" "rmpc" "-T" "rmpc Music Player" "-w" "980x620" "/home/aquistus/.config/niri/scripts/music-player.sh"; }
     Mod+D { spawn "fuzzel"; }
     Mod+Q { close-window; }
     Mod+Shift+Q { spawn "/home/aquistus/.config/niri/scripts/force-kill.sh"; }
