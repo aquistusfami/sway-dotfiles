@@ -42,7 +42,7 @@ case "$ext" in
         firefox "$file" >/dev/null 2>&1 &
         ;;
 
-    # Archives: list or extract with tar/unzip
+    # Archives: list or preview with tar/unzip/unrar/7z
     zip)
         if command -v unzip >/dev/null 2>&1; then
             unzip -l "$file" | ${PAGER:-less}
@@ -50,6 +50,22 @@ case "$ext" in
         ;;
     tar|gz|bz2|xz|zst|tgz)
         tar -tvf "$file" | ${PAGER:-less}
+        ;;
+    rar)
+        if command -v unrar >/dev/null 2>&1; then
+            unrar l "$file" | ${PAGER:-less}
+        elif command -v 7z >/dev/null 2>&1; then
+            7z l "$file" | ${PAGER:-less}
+        elif command -v als >/dev/null 2>&1; then
+            als "$file" | ${PAGER:-less}
+        fi
+        ;;
+    7z)
+        if command -v 7z >/dev/null 2>&1; then
+            7z l "$file" | ${PAGER:-less}
+        elif command -v als >/dev/null 2>&1; then
+            als "$file" | ${PAGER:-less}
+        fi
         ;;
 
     # Default: Text files / code / config in nvim/EDITOR

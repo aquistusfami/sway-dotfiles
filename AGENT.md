@@ -150,6 +150,7 @@ if command -v wlr-randr >/dev/null 2>&1; then wlr-randr; elif command -v xrandr 
      grim slurp wl-clipboard cliphist wlsunset kanshi \
      polkit-gnome brightnessctl pamixer networkmanager bluez bluez-utils \
      fcitx5 fcitx5-bamboo fcitx5-gtk fcitx5-qt \
+     atool p7zip unrar \
      ttf-jetbrains-mono-nerd
    ```
 2. Install AUR dependencies (e.g. via `yay` or `paru`):
@@ -171,6 +172,7 @@ if command -v wlr-randr >/dev/null 2>&1; then wlr-randr; elif command -v xrandr 
      grim slurp wl-clipboard wlsunset kanshi \
      polkit-gnome brightnessctl pamixer NetworkManager bluez \
      fcitx5 fcitx5-bamboo fcitx5-gtk fcitx5-qt \
+     atool p7zip unrar \
      jetbrains-mono-fonts-all
    ```
 2. Install Geist Mono or JetBrainsMono Nerd Font to `~/.local/share/fonts/`.
@@ -184,7 +186,8 @@ if command -v wlr-randr >/dev/null 2>&1; then wlr-randr; elif command -v xrandr 
      waybar fuzzel mako-notifier foot starship btop nnn neovim zsh \
      grim slurp wl-clipboard wlsunset kanshi \
      policykit-1-gnome brightnessctl pamixer network-manager bluez \
-     fcitx5 fcitx5-bamboo fonts-jetbrains-mono
+     fcitx5 fcitx5-bamboo fonts-jetbrains-mono \
+     atool p7zip-full unrar
    ```
 2. For Niri on Debian/Ubuntu: download release binary from `github.com/YaLTeR/niri/releases` or build via `cargo install --locked niri`.
 3. Run `~/dotfiles/install.sh`.

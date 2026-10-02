@@ -467,6 +467,9 @@
     wget
     curl
     unzip
+    p7zip
+    unrar
+    atool
     jq
     yq
     proton-vpn-cli
