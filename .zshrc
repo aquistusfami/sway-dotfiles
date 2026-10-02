@@ -95,6 +95,8 @@ alias ip='ip -color=auto'
 alias fetch='fastfetch'
 alias neofetch='fastfetch'
 alias fc='footclient'
+alias boost-off='echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost'
+alias boost-on='echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost'
 
 # iCTSV & DRL Tool
 ctsv() {

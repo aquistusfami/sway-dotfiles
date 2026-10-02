@@ -8,9 +8,8 @@ export XCURSOR_SIZE=24
 export EDITOR=nvim
 export VISUAL=nvim
 
-# Input method (Fcitx5 for Wayland/Sway)
+# Input method (Fcitx5 for Wayland)
 export XMODIFIERS="@im=fcitx"
-export GTK_IM_MODULE="fcitx"
 export QT_IM_MODULE="fcitx"
 
 # nnn File Manager configuration

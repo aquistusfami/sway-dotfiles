@@ -50,8 +50,9 @@
             "deactivated": ""
         },
         "tooltip": true,
-        "tooltip-format-activated": "Focus Mode: ON (Display kept awake)",
-        "tooltip-format-deactivated": "Focus Mode: OFF (Auto suspend enabled)"
+        "tooltip-format-activated": "Focus Mode: ON (Notifications silenced, display kept awake)",
+        "tooltip-format-deactivated": "Focus Mode: OFF (Notifications unmuted, auto suspend enabled)",
+        "on-click": "/home/aquistus/.config/niri/scripts/toggle-focus-mode.sh"
     },
     "sway/mode": {
         "format": "<span foreground='#ff5c57'></span> {}"
@@ -130,6 +131,7 @@
         "on-click-right": "rfkill toggle bluetooth"
     },
     "network": {
+        "interface": "wl*",
         "format-wifi": "<span foreground='#f3f99d'></span>&#8195;{essid} <span foreground='#f3f99d'>{signalStrength}%</span>",
         "format-ethernet": "<span foreground='#f3f99d'></span>&#8195;wired",
         "format-disconnected": "<span foreground='#f3f99d'></span>&#8195;disconnected",

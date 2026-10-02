@@ -212,14 +212,14 @@ user_pref("findbar.highlightAll", true);
 
 
 /****************************************************************************
- * SECTION: SMOOTHFOX (Sharpen Scrolling for 60Hz Display)                  *
+ * SECTION: SMOOTHFOX (Optimized for 120Hz OLED Display & Smoothness)       *
 ****************************************************************************/
 user_pref("apz.overscroll.enabled", true);
 user_pref("general.smoothScroll", true);
 user_pref("mousewheel.min_line_scroll_amount", 10);
-user_pref("general.smoothScroll.mouseWheel.durationMinMS", 80);
-user_pref("general.smoothScroll.currentVelocityWeighting", "0.15");
-user_pref("general.smoothScroll.stopDecelerationWeighting", "0.6");
+user_pref("general.smoothScroll.mouseWheel.durationMinMS", 40);
+user_pref("general.smoothScroll.currentVelocityWeighting", "0.25");
+user_pref("general.smoothScroll.stopDecelerationWeighting", "0.4");
 
 /****************************************************************************
  * START: MY OVERRIDES - RAM USAGE OPTIMIZATIONS                            *
@@ -285,11 +285,11 @@ user_pref("browser.tabs.inTitlebar", 1);
 user_pref("browser.startup.page", 3);
 user_pref("browser.profiles.enabled", false);
 
-// High-quality modern fonts for web content (Inter Variable)
+// High-quality modern fonts for web content (Geist & Geist Mono)
 user_pref("font.default.x-western", "sans-serif");
 user_pref("font.default.vi", "sans-serif");
-user_pref("font.name.sans-serif.x-western", "Inter Variable");
-user_pref("font.name.sans-serif.vi", "Inter Variable");
+user_pref("font.name.sans-serif.x-western", "Geist");
+user_pref("font.name.sans-serif.vi", "Geist");
 user_pref("font.name.monospace.x-western", "Geist Mono");
 user_pref("font.name.monospace.vi", "Geist Mono");
 
@@ -300,14 +300,16 @@ user_pref("font.name.monospace.vi", "Geist Mono");
 user_pref("media.ffmpeg.vaapi.enabled", true);
 user_pref("media.hardware-video-decoding.enabled", true);
 user_pref("media.rdd-ffmpeg.enabled", true);
+user_pref("media.ffmpeg.low-latency.enabled", true);
 user_pref("media.av1.enabled", true);
 user_pref("gfx.webrender.all", true);
 
-// Wayland fractional scaling & crisp rendering
+// Wayland fractional scaling, touch gestures & crisp rendering
 user_pref("widget.wayland.fractional-scale.enabled", true);
 user_pref("widget.use-xdg-desktop-portal.file-picker", 1);
 user_pref("widget.use-xdg-desktop-portal.mime-handler", 1);
 user_pref("apz.gtk.kinetic_scroll.enabled", true);
+user_pref("apz.gtk.pinch_to_zoom.enabled", true);
 
 // OLED Wide Gamut (DCI-P3) Color Management & Crisp Text Rendering
 user_pref("gfx.color_management.mode", 1);

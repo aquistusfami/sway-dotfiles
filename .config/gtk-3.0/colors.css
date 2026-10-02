@@ -1,21 +1,21 @@
 /* Acid Dark Color Palette for GTK 3 & GTK 4 */
 
-/* Base & Window Backgrounds */
-@define-color theme_bg_color #202020;
+/* Base & Window Backgrounds (Acid Dark Deep Charcoal) */
+@define-color theme_bg_color #18181c;
 @define-color theme_fg_color #eff0eb;
-@define-color theme_base_color #202020;
+@define-color theme_base_color #18181c;
 @define-color theme_text_color #eff0eb;
 
 /* HeaderBar & TitleBar */
-@define-color headerbar_bg_color #181818;
+@define-color headerbar_bg_color #141418;
 @define-color headerbar_fg_color #eff0eb;
-@define-color headerbar_border_color #2a2a2a;
+@define-color headerbar_border_color #282830;
 
 /* Places Sidebar */
-@define-color sidebar_bg_color #161616;
+@define-color sidebar_bg_color #141418;
 @define-color sidebar_fg_color #eff0eb;
 
-/* Selection & Accents (Vibrant Emerald Green with Pure White Text) */
+/* Selection & Accents (Vibrant Emerald Green & Pure White) */
 @define-color theme_selected_bg_color #238636;
 @define-color theme_selected_fg_color #ffffff;
 @define-color accent_color #238636;
@@ -25,23 +25,23 @@
 @define-color pink_accent #ff6ac1;
 
 /* Borders & Dividers */
-@define-color borders #2e2e2e;
-@define-color unfocused_borders #242424;
+@define-color borders #2e2e38;
+@define-color unfocused_borders #24242c;
 
 /* Inputs & Entries */
-@define-color entry_bg_color #262626;
+@define-color entry_bg_color #202026;
 @define-color entry_fg_color #eff0eb;
-@define-color entry_border_color #383838;
+@define-color entry_border_color #383844;
 
 /* Buttons */
-@define-color button_bg_color #282828;
+@define-color button_bg_color #24242c;
 @define-color button_fg_color #eff0eb;
-@define-color button_border_color #3a3a3a;
-@define-color button_hover_bg_color #323232;
-@define-color button_active_bg_color #3a3a3a;
+@define-color button_border_color #383844;
+@define-color button_hover_bg_color #30303a;
+@define-color button_active_bg_color #383846;
 
 /* Tooltips */
-@define-color tooltip_bg_color #181818;
+@define-color tooltip_bg_color #141418;
 @define-color tooltip_fg_color #eff0eb;
 
 /* Status Colors */

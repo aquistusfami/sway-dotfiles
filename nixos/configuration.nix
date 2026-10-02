@@ -301,10 +301,18 @@
       nerd-fonts.geist-mono
       nerd-fonts.jetbrains-mono
       geist-font
+      inter
       dejavu_fonts
       noto-fonts
       libertinus
       font-awesome
+
+      # Microsoft Office / Word Common Fonts (Times New Roman, Arial, Calibri, Cambria, etc.)
+      corefonts
+      vista-fonts
+      liberation_ttf
+      carlito
+      caladea
     ];
 
     fontconfig = {
@@ -461,6 +469,8 @@
     unzip
     jq
     yq
+    proton-vpn-cli
+    wireguard-tools
 
     # --- Sway / Wayland Desktop Utilities ---
     waybar
@@ -569,6 +579,7 @@
     obsidian
     logseq
     brave
+    heroic
 
     # --- Disabled / Bloatware (Keep commented for future reference) ---
     # haruna

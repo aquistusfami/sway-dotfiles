@@ -12,5 +12,5 @@ mpd --kill >/dev/null 2>&1 || true
 pkill -f mpd-mpris >/dev/null 2>&1 || true
 pkill -x rmpc >/dev/null 2>&1 || true
 
-notify-send -t 1500 -i audio-speakers "Music Player" "Đã tắt hoàn toàn MPD & dừng nhạc." 2>/dev/null || true
-echo "✓ Đã tắt hoàn toàn MPD và dừng phát nhạc."
+notify-send -t 1500 -i audio-speakers "Music Player" "Playback stopped & MPD daemon killed." 2>/dev/null || true
+echo "✓ Stopped playback and killed MPD daemon."

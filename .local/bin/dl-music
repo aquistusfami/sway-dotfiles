@@ -62,4 +62,4 @@ if command -v rmpc >/dev/null 2>&1; then
     rmpc update >/dev/null 2>&1 || true
     rmpc lyricsindex >/dev/null 2>&1 || true
 fi
-notify-send -i audio-speakers "Music Downloader" "Đã tải xong: $SONG_TITLE" 2>/dev/null || true
+notify-send -i audio-speakers "Music Downloader" "Download finished: $SONG_TITLE" 2>/dev/null || true

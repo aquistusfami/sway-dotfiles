@@ -1,20 +1,20 @@
-/* Acid Dark Theme - Strict Minimal, Square & 100% Flat (No Gradients) */
+/* Acid Dark Theme - Modern Rounded & Consistent with Niri / Fuzzel / Waybar */
 @import 'colors.css';
 
-/* Universal Reset: Sharp corners, flat, no gradients, no shadows */
+/* Universal Reset: Smooth subtle outlines and clean surfaces */
 * {
-    border-radius: 0px;
-    -gtk-outline-radius: 0px;
     background-image: none;
     box-shadow: none;
     text-shadow: none;
 }
 
-/* Window & Base Dialog */
-window, dialog {
+/* Window & Base Dialogs */
+window,
+dialog,
+.background {
     background-color: @theme_bg_color;
     color: @theme_fg_color;
-    border-radius: 0px;
+    border-radius: 8px;
 }
 
 /* HeaderBar */
@@ -23,70 +23,76 @@ headerbar {
     border-bottom: 1px solid @headerbar_border_color;
     box-shadow: none;
     background-image: none;
-    padding: 6px 8px;
-    border-radius: 0px;
+    padding: 6px 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 headerbar .title {
     font-weight: 600;
     color: @theme_fg_color;
+    font-size: 13px;
 }
 
 headerbar .subtitle {
-    color: #888888;
+    color: #888899;
     font-size: 10px;
 }
 
-/* Normal Buttons (Cancel, Search... vuông vắn, phẳng tuyệt đối) */
+/* Standard Buttons */
 headerbar button,
 dialog button,
 .dialog-action-area button,
 button {
-    background-color: #262626;
+    background-color: @button_bg_color;
     background-image: none;
     box-shadow: none;
     text-shadow: none;
-    color: #eff0eb;
-    border: 1px solid #3a3a3a;
-    border-radius: 0px;
+    color: @button_fg_color;
+    border: 1px solid @button_border_color;
+    border-radius: 6px;
     padding: 6px 14px;
     font-weight: 500;
-    transition: background-color 60ms ease;
+    transition: all 120ms ease;
 }
 
 headerbar button:hover,
 dialog button:hover,
 .dialog-action-area button:hover,
 button:hover {
-    background-color: #333333;
-    background-image: none;
-    border-color: #555555;
+    background-color: @button_hover_bg_color;
+    border-color: #555566;
     color: #ffffff;
 }
 
 headerbar button:active,
 dialog button:active,
 button:active {
-    background-color: #3e3e3e;
-    background-image: none;
-    border-color: #5af78e;
+    background-color: @button_active_bg_color;
+    border-color: @success_color;
     color: #ffffff;
 }
 
-/* ========================================================================== */
-/* Nút Open / Select: Phẳng 100%, không gradient, chữ màu TRẮNG */
-/* ========================================================================== */
+headerbar button:disabled,
+dialog button:disabled,
+button:disabled {
+    background-color: #1a1a20;
+    border-color: #2a2a34;
+    color: #666677;
+}
+
+/* Suggested Action Buttons (Open, Save, Select) */
 headerbar button.suggested-action,
 button.suggested-action,
 .dialog-action-area button.suggested-action,
 button.default {
-    background-color: #238636;
+    background-color: @accent_bg_color;
     background-image: none;
     box-shadow: none;
     text-shadow: none;
-    color: #ffffff;
+    color: @accent_fg_color;
     border: 1px solid #3fb950;
-    border-radius: 0px;
+    border-radius: 6px;
     font-weight: 600;
     padding: 6px 18px;
 }
@@ -96,15 +102,13 @@ button.suggested-action:hover,
 .dialog-action-area button.suggested-action:hover,
 button.default:hover {
     background-color: #2ea043;
-    background-image: none;
-    border-color: #5af78e;
+    border-color: @success_color;
     color: #ffffff;
 }
 
 headerbar button.suggested-action:active,
 button.suggested-action:active {
     background-color: #1e702e;
-    background-image: none;
     border-color: #3fb950;
     color: #ffffff;
 }
@@ -113,177 +117,170 @@ headerbar button.suggested-action:disabled,
 button.suggested-action:disabled,
 .dialog-action-area button.suggested-action:disabled,
 button.default:disabled {
-    background-color: #242a26;
-    background-image: none;
-    box-shadow: none;
-    text-shadow: none;
-    color: #9aa8a0;
-    border: 1px solid #333d36;
+    background-color: #1c2420;
+    border-color: #29362e;
+    color: #6b7a70;
 }
 
-/* Nút Cancel / Destructive */
+/* Destructive / Cancel Actions */
 headerbar button.destructive-action,
 button.destructive-action {
-    background-color: #352323;
-    background-image: none;
-    box-shadow: none;
-    text-shadow: none;
-    color: #ff5c57;
-    border: 1px solid #ff5c57;
-    border-radius: 0px;
+    background-color: #2a181a;
+    border: 1px solid @error_color;
+    border-radius: 6px;
+    color: @error_color;
+}
+
+headerbar button.destructive-action:hover,
+button.destructive-action:hover {
+    background-color: #3c1e21;
+    border-color: #ff7b72;
+    color: #ffffff;
 }
 
 /* Text Entries & Search */
 entry,
 searchbar entry {
-    background-color: #242424;
-    background-image: none;
-    box-shadow: none;
-    color: #eff0eb;
-    border: 1px solid #383838;
-    border-radius: 0px;
-    padding: 6px 10px;
+    background-color: @entry_bg_color;
+    color: @entry_fg_color;
+    border: 1px solid @entry_border_color;
+    border-radius: 6px;
+    padding: 6px 12px;
+    transition: border-color 120ms ease;
 }
 
 entry:focus,
 searchbar entry:focus {
-    border-color: #5af78e;
-    background-image: none;
-    box-shadow: none;
+    border-color: @success_color;
+    box-shadow: 0 0 0 1px @success_color;
 }
 
 /* Path Bar (Breadcrumbs thư mục) */
 pathbar button,
 .path-bar button {
     background-color: transparent;
-    background-image: none;
-    box-shadow: none;
     border: 1px solid transparent;
-    border-radius: 0px;
-    color: #eff0eb;
-    padding: 4px 8px;
+    border-radius: 5px;
+    color: @theme_fg_color;
+    padding: 4px 10px;
+    margin: 0 2px;
+    transition: all 100ms ease;
 }
 
 pathbar button:hover,
 .path-bar button:hover {
-    background-color: #282828;
-    border-color: #383838;
-    color: #57c7ff;
+    background-color: #262630;
+    border-color: #383844;
+    color: @cyan_accent;
 }
 
 pathbar button:checked,
 .path-bar button:checked {
-    background-color: #1c2e22;
-    border-color: #5af78e;
-    color: #5af78e;
+    background-color: #1a3022;
+    border-color: #238636;
+    color: @success_color;
     font-weight: 600;
 }
 
-/* Places Sidebar */
+/* Places Sidebar (Quick Access / Thư mục nhanh) */
 placessidebar,
 placessidebar.frame,
 .placessidebar {
-    background-color: #161616;
-    border-right: 1px solid #282828;
-    border-radius: 0px;
+    background-color: @sidebar_bg_color;
+    border-right: 1px solid #24242c;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 8px;
 }
 
 placessidebar row {
     padding: 7px 12px;
-    margin: 0;
-    border-radius: 0px;
-    border-left: 2px solid transparent;
-    color: #b0b3b2;
-    transition: background-color 60ms ease;
+    margin: 2px 8px;
+    border-radius: 6px;
+    color: #a4a4b4;
+    transition: all 100ms ease;
 }
 
 placessidebar row:hover {
-    background-color: #222222;
-    color: #eff0eb;
+    background-color: #22222a;
+    color: #ffffff;
 }
 
 placessidebar row:selected {
-    background-color: #1c2b21;
-    border-left: 2px solid #5af78e;
-    color: #5af78e;
-    font-weight: 500;
+    background-color: #1a3022;
+    color: @success_color;
+    font-weight: 600;
 }
 
 placessidebar row:selected image,
 placessidebar row:selected label {
-    color: #5af78e;
+    color: @success_color;
 }
 
 placessidebar separator {
-    background-color: #252525;
-    margin: 4px 0;
+    background-color: #24242c;
+    margin: 6px 8px;
 }
 
-/* ========================================================================== */
-/* Danh sách tệp tin (TreeView & File Chooser List) */
-/* ========================================================================== */
+/* TreeView & File Chooser List */
 treeview.view,
 .view {
-    background-color: #202020;
-    color: #eff0eb;
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
     border: none;
-    -GtkTreeView-vertical-separator: 6;
+    -GtkTreeView-vertical-separator: 5;
     -GtkTreeView-horizontal-separator: 8;
 }
 
 treeview.view:hover,
 .view:hover {
-    background-color: #202020;
+    background-color: @theme_bg_color;
 }
 
 /* Column Headers */
 treeview.view header button {
-    background-color: #181818;
-    background-image: none;
-    box-shadow: none;
-    color: #888888;
+    background-color: #141418;
+    color: #888899;
     font-size: 11px;
     font-weight: 600;
     border-top: none;
-    border-bottom: 1px solid #282828;
+    border-bottom: 1px solid #282830;
     border-left: none;
-    border-right: 1px solid #242424;
-    border-radius: 0px;
-    padding: 7px 10px;
+    border-right: 1px solid #202028;
+    border-radius: 0;
+    padding: 6px 10px;
 }
 
 treeview.view header button:hover {
-    background-color: #222222;
+    background-color: #1e1e24;
     color: #eff0eb;
 }
 
-/* Normal File Rows */
+/* File Rows */
 treeview.view row,
 .view row {
-    padding: 6px 8px;
+    padding: 5px 8px;
+    margin: 1px 4px;
     color: #eff0eb;
+    border-radius: 5px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-    border-radius: 0px;
 }
 
 treeview.view row:nth-child(even),
 .view row:nth-child(even) {
-    background-color: #222222;
+    background-color: #1b1b20;
 }
 
 treeview.view row:nth-child(odd),
 .view row:nth-child(odd) {
-    background-color: #202020;
+    background-color: #18181c;
 }
 
 treeview.view row:hover,
 .view row:hover {
-    background-color: #2a2a2a;
+    background-color: #262630;
 }
 
-/* ========================================================================== */
-/* HIỂN THỊ KHI CHỌN FILE (Selection Highlight NỔI BẬT & RÕ RÀNG) */
-/* ========================================================================== */
+/* Selection Highlight */
 treeview.view:selected,
 treeview.view:selected:focus,
 treeview.view:selected:hover,
@@ -294,36 +291,34 @@ treeview.view:selected:backdrop,
 row:selected,
 row:selected:focus,
 row:selected:backdrop {
-    background-color: #238636;
-    background-image: none;
-    color: #ffffff;
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
     font-weight: 600;
-    border-radius: 0px;
+    border-radius: 5px;
 }
 
 /* Icon / Thumbnail Grid View */
 iconview {
-    background-color: #202020;
-    color: #eff0eb;
+    background-color: @theme_bg_color;
+    color: @theme_fg_color;
 }
 
 iconview:selected,
 iconview:selected:focus,
 iconview:selected:backdrop {
-    background-color: #238636;
-    background-image: none;
-    color: #ffffff;
-    border-radius: 0px;
+    background-color: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+    border-radius: 6px;
 }
 
-/* Minimalist Flat Scrollbar */
+/* Sleek Rounded Scrollbar */
 scrollbar {
     background-color: transparent;
     border: none;
-    margin: 0;
+    margin: 2px;
     padding: 0;
-    min-width: 4px;
-    min-height: 4px;
+    min-width: 6px;
+    min-height: 6px;
 }
 
 scrollbar trough {
@@ -332,51 +327,62 @@ scrollbar trough {
 }
 
 scrollbar slider {
-    background-color: #383838;
-    background-image: none;
-    border-radius: 0px;
-    min-width: 4px;
+    background-color: #383844;
+    border-radius: 8px;
+    min-width: 6px;
     min-height: 24px;
     border: none;
-    margin: 0px;
+    margin: 0;
+    transition: background-color 150ms ease;
 }
 
 scrollbar slider:hover {
-    background-color: #5af78e;
+    background-color: @success_color;
 }
 
 scrollbar slider:active {
     background-color: #6ef99d;
 }
 
-/* Checkboxes */
+/* Checkboxes & Radio Buttons */
 checkbutton check,
 check {
-    border: 1px solid #444444;
-    background-color: #242424;
-    background-image: none;
-    box-shadow: none;
-    border-radius: 0px;
+    border: 1px solid #444452;
+    background-color: #202026;
+    border-radius: 4px;
     min-width: 14px;
     min-height: 14px;
 }
 
 checkbutton check:checked,
 check:checked {
-    background-color: #238636;
+    background-color: @accent_bg_color;
+    border-color: @success_color;
     color: #ffffff;
-    border-color: #5af78e;
 }
 
-/* Tooltip */
+radiobutton radio,
+radio {
+    border: 1px solid #444452;
+    background-color: #202026;
+    border-radius: 50%;
+    min-width: 14px;
+    min-height: 14px;
+}
+
+radiobutton radio:checked,
+radio:checked {
+    background-color: @accent_bg_color;
+    border-color: @success_color;
+}
+
+/* Tooltips */
 tooltip {
-    background-color: #181818;
-    background-image: none;
-    box-shadow: none;
-    color: #eff0eb;
-    border: 1px solid #333333;
-    border-radius: 0px;
-    padding: 6px 10px;
+    background-color: @tooltip_bg_color;
+    color: @tooltip_fg_color;
+    border: 1px solid #383844;
+    border-radius: 6px;
+    padding: 6px 12px;
 }
 
 tooltip * {
@@ -386,24 +392,25 @@ tooltip * {
 }
 
 /* Popover & Menus */
-popover, menu {
-    background-color: #202020;
-    background-image: none;
-    box-shadow: none;
-    color: #eff0eb;
-    border: 1px solid #333333;
-    border-radius: 0px;
-    padding: 2px;
+popover,
+menu {
+    background-color: #18181e;
+    color: @theme_fg_color;
+    border: 1px solid #383844;
+    border-radius: 8px;
+    padding: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
 }
 
 popover menuitem,
 menu menuitem {
-    border-radius: 0px;
+    border-radius: 5px;
     padding: 6px 10px;
+    transition: background-color 100ms ease;
 }
 
 popover menuitem:hover,
 menu menuitem:hover {
-    background-color: #238636;
+    background-color: @theme_selected_bg_color;
     color: #ffffff;
 }

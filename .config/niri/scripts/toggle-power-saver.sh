@@ -4,18 +4,26 @@ set -euo pipefail
 # Dynamic power saver for ThinkPad P14s OLED on Niri
 STATE_FILE="${XDG_RUNTIME_DIR:-/tmp}/niri_screen_power_mode"
 
+is_edp_active() {
+    niri msg outputs 2>/dev/null | awk '/\(eDP-1\)/{getline; if ($1 == "Disabled") exit 1; exit 0}'
+}
+
 set_powersave() {
-    niri msg output eDP-1 mode "2880x1800@60" >/dev/null 2>&1 || true
-    brightnessctl set 40% >/dev/null 2>&1 || true
+    if is_edp_active; then
+        niri msg output eDP-1 mode "2880x1800@60" >/dev/null 2>&1 || true
+        brightnessctl set 40% >/dev/null 2>&1 || true
+        notify-send -u low -a "Display Power" "🔋 Battery Saver: 60Hz (40%)" "Reduced refresh rate & brightness to save power." 2>/dev/null || true
+    fi
     echo "powersave" > "$STATE_FILE"
-    notify-send -u low -a "Nguồn Màn Hình" "🔋 Tiết Kiệm Pin: 60Hz (40%)" "Đã hạ tần số quét và độ sáng để tiết kiệm ~3W-5W điện." 2>/dev/null || true
 }
 
 set_performance() {
-    niri msg output eDP-1 mode "2880x1800@120" >/dev/null 2>&1 || true
-    brightnessctl set 70% >/dev/null 2>&1 || true
+    if is_edp_active; then
+        niri msg output eDP-1 mode "2880x1800@120" >/dev/null 2>&1 || true
+        brightnessctl set 70% >/dev/null 2>&1 || true
+        notify-send -u low -a "Display Power" "⚡ High Performance: 120Hz (70%)" "Smooth 120Hz display with optimal brightness." 2>/dev/null || true
+    fi
     echo "performance" > "$STATE_FILE"
-    notify-send -u low -a "Nguồn Màn Hình" "⚡ Hiệu Năng Cao: 120Hz (70%)" "Màn hình 120Hz mượt mà, độ sáng tối ưu." 2>/dev/null || true
 }
 
 auto_detect() {

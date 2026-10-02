@@ -16,6 +16,10 @@ input {
         middle-emulation
         tap-button-map "left-right-middle"
     }
+    trackpoint {
+        accel-speed 0.0
+        accel-profile "adaptive"
+    }
     warp-mouse-to-focus
     focus-follows-mouse
 }
@@ -44,7 +48,6 @@ output "eDP-1" {
     mode "2880x1800@120.000"
     scale 1.5
     position x=2048 y=0
-    variable-refresh-rate
 }
 
 // --- WINDOW STYLING: MINIMAL FLAT ---
@@ -117,6 +120,17 @@ window-rule {
     open-floating true
 }
 
+// --- ENVIRONMENT VARIABLES ---
+environment {
+    ELECTRON_OZONE_PLATFORM_HINT "auto";
+    QT_QPA_PLATFORM "wayland;xcb";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1";
+    SDL_VIDEODRIVER "wayland";
+    CLUTTER_BACKEND "wayland";
+    GDK_BACKEND "wayland,x11,*";
+    MOZ_ENABLE_WAYLAND "1";
+}
+
 // --- AUTOSTART ---
 spawn-at-startup "dbus-update-activation-environment" "--all"
 spawn-at-startup "fcitx5" "-d"
@@ -127,6 +141,7 @@ spawn-at-startup "waybar"
 spawn-at-startup "mako"
 spawn-at-startup "swaybg" "-i" "/home/aquistus/.config/niri/current_wallpaper" "-m" "fill"
 spawn-at-startup "/home/aquistus/.config/niri/scripts/toggle-power-saver.sh" "watch"
+spawn-at-startup "/home/aquistus/.config/niri/scripts/idle-handler.sh"
 
 // --- KEYBINDINGS ---
 binds {
@@ -214,6 +229,7 @@ binds {
     Mod+N { spawn "/home/aquistus/.config/niri/scripts/toggle-nightlight.sh"; }
     Mod+P { spawn "/home/aquistus/.config/niri/scripts/toggle-power-saver.sh"; }
     Mod+G { spawn "/home/aquistus/.config/niri/scripts/toggle-gaps.sh"; }
+    Mod+Shift+D { spawn "/home/aquistus/.config/niri/scripts/toggle-focus-mode.sh"; }
 
     // Hardware Media & Brightness Controls
     XF86AudioMute        allow-when-locked=true { spawn "pactl" "set-sink-mute" "@DEFAULT_SINK@" "toggle"; }

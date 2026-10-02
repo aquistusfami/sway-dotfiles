@@ -37,7 +37,7 @@ def main():
     else:
         current = get_current_song()
         if not current:
-            print("Không có bài hát nào đang phát.")
+            print("No song currently playing.")
             sys.exit(1)
         base = os.path.splitext(current)[0]
         music_dir = os.path.expanduser("~/Music")
@@ -50,8 +50,8 @@ def main():
                 lrc_path = f"{os.path.splitext(current)[0]}.lrc"
 
     if not lrc_path or not os.path.exists(lrc_path):
-        print(f"Không tìm thấy file .lrc cho bài hát đang phát.")
-        notify("Không tìm thấy file .lrc", "Lyrics Sync")
+        print("LRC file not found for current song.")
+        notify("LRC file not found", "Lyrics Sync")
         sys.exit(1)
 
     with open(lrc_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -71,7 +71,7 @@ def main():
     if arg is None:
         print(f"File: {os.path.basename(lrc_path)}")
         print(f"Current offset: {current_offset} ms")
-        notify(f"Offset hiện tại: {current_offset} ms\n({os.path.basename(lrc_path)})")
+        notify(f"Current offset: {current_offset} ms\n({os.path.basename(lrc_path)})")
         return
 
     # Parse argument
@@ -94,7 +94,7 @@ def main():
         f.write('\n'.join(lines) + '\n')
 
     song_name = os.path.basename(lrc_path).replace('.lrc', '')
-    print(f"✓ Đã cập nhật offset: {current_offset} ms -> {new_offset} ms ({song_name})")
+    print(f"✓ Updated offset: {current_offset} ms -> {new_offset} ms ({song_name})")
     notify(f"Offset: {new_offset} ms ({'+' if new_offset>0 else ''}{new_offset - current_offset} ms)\n{song_name}")
 
 if __name__ == '__main__':
