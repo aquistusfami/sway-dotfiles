@@ -1,307 +1,315 @@
-# AGENT.md — Machine Deployment Guide
+# AGENT.md — Multi-OS & Multi-WM Deployment Guide
 
-> **For AI agents:** Read this entire file before touching any config.
-> Everything you need to replicate this setup on a new machine is here.
-> Follow the steps in order. Do not skip sections.
+> **For AI agents:** Read this entire file before touching any config or running commands on the target machine.
+> This repository houses a modular Wayland desktop environment built on the **Acid Dark** design system.
+> Follow the pre-flight checklist, identify target OS and Window Manager (WM), then execute the matched deployment path.
 
 ---
 
-## 1. Machine Profile
+## 1. Reference Machine Profile (Origin Hardware)
 
-| Field | Value |
-|---|---|
-| Hardware | Lenovo ThinkPad P14s Gen 5 AMD |
-| CPU | Ryzen 7 PRO 8840HS (Zen 4, 8C/16T) |
-| GPU | AMD Radeon 780M (integrated, VA-API capable) |
-| RAM | 27.1 GB |
-| Display 1 | eDP-1 — 2880×1800 OLED 120Hz, scale 1.5 |
-| Display 2 | HDMI-A-1 — 2560×1440 60Hz, scale 1.25 |
-| OS | NixOS (nixos-unstable channel) |
-| Compositor | **Niri** (scrollable-tiling Wayland) |
-| Shell | Zsh + Starship |
-| Username | `aquistus` |
-| Timezone | `Asia/Ho_Chi_Minh` |
-| Locale | `en_US.UTF-8` (LC_* set to `vi_VN`) |
-
-**If deploying to different hardware**, you MUST:
-- Generate new `hardware-configuration.nix` via `nixos-generate-config`
-- Adjust display outputs in `.config/niri/config.kdl` (output names, mode, scale)
-- Remove ThinkPad-specific services (thinkfan, TLP thresholds) if not ThinkPad
+| Field | Baseline Value | Adaptation Requirement on Other Hardware |
+|---|---|---|
+| Hardware | Lenovo ThinkPad P14s Gen 5 AMD | Remove `thinkfan` and TLP ThinkPad charge thresholds if not ThinkPad |
+| CPU | Ryzen 7 PRO 8840HS (Zen 4, 8C/16T) | Adjust CPU frequency/governor rules if using Intel or desktop CPU |
+| GPU | AMD Radeon 780M (RADV / Mesa) | If Nvidia: configure proprietary drivers + Wayland env flags |
+| Displays | eDP-1 (2880×1800@120Hz, scale 1.5) + HDMI-A-1 | Detect with `wlr-randr` / `niri msg outputs` and adjust scale/mode |
+| OS | NixOS (nixos-unstable, Flakes) | If Arch/Fedora/Debian: use distro packages + `install.sh` |
+| Primary WM | **Niri** (scrollable-tiling Wayland) | Also supports **Sway** natively, or port to Hyprland |
+| Shell | Zsh + Starship | Fully cross-platform POSIX/Zsh |
 
 ---
 
 ## 2. Design System (Global Visual Language)
 
-All configs follow a single coherent aesthetic. **Do not deviate from these values** when editing any config file.
+**Do not deviate from these design tokens** when editing or generating configurations across any WM.
 
-### Colors
-| Token | Value | Used in |
+### Colors (Acid Dark)
+| Token | Hex / Value | Scope |
 |---|---|---|
-| Background | `#141419` (`f2` opacity = 95%) | mako, fuzzel, waybar |
-| Text | `#f5f5f7` | mako, waybar, foot |
-| Border (active) | `#ffffff40` (25% white) | niri windows, mako, fuzzel, waybar |
-| Border (inactive) | `#ffffff20` (12% white) | niri windows |
-| Icon accent (yellow) | `#f3f99d` | waybar icons, fastfetch keys |
-| Error / urgent | `#ff6ac1` (pink) | mako critical, terminal |
-| Warning | `#f3f99d` (same yellow) | mako low urgency |
+| Background | `#141419` (`f2` = 95% opacity) | mako, fuzzel, waybar, foot |
+| Foreground / Text | `#f5f5f7` | mako, waybar, foot |
+| Active Border | `#ffffff40` (25% white) | niri, sway, mako, fuzzel, waybar |
+| Inactive Border | `#ffffff20` (12% white) | niri, sway |
+| Yellow Accent | `#f3f99d` | waybar icons, fastfetch keys, mako low urgency |
+| Pink Accent (Urgent) | `#ff6ac1` | mako critical, terminal alerts |
 
 ### Typography
-| Usage | Font | Size |
+| Component | Font Family | Size |
 |---|---|---|
-| UI / Notifications (mako) | `JetBrainsMono Nerd Font` | 10.5 |
-| Terminal (foot) | `GeistMono Nerd Font` | 10.5 |
-| Waybar | System default | 12px, weight 500 |
+| UI / Notifications (mako) | `JetBrainsMono Nerd Font` | 10.5 pt |
+| Terminal (foot) | `GeistMono Nerd Font` (fallback: `JetBrainsMono Nerd Font`) | 10.5 pt |
+| Bar (waybar) | System default / `JetBrainsMono Nerd Font` | 12px, weight 500 |
 
-### Geometry
-| Property | Float mode | Full mode |
+### Geometry (Dual Mode)
+| Property | Float Mode (Default) | Full Mode |
 |---|---|---|
-| Window gaps | 4px | 0px |
-| Corner radius | 8px | 0px |
-| Niri border-width | 1px | 1px |
-| Waybar margin | 4px | 0px |
-| Fuzzel border-radius | 8px | 0px |
+| Window Gaps | 4px | 0px |
+| Corner Radius | 8px | 0px |
+| Border Width | 1px | 1px |
+| Waybar Margin | 4px | 0px |
+| Fuzzel Radius | 8px | 0px |
 
 ---
 
-## 3. Repository Layout
+## 3. Repository Architecture & Modularity
+
+The repository separates the desktop into 4 independent tiers:
 
 ```
 dotfiles/
-├── AGENT.md                    ← you are here
-├── README.md                   ← human-readable overview
-├── install.sh                  ← symlink deployment script
-├── nixos/
-│   ├── configuration.nix       ← full NixOS system config (copy to /etc/nixos/)
-│   └── flake.nix               ← flake with nixos-hardware module
+├── AGENT.md                       ← Comprehensive deployment guide for AI agents
+├── install.sh                     ← Universal symlink installer (safe, non-destructive)
+├── nixos/                         ← NixOS declarative system configuration
+│   ├── configuration.nix
+│   └── flake.nix
 ├── .config/
-│   ├── niri/
-│   │   ├── config.kdl          ← compositor: inputs, outputs, keybinds, layout
-│   │   ├── current_wallpaper   ← symlink → active wallpaper (set by wallpaper-picker)
-│   │   └── scripts/
-│   │       ├── wallpaper-picker.lua  ← swayimg gallery → sets current_wallpaper
-│   │       ├── toggle-gaps.sh        ← Mod+G: switch float ↔ full mode
-│   │       └── powermenu.sh          ← Mod+Shift+E: lock/logout/suspend/reboot/shutdown
-│   ├── waybar/
-│   │   ├── config.jsonc        ← bar modules, positions, bindings
-│   │   ├── style.css           ← glass capsule design, colors, animations
-│   │   ├── wifi-menu.sh        ← wifi TUI manager (nmcli + curses)
-│   │   ├── bluetooth-menu.sh   ← bluetooth TUI manager (bluetoothctl + curses)
-│   │   └── wifi-scanner.py     ← background wifi scan for waybar tooltip
-│   ├── foot/foot.ini           ← terminal: GeistMono, Acid Dark colors, keybinds
-│   ├── fuzzel/fuzzel.ini       ← launcher: glass theme, foot terminal, radius 8
-│   ├── mako/config             ← notifications: JetBrainsMono, glass, 8px radius
-│   ├── swaylock/config         ← lock screen: wallpaper from niri/current_wallpaper
-│   ├── fastfetch/config.jsonc  ← system info: yellow keys, nixos_medium logo
-│   ├── btop/                   ← system monitor
-│   ├── nvim/                   ← LazyVim, JDT.LS, Tectonic/Zathura SyncTeX
-│   ├── nnn/                    ← file manager wrapper scripts
-│   └── starship.toml           ← shell prompt
-├── firefox/
-│   ├── user.js                 ← Betterfox + VA-API + OLED color management
-│   └── chrome/
-│       ├── userChrome.css      ← minimal tabs, no titlebar, JetBrains Mono URL bar
-│       └── userContent.css
-├── wallpapers/                 ← wallpaper collection
-└── system/
-    └── tlp/                    ← TLP battery + thermal config (ThinkPad only)
+│   ├── [TIER 1: COMPOSITORS]
+│   │   ├── niri/                  ← Primary: Niri scrollable-tiling (config.kdl + scripts)
+│   │   └── sway/                  ← Fallback: Sway i3-compatible tiling (config + scripts)
+│   ├── [TIER 2: WAYLAND SHELL]
+│   │   ├── waybar/                ← Glass capsule status bar (float / full modes)
+│   │   ├── fuzzel/                ← Application launcher (Acid Dark, 8px radius)
+│   │   ├── mako/                  ← Notification daemon
+│   │   ├── swaylock/              ← Lockscreen config
+│   │   ├── swayimg/               ← Native Wayland gallery & wallpaper picker
+│   │   └── kanshi/                ← Dynamic monitor hotplugging
+│   ├── [TIER 3: TERMINAL & APPS]
+│   │   ├── foot/                  ← Standalone fast Wayland terminal
+│   │   ├── starship.toml          ← Prompt theme
+│   │   ├── fastfetch/             ← System info card
+│   │   ├── btop/                  ← System monitor
+│   │   ├── nnn/                   ← Terminal file manager + custom launcher
+│   │   ├── nvim/                  ← LazyVim, LaTeX/SyncTeX, JDT.LS
+│   │   ├── zathura/               ← PDF viewer with SyncTeX
+│   │   ├── mpv/                   ← Minimal video player
+│   │   └── fcitx5/                ← Vietnamese input (Bamboo)
+│   └── [TIER 4: THEMES & DESKTOP]
+│       ├── gtk-3.0/ & gtk-4.0/    ← GTK dark theme & cursor config
+│       ├── mimeapps.list          ← Default file associations
+│       └── fontconfig/            ← Font fallback priority
+├── firefox/                       ← Minimal Acid Dark userChrome.css + Betterfox user.js
+└── wallpapers/                    ← Wallpaper collection
 ```
 
 ---
 
-## 4. Full Deployment Steps (New Machine)
+## 4. Pre-Flight Inspection (AI Agent Step 0)
 
-### Step 1 — Install NixOS base
-Boot NixOS installer, partition disk, then:
+Before executing any install commands, run this audit snippet to detect the environment:
+
 ```bash
-nixos-generate-config --root /mnt
+# 1. Detect Distribution
+cat /etc/os-release | grep -E '^ID=|^ID_LIKE='
+
+# 2. Detect GPU Vendor (AMD / Intel / Nvidia)
+lspci -nnk | grep -iE 'vga|3d|display'
+
+# 3. Detect Form Factor (Laptop vs Desktop)
+hostnamectl chassis || cat /sys/class/dmi/id/chassis_type 2>/dev/null || echo "desktop"
+
+# 4. Detect Displays and Connected Outputs
+if command -v wlr-randr >/dev/null 2>&1; then wlr-randr; elif command -v xrandr >/dev/null 2>&1; then xrandr --query; fi
 ```
-
-### Step 2 — Deploy NixOS system config
-```bash
-git clone https://github.com/aquistusfami/sway-dotfiles.git ~/dotfiles
-
-# Copy NixOS config (keep the hardware-configuration.nix generated in Step 1)
-cp ~/dotfiles/nixos/configuration.nix /etc/nixos/configuration.nix
-cp ~/dotfiles/nixos/flake.nix /etc/nixos/flake.nix
-
-# IMPORTANT: Edit these in configuration.nix for the new machine:
-# - users.users."aquistus" → change username if needed
-# - time.timeZone → change if not Vietnam
-# - services.thinkfan → remove if not ThinkPad
-# - system.stateVersion → match nixos-generate-config output
-
-sudo nixos-rebuild switch --flake /etc/nixos#nixos
-```
-
-### Step 3 — Deploy dotfiles (symlinks)
-```bash
-chmod +x ~/dotfiles/install.sh
-~/dotfiles/install.sh
-```
-
-### Step 4 — Adjust display outputs in Niri config
-Edit `~/.config/niri/config.kdl`. Find the `// --- MONITORS ---` section.
-Check your output names first:
-```bash
-niri msg outputs
-```
-Update output names, modes, and scales to match your hardware.
-
-### Step 5 — Set initial wallpaper
-```bash
-swaybg -i ~/Pictures/wallpapers/<any>.jpg -m fill &
-```
-Or use the wallpaper picker: `Mod+Shift+W` inside Niri.
-
-### Step 6 — Firefox profile
-Run Firefox once to create a profile, then `install.sh` will auto-link
-`userChrome.css`, `userContent.css`, and `user.js` to the profile.
-If running after Firefox was already opened:
-```bash
-~/dotfiles/install.sh  # re-run, it handles existing profiles
-```
-Enable `toolkit.legacyUserProfileCustomizations.stylesheets` in `about:config`.
 
 ---
 
-## 5. Key Bindings (Niri)
+## 5. OS-Specific Deployment Paths
 
-`$mod` = Super (Windows key)
+### Path 5A — NixOS
+1. Clone dotfiles to `~/dotfiles`:
+   ```bash
+   git clone https://github.com/aquistusfami/sway-dotfiles.git ~/dotfiles
+   ```
+2. Generate target machine hardware configuration:
+   ```bash
+   nixos-generate-config --dir /tmp/nixos-gen
+   cp /tmp/nixos-gen/hardware-configuration.nix /etc/nixos/hardware-configuration.nix
+   ```
+3. Copy system configuration:
+   ```bash
+   cp ~/dotfiles/nixos/configuration.nix /etc/nixos/configuration.nix
+   cp ~/dotfiles/nixos/flake.nix /etc/nixos/flake.nix
+   ```
+4. Adjust machine-specific fields in `/etc/nixos/configuration.nix`:
+   - Change `users.users.aquistus` to the target machine username.
+   - If not a ThinkPad: remove `services.thinkfan` and TLP battery thresholds.
+   - If Nvidia GPU: enable `hardware.nvidia` instead of AMD Mesa defaults.
+5. Rebuild and deploy symlinks:
+   ```bash
+   sudo nixos-rebuild switch --flake /etc/nixos#nixos
+   ~/dotfiles/install.sh
+   ```
 
-| Binding | Action |
-|---|---|
-| `Mod+Return` | Terminal (foot) |
-| `Mod+D` | App launcher (fuzzel) |
-| `Mod+B` | Firefox |
-| `Mod+E` | File manager (nnn in foot) |
-| `Mod+Q` | Close window |
-| `Mod+F` | Fullscreen |
-| `Mod+G` | Toggle float ↔ full mode (gaps + radius) |
-| `Mod+Shift+W` | Wallpaper picker (swayimg gallery) |
-| `Mod+Shift+E` | Power menu (lock/logout/suspend/reboot/shutdown) |
-| `Mod+Shift+S` | Area screenshot → clipboard + `~/Pictures/` |
-| `Mod+O` | Toggle waybar visibility |
-| `Mod+←→` | Move focus left/right in workspace |
-| `Mod+Shift+←→` | Move window left/right |
-| `Ctrl+Alt+←→` | Switch workspace |
-| `Mod+1-9` | Switch to workspace N |
+### Path 5B — Arch Linux / CachyOS / Manjaro
+1. Install base Wayland shell, compositors, and fonts via `pacman`:
+   ```bash
+   sudo pacman -S --needed \
+     niri sway swaybg swayidle swaylock swayimg \
+     waybar fuzzel mako foot starship fastfetch btop nnn neovim zsh \
+     grim slurp wl-clipboard cliphist wlsunset kanshi \
+     polkit-gnome brightnessctl pamixer networkmanager bluez bluez-utils \
+     fcitx5 fcitx5-bamboo fcitx5-gtk fcitx5-qt \
+     ttf-jetbrains-mono-nerd
+   ```
+2. Install AUR dependencies (e.g. via `yay` or `paru`):
+   ```bash
+   yay -S --needed ttf-geist-mono-nerd
+   ```
+3. Run universal symlink installer:
+   ```bash
+   chmod +x ~/dotfiles/install.sh && ~/dotfiles/install.sh
+   ```
 
----
+### Path 5C — Fedora / Nobara
+1. Enable COPR for Niri and install packages:
+   ```bash
+   sudo dnf copr enable yalter/niri -y
+   sudo dnf install -y \
+     niri sway swaybg swayidle swaylock \
+     waybar fuzzel mako foot starship fastfetch btop nnn neovim zsh \
+     grim slurp wl-clipboard wlsunset kanshi \
+     polkit-gnome brightnessctl pamixer NetworkManager bluez \
+     fcitx5 fcitx5-bamboo fcitx5-gtk fcitx5-qt \
+     jetbrains-mono-fonts-all
+   ```
+2. Install Geist Mono or JetBrainsMono Nerd Font to `~/.local/share/fonts/`.
+3. Run `~/dotfiles/install.sh`.
 
-## 6. NixOS-Specific Gotchas
-
-These are known issues that will break things if you don't know about them.
-
-### Process names are wrapped
-NixOS wraps binaries. Always use `pkill -f` (not `-x`):
-```bash
-pkill -f swaybg      # correct (kills .swaybg-wrapped)
-pkill -x swaybg      # WRONG — will not kill NixOS-wrapped binary
-```
-Affects: `swaybg`, `waybar`, `mako`, `swaylock`.
-
-### Power management — systemctl only
-On NixOS with systemd, always use:
-```bash
-systemctl suspend        # suspend
-systemctl poweroff       # shutdown
-systemctl reboot         # reboot
-loginctl terminate-session $XDG_SESSION_ID  # logout
-```
-Do NOT use `zzz`, `pm-suspend`, or `loginctl` with trailing arguments.
-The powermenu script (`powermenu.sh`) already uses correct commands.
-
-### Swaylock authentication
-PAM config is enabled in `configuration.nix`:
-```nix
-security.pam.services.swaylock = {};
-```
-Without this, swaylock will never accept the password.
-
-### Icon paths (notification icons)
-Papirus icons are NOT installed. Valid icon paths:
-- `/home/aquistus/.local/share/icons/YAMIS/` (custom, from this dotfiles)
-- `/run/current-system/sw/share/icons/Adwaita/`
-- `/run/current-system/sw/share/icons/hicolor/`
-
-### Niri IPC — no swaymsg
-Niri does not use `swaymsg`. Use:
-```bash
-niri msg action <action>       # send actions
-niri msg outputs               # list outputs
-niri msg workspaces            # list workspaces
-```
-
-### Toggle-gaps mode state
-Mode (float/full) is stored in:
-```
-$XDG_RUNTIME_DIR/desktop_mode_state   # contains "full" or "float"
-```
-`toggle-gaps.sh` patches `config.kdl`, `style.css`, and `fuzzel.ini` via `sed -i`.
-After patching niri config, it reloads niri: `niri msg action reload-config`.
-
-### Foot terminal — standalone only
-`footclient` was removed. Use `foot` directly everywhere.
-There is NO foot server daemon in autostart. Each `foot` call spawns its own process.
-
-### Wallpaper persistence
-`current_wallpaper` is a symlink at `~/.config/niri/current_wallpaper`.
-`wallpaper-picker.lua` updates it on selection.
-`swaylock/config` reads from this path for the lock screen image.
-
-### X11 apps (OnlyOffice, etc.) require XWayland managed by Niri
-`programs.xwayland.enable = true` is set in `configuration.nix`.
-After `nixos-rebuild switch`, **logout and log back into Niri** — Niri will then
-manage XWayland automatically and X11 apps work normally from Mod+D.
-
-Do NOT launch `Xwayland` manually as a standalone process — it will not integrate
-with Niri's compositor and windows will be invisible.
-
-The wrapper script `.config/niri/scripts/onlyoffice.sh` exists as a fallback but
-is only needed if XWayland is not being managed by Niri (i.e., before rebuild).
+### Path 5D — Ubuntu (24.04+) / Debian (Bookworm+)
+1. Install available Wayland stack via `apt`:
+   ```bash
+   sudo apt update && sudo apt install -y \
+     sway swaybg swayidle swaylock \
+     waybar fuzzel mako-notifier foot starship btop nnn neovim zsh \
+     grim slurp wl-clipboard wlsunset kanshi \
+     policykit-1-gnome brightnessctl pamixer network-manager bluez \
+     fcitx5 fcitx5-bamboo fonts-jetbrains-mono
+   ```
+2. For Niri on Debian/Ubuntu: download release binary from `github.com/YaLTeR/niri/releases` or build via `cargo install --locked niri`.
+3. Run `~/dotfiles/install.sh`.
 
 ---
 
-## 7. Services Running at Niri Startup
+## 6. Window Manager / Compositor Selection Guide
 
-Defined in `config.kdl` under `spawn-at-startup`:
+The dotfiles repository provides pre-configured environments for multiple WMs:
 
-| Service | Command | Purpose |
+### Option 6A — Niri (Default / Primary)
+- **Config Path**: `~/.config/niri/config.kdl`
+- **Display Setup**: Run `niri msg outputs`, then edit the `output` blocks in `config.kdl` to match connector names (e.g. `eDP-1`, `DP-1`, `HDMI-A-1`) and set proper resolution/scaling.
+- **Reload**: `niri msg action reload-config`
+
+### Option 6B — Sway (Complete Alternative in Repo)
+- **Config Path**: `~/.config/sway/config`
+- **Display Setup**: Run `swaymsg -t get_outputs`, then edit `output <name> resolution <res> position <pos> scale <scale>` in `~/.config/sway/config`.
+- **Startup**: `sway` launches the same Waybar, Fuzzel, Mako, Foot, and Swaybg seamlessly.
+- **Reload**: `swaymsg reload` (`Mod+Shift+C`)
+
+### Option 6C — Hyprland (Porting Guide)
+When the user requests Hyprland on top of these dotfiles:
+1. Re-use existing Tier 2 & 3 tools without modification:
+   - Status bar: Waybar (`~/.config/waybar/config.jsonc` + `style.css`)
+   - Launcher: Fuzzel (`~/.config/fuzzel/fuzzel.ini`)
+   - Notifications: Mako (`~/.config/mako/config`)
+   - Terminal: Foot (`~/.config/foot/foot.ini`)
+   - Shell & Editors: Starship, Neovim, Fastfetch, Btop
+2. In `~/.config/hypr/hyprland.conf`, set matching Acid Dark theme variables:
+   ```ini
+   general {
+       gaps_in = 2
+       gaps_out = 4
+       border_size = 1
+       col.active_border = rgba(ffffff40)
+       col.inactive_border = rgba(ffffff20)
+   }
+   decoration {
+       rounding = 8
+   }
+   exec-once = waybar & mako & swaybg -i ~/.config/niri/current_wallpaper -m fill & fcitx5 -d &
+   ```
+
+### Option 6D — Desktop Environments (GNOME / KDE / X11)
+When the target system runs a full desktop environment:
+- `install.sh` links terminal, editor, shell, and browser configs cleanly.
+- Do **not** launch Waybar, Mako, or Swaybg inside GNOME or KDE sessions.
+
+---
+
+## 7. Hardware & GPU Adaptation Checklist
+
+### A. GPU Configuration
+- **AMD (Radeon 780M / Navi)**: Default setup. Fully supported out of the box via Mesa `radv`.
+- **Intel (Xe / Arc / UHD)**: Works out of the box with Mesa `iris`. Verify `intel-media-driver` is installed for VA-API video acceleration.
+- **Nvidia (Proprietary Drivers)**:
+  1. Add environment variables to `~/.zprofile` or `/etc/environment`:
+     ```bash
+     export LIBVA_DRIVER_NAME=nvidia
+     export GBM_BACKEND=nvidia-drm
+     export __GLX_VENDOR_LIBRARY_NAME=nvidia
+     export NIXOS_OZONE_WL=1
+     export WLR_NO_HARDWARE_CURSORS=1
+     ```
+  2. If running Niri with Nvidia: launch with `niri --render-drm-device /dev/dri/renderD128`.
+
+### B. Display Scaling & Resolution
+Never leave default OLED 2880×1800 scale 1.5 on non-OLED screens:
+- **1080p (1920×1080)**: Set `scale 1.0` in `config.kdl` or `sway/config`.
+- **1440p (2560×1440)**: Set `scale 1.0` or `scale 1.25`.
+- **4K (3840×2160)**: Set `scale 1.75` or `scale 2.0`.
+
+### C. Desktop vs Laptop Adaptation
+If the machine is a **Desktop PC** (no battery, external monitors only):
+1. In `~/.config/waybar/config.jsonc`, remove `"battery"` and `"backlight"` from `"modules-right"`.
+2. Disable/remove `tlp` and `thinkfan` system services.
+
+---
+
+## 8. Cross-Platform Gotchas & Troubleshooting
+
+| Issue | Cause | Fix |
 |---|---|---|
-| Waybar | `waybar` | Status bar |
-| Mako | `mako` | Notifications |
-| Swaybg | `swaybg -i ~/.config/niri/current_wallpaper -m fill` | Wallpaper |
-| Swayidle | `swayidle -w ...` | Lock after 5min idle |
-| Fcitx5 | `fcitx5 -d` | Vietnamese input (Bamboo) |
-| Polkit | `polkit-gnome-authentication-agent-1` | Auth dialogs |
-| Wlsunset | `wlsunset -l 10.8 -L 106.6` | Night light (Ho Chi Minh City) |
-| Cliphist | `wl-paste --watch cliphist store` | Clipboard history |
-| Kanshi | `kanshi` | Auto display profile switching |
+| Binary kill fails | NixOS wraps binaries in `.name-wrapped` | Use `pkill -f <name>` (never `pkill -x`) on NixOS |
+| Swaylock rejects password | Missing PAM authentication service | On NixOS: `security.pam.services.swaylock = {};`<br>On Arch/Debian: verify `/etc/pam.d/swaylock` exists |
+| Icons missing in Waybar/Fastfetch | Nerd fonts not loaded | Ensure `JetBrainsMono Nerd Font` or `GeistMono Nerd Font` is installed |
+| X11 apps invisible on Niri | XWayland not running | Ensure `xwayland` package installed and restart Niri session |
+| Power shortcuts fail | Non-systemd or permission issue | Powermenu uses `systemctl suspend/poweroff/reboot`. Verify user in `wheel` or `power` group |
 
 ---
 
-## 8. Toggle-Gaps Behavior (Mod+G)
+## 9. Key Bindings Quick Reference
 
-The `toggle-gaps.sh` script patches 3 files simultaneously:
+`$mod` = Super (Windows Key)
 
-| File | Float mode | Full mode |
-|---|---|---|
-| `niri/config.kdl` | `gaps 4`, `geometry-corner-radius 8` | `gaps 0`, `geometry-corner-radius 0` |
-| `waybar/style.css` | `margin: 4px` on `.bar` | `margin: 0px` |
-| `fuzzel/fuzzel.ini` | `border.radius=8` | `border.radius=0` |
-
-After patching: `niri msg action reload-config` + `pkill -f waybar && waybar &`
+| Action | Niri Binding | Sway Binding | Command Executed |
+|---|---|---|---|
+| Terminal | `Mod+Return` | `Mod+Return` | `foot` |
+| App Launcher | `Mod+D` | `Mod+D` | `fuzzel` |
+| Web Browser | `Mod+B` | `Mod+B` | `firefox` |
+| File Manager | `Mod+E` | `Mod+E` | `foot -e n` (`nnn`) |
+| Close Window | `Mod+Q` | `Mod+Q` | Native compositor close |
+| Fullscreen | `Mod+F` | `Mod+F` | Native fullscreen toggle |
+| Toggle Gaps (Float ↔ Full) | `Mod+G` | `Mod+G` | `toggle-gaps.sh` |
+| Wallpaper Picker | `Mod+Shift+W` | `Mod+Shift+W` | `swayimg` gallery script |
+| Power Menu | `Mod+Shift+E` | `Mod+Shift+E` | `powermenu.sh` |
+| Area Screenshot | `Mod+Shift+S` | `Mod+Shift+S` | `grim -g "$(slurp)"` → wl-copy + file |
+| Toggle Bar | `Mod+O` | `Mod+O` | `pkill -USR1 waybar` or hide |
 
 ---
 
-## 9. Editing Workflow
+## 10. AI Agent Operational Workflow
 
-When an AI agent needs to change a config:
-
-1. **Check design tokens** (Section 2) before changing colors, fonts, or geometry.
-2. **Check gotchas** (Section 6) before writing any shell command.
-3. After editing dotfiles: `git -C ~/dotfiles add -A && git -C ~/dotfiles commit -m "..."`
-4. Changes take effect immediately since `~/.config/*` → `~/dotfiles/.config/*` are symlinks.
-5. For niri config changes: `niri msg action reload-config`
-6. For waybar changes: `pkill -f waybar && waybar &`
-7. For mako changes: `makoctl reload`
+When modifying or deploying this repository:
+1. **Run Pre-Flight Audit (Section 4)** to understand the host system before modifying files.
+2. **Respect Design Tokens (Section 2)**: Never change hex colors or radiuses arbitrarily.
+3. **Keep Scripts Executable**: Any new `.sh` or `.py` script must have `chmod +x`.
+4. **Commit Cleanly**:
+   ```bash
+   git -C ~/dotfiles add -A
+   git -C ~/dotfiles commit -m "feat/fix: <clear summary>"
+   ```
+5. **Verify live changes**:
+   - Niri: `niri msg action reload-config`
+   - Sway: `swaymsg reload`
+   - Waybar: `pkill -f waybar && waybar &`
+   - Mako: `makoctl reload`
