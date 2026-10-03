@@ -46,6 +46,9 @@ user_pref("network.dnsCacheExpiration", 3600);
 user_pref("network.dns.disableIPv6", true);
 // Enable HTTP/3 (QUIC/UDP) for Meta/Facebook multi-stream asset acceleration
 user_pref("network.http.http3.enable", true);
+// Captive Portal Detection (Tự động phát hiện & hiện thanh đăng nhập Wi-Fi trường học/công cộng)
+user_pref("network.captive-portal-service.enabled", true);
+user_pref("captivedetect.canonicalURL", "http://detectportal.firefox.com/canonical.html");
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
