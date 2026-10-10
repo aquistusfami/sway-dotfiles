@@ -134,6 +134,7 @@ environment {
 // --- AUTOSTART ---
 spawn-at-startup "dbus-update-activation-environment" "--all"
 spawn-at-startup "fcitx5" "-d"
+spawn-at-startup "anyrun" "daemon"
 spawn-at-startup "kanshi"
 spawn-at-startup "mpd"
 spawn-at-startup "mpd-mpris"
@@ -151,6 +152,7 @@ binds {
     Mod+E { spawn "foot" "-a" "termfloat" "-T" "nnn File Manager" "/home/aquistus/.config/nnn/run-nnn.sh"; }
     Mod+M { spawn "foot" "-a" "rmpc" "-T" "rmpc Music Player" "-w" "980x620" "/home/aquistus/.config/niri/scripts/music-player.sh"; }
     Mod+D { spawn "fuzzel"; }
+    Mod+Space { spawn "anyrun"; }  // Spotlight (anyrun)
     Mod+Q { close-window; }
     Mod+Shift+Q { spawn "/home/aquistus/.config/niri/scripts/force-kill.sh"; }
     Mod+Shift+E { spawn "/home/aquistus/.config/niri/scripts/powermenu.sh"; }
@@ -211,7 +213,7 @@ binds {
     Mod+Shift+F { fullscreen-window; }
     Mod+C { center-column; }
     Mod+Shift+Space { toggle-window-floating; }
-    Mod+Space { switch-focus-between-floating-and-tiling; }
+    Mod+V { switch-focus-between-floating-and-tiling; }
     Mod+R { switch-preset-column-width; }
     Mod+Minus { set-column-width "-10%"; }
     Mod+Equal { set-column-width "+10%"; }

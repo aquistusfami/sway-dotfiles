@@ -1,0 +1,77 @@
+/* Anyrun — Acid Dark theme
+ * Design tokens from AGENT.md: bg #141419f2, fg #f5f5f7, accent #f3f99d,
+ * border #ffffff40, radius 8px. Typography: Geist (500) + Nerd/FontAwesome.
+ */
+
+@define-color bg rgba(20, 20, 25, 0.95);      /* #141419 @ f2 */
+@define-color fg #f5f5f7;
+@define-color dim #9a9aa1;
+@define-color accent #f3f99d;
+@define-color border rgba(255, 255, 255, 0.25);  /* #ffffff40 */
+@define-color sel rgba(243, 249, 157, 0.14);      /* accent tint */
+
+* {
+  font-family: "GeistMono Nerd Font", "JetBrainsMono Nerd Font", "Font Awesome 7 Free", "Font Awesome 7 Brands", monospace;
+}
+
+window {
+  background: transparent;
+}
+
+box.main {
+  margin: 0;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid @border;
+  background-color: @bg;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+text {
+  min-height: 36px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: @fg;
+  background: transparent;
+  caret-color: @accent;
+}
+
+.matches {
+  background: transparent;
+  margin-top: 2px;
+}
+
+list.plugin {
+  background: transparent;
+  margin: 0 2px;
+}
+
+box.plugin {
+  margin: 1px 0;
+}
+
+.match {
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: transparent;
+}
+
+.match:selected {
+  background-color: @sel;
+  box-shadow: inset 3px 0 0 @accent;
+}
+
+label.match {
+  font-size: 13px;
+  font-weight: 500;
+  color: @fg;
+}
+
+label.match.description {
+  font-size: 11px;
+  font-weight: 400;
+  color: @dim;
+}

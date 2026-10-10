@@ -1,0 +1,12 @@
+Config(
+  // Show "New Window" style desktop actions
+  desktop_actions: true,
+  max_entries: 6,
+  hide_description: true,
+  preprocess_exec_script: None,
+  // Terminal used for Terminal=true desktop entries
+  terminal: Some(Terminal(
+    command: "foot",
+    args: "-e {}",
+  )),
+)

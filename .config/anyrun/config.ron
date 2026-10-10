@@ -1,0 +1,37 @@
+Config(
+  // macOS Spotlight-like floating panel: top-center, translucent, rounded
+  x: Fraction(0.5),
+  y: Fraction(0.28),
+  width: Fraction(0.32),
+  height: Absolute(1),
+
+  hide_icons: false,
+  ignore_exclusive_zones: true,
+  layer: Overlay,
+  hide_plugin_info: true,
+  close_on_click: true,
+  show_results_immediately: false,
+  max_entries: None,
+
+  // Order = priority. Applications first when idle.
+  plugins: [
+    "libapplications.so",
+    "librink.so",
+    "libniri_focus.so",
+    "libwebsearch.so",
+    "libactions.so",
+    "libshell.so",
+    "libdictionary.so",
+    "libsymbols.so",
+    "libtranslate.so",
+  ],
+
+  keybinds: [
+    Keybind(key: "Return", action: Select),
+    Keybind(key: "Up", action: Up),
+    Keybind(key: "Down", action: Down),
+    Keybind(key: "ISO_Left_Tab", action: Up, shift: true),
+    Keybind(key: "Tab", action: Down),
+    Keybind(key: "Escape", action: Close),
+  ],
+)

@@ -1,0 +1,34 @@
+Config(
+  // Built-in power actions (lock, log out, power off, reboot, suspend, hibernate)
+  enable_power_actions: true,
+  custom_actions: [
+    (
+      title: "Lock Screen",
+      command: "swaylock -f",
+      description: "Lock the session",
+      icon: "system-lock-screen",
+      confirm: false,
+    ),
+    (
+      title: "Wallpaper Picker",
+      command: "/home/aquistus/.config/niri/scripts/wallpaper-picker.sh",
+      description: "Change desktop wallpaper",
+      icon: "preferences-desktop-wallpaper",
+      confirm: false,
+    ),
+    (
+      title: "Toggle Night Light",
+      command: "/home/aquistus/.config/niri/scripts/toggle-nightlight.sh",
+      description: "Toggle blue light filter",
+      icon: "night-light-symbolic",
+      confirm: false,
+    ),
+    (
+      title: "Screenshot Area",
+      command: "/home/aquistus/.config/niri/scripts/screenshot.sh area-file",
+      description: "Capture a region to file",
+      icon: "camera-photo",
+      confirm: false,
+    ),
+  ],
+)

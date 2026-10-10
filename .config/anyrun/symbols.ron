@@ -1,0 +1,14 @@
+Config(
+  prefix: ":sym",
+  symbols: {
+    "shrug": "¯\\_(ツ)_/¯",
+    "tableflip": "(╯°□°）╯︵ ┻━┻",
+    "unflip": "┬─┬ノ( º _ ºノ)",
+    "check": "✓",
+    "cross": "✗",
+    "arrow": "➜",
+    "star": "★",
+    "heart": "♥",
+  },
+  max_entries: 5,
+)

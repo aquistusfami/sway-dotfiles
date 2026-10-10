@@ -14,6 +14,7 @@ configs=(
     "waybar"
     "foot"
     "fuzzel"
+    "anyrun"
     "mako"
     "swaylock"
     "starship.toml"
