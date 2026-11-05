@@ -1,0 +1,19 @@
+# Quạt êm ~38-42°C. Sensors: k10temp temp1 = Tctl (CPU), amdgpu temp1 = edge (iGPU).
+sensors:
+  - hwmon: /sys/class/hwmon
+    name: k10temp
+    indices: [ 1 ]
+  - hwmon: /sys/class/hwmon
+    name: amdgpu
+    indices: [ 1 ]
+fans:
+  - tpacpi: /proc/acpi/ibm/fan
+levels:
+  - [ 0, 0, 38 ]
+  - [ 1, 36, 44 ]
+  - [ 2, 42, 50 ]
+  - [ 3, 48, 56 ]
+  - [ 5, 54, 65 ]
+  - [ 7, 62, 85 ]
+  # Nóng nhất thì quay tối đa, không trả cho EC "auto" (có thể quay chậm hơn level 7)
+  - [ "level disengaged", 80, 32767 ]
