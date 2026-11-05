@@ -1,0 +1,4 @@
+#!/bin/sh
+# NetworkManager dispatcher: re-apply the AC/battery Wi-Fi power save rule after every (re)connect.
+[ "$2" = up ] || exit 0
+exec /usr/local/bin/wifi-powersave-by-ac

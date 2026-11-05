@@ -1,0 +1,2 @@
+# Re-apply the Wi-Fi power save rule when the charger is plugged in or out.
+SUBSYSTEM=="power_supply", ATTR{type}=="Mains", ACTION=="change", RUN+="/usr/local/bin/wifi-powersave-by-ac"
