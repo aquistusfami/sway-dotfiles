@@ -37,18 +37,22 @@ user_pref("image.mem.decode_bytes_at_a_time", 32768);
 /** NETWORKING ***/
 user_pref("network.buffer.cache.size", 65535);
 user_pref("network.buffer.cache.count", 48);
-user_pref("network.http.max-connections", 1800);
-user_pref("network.http.max-persistent-connections-per-server", 10);
-user_pref("network.http.max-urgent-start-excessive-connections-per-host", 5);
-user_pref("network.http.request.max-start-delay", 5);
-user_pref("network.dnsCacheExpiration", 3600);
+// Connection limits: theo mặc định Firefox để phân bổ socket ổn định.
+// (1800/10 quá cao, dễ tranh chấp socket và nghẽn khi mạng yếu/đông thiết bị)
+user_pref("network.http.max-connections", 900);
+user_pref("network.http.max-persistent-connections-per-server", 6);
+user_pref("network.http.max-urgent-start-excessive-connections-per-host", 3);
+user_pref("network.http.request.max-start-delay", 10);
+// Cache DNS ngắn: đổi mạng (nhà <-> trường/công cộng) không bị trỏ sai IP
+user_pref("network.dnsCacheExpiration", 60);
 // Fix slow loading on networks without IPv6 WAN (bypasses AAAA queries & IPv6 timeouts)
 user_pref("network.dns.disableIPv6", true);
-// Enable HTTP/3 (QUIC/UDP) for Meta/Facebook multi-stream asset acceleration
-user_pref("network.http.http3.enable", true);
+// HTTP/3 (QUIC/UDP): off — school/public firewalls often drop UDP 443,
+// causing stalls until TCP fallback. TCP/1.1 & 2 are enough on Wi-Fi.
+user_pref("network.http.http3.enable", false);
 // Captive Portal Detection (Tự động phát hiện & hiện thanh đăng nhập Wi-Fi trường học/công cộng)
 user_pref("network.captive-portal-service.enabled", true);
-user_pref("captivedetect.canonicalURL", "http://detectportal.firefox.com/canonical.html");
+user_pref("network.connectivity-service.enabled", true);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
@@ -71,10 +75,7 @@ user_pref("browser.xul.error_pages.expert_bad_cert", true);
 user_pref("security.tls.enable_0rtt_data", false);
 
 /** DISK AVOIDANCE ***/
-user_pref("browser.cache.disk.enable", false);
 user_pref("browser.privatebrowsing.forceMediaMemoryCache", true);
-user_pref("media.memory_cache_max_size", 65536);
-user_pref("browser.sessionstore.interval", 60000);
 
 /** SHUTDOWN & SANITIZING ***/
 user_pref("privacy.history.custom", true);
@@ -173,11 +174,8 @@ user_pref("browser.preferences.moreFromMozilla", false);
 user_pref("browser.aboutConfig.showWarning", false);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("browser.aboutwelcome.enabled", false);
-user_pref("browser.profiles.enabled", false);
 
 /** THEME ADJUSTMENTS ***/
-user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
-user_pref("browser.compactmode.show", true);
 user_pref("browser.privateWindowSeparation.enabled", false); // WINDOWS
 
 /** AI ***/
@@ -228,7 +226,6 @@ user_pref("general.smoothScroll.stopDecelerationWeighting", "0.4");
  * START: MY OVERRIDES - RAM USAGE OPTIMIZATIONS                            *
 ****************************************************************************/
 // Limit content processes (balanced for 8-core/16-thread AMD Ryzen)
-user_pref("dom.ipc.processCount.webIsolated", 8);
 user_pref("dom.ipc.processCount", 8);
 
 // Back-Forward Cache (bfcache): allow instant back/forward navigation
@@ -247,7 +244,6 @@ user_pref("browser.cache.memory.max_entry_size", 32768); // 32 MB per object cap
 // Proactive Tab Unloading on memory constraints
 user_pref("browser.tabs.unloadOnLowMemory", true);
 user_pref("browser.tabs.min_inactive_duration_before_unload", 600000); // 10 minutes
-user_pref("browser.low_commit_space_threshold_mb", 2048);
 
 // Limit closed tab undo history retained in RAM
 user_pref("browser.sessionstore.max_tabs_undo", 8);
@@ -262,9 +258,6 @@ user_pref("media.memory_cache_max_size", 131072); // 128MB media buffer
 // Disable Accessibility service overhead (~60-100MB RAM)
 user_pref("accessibility.force_disabled", 1);
 
-// Garbage Collection responsiveness & memory freeing
-user_pref("javascript.options.mem.gc_incremental_slice", 10);
-user_pref("javascript.options.mem.high_water_mark", 128);
 
 /****************************************************************************
  * START: MY OVERRIDES - MINIMAL STYLE & ACID DARK INTEGRATION              *
@@ -275,8 +268,7 @@ user_pref("browser.compactmode.show", true);
 user_pref("browser.uidensity", 1); // Compact density
 user_pref("svg.context-properties.content.enabled", true);
 user_pref("widget.non-native-theme.scrollbar.style", 3); // Thin scrollbar
-user_pref("layout.css.color-scheme.content", 1); // Dark content pages by default
-user_pref("browser.in-content.dark-mode", true);
+user_pref("layout.css.prefers-color-scheme.content-override", 0); // dark pages by default
 user_pref("ui.systemUsesDarkTheme", 1);
 
 // Hide titlebar & use client-side decorations
@@ -303,7 +295,6 @@ user_pref("font.name.monospace.vi", "Geist Mono");
 user_pref("media.ffmpeg.vaapi.enabled", true);
 user_pref("media.hardware-video-decoding.enabled", true);
 user_pref("media.rdd-ffmpeg.enabled", true);
-user_pref("media.ffmpeg.low-latency.enabled", true);
 user_pref("media.av1.enabled", true);
 user_pref("gfx.webrender.all", true);
 
@@ -317,4 +308,17 @@ user_pref("apz.gtk.pinch_to_zoom.enabled", true);
 // OLED Wide Gamut (DCI-P3) Color Management & Crisp Text Rendering
 user_pref("gfx.color_management.mode", 1);
 user_pref("gfx.color_management.enablev4", true);
-user_pref("gfx.font_rendering.cleartype_params.subpixel_structure", 0);
+
+// DRM (Widevine) for Microsoft Stream / Netflix etc.
+user_pref("media.eme.enabled", true);
+user_pref("media.gmp-widevinecdm.enabled", true);
+user_pref("media.gmp-widevinecdm.visible", true);
+
+// Reset leftovers stuck in prefs.js from older configs (forced flags / experimental). Firefox defaults.
+user_pref("dom.ipc.processCount.webIsolated", 4);
+user_pref("layers.acceleration.force-enabled", false);
+user_pref("layout.frame_rate", -1); // follow monitor refresh (external Q27q-20 is 60Hz)
+user_pref("media.ffmpeg.low-latency.enabled", false);
+user_pref("media.hardware-video-decoding.force-enabled", false);
+user_pref("media.mediasource.experimental.enabled", false);
+user_pref("widget.dmabuf.force-enabled", false);

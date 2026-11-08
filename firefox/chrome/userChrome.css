@@ -1,244 +1,158 @@
 /* ==========================================================================
-   Firefox Minimal Acid Dark Theme (userChrome.css)
-   Tailored for Sway WM & Acid Dark theme (0px radius, compact, distraction-free)
+   Firefox Minimal (userChrome.css) — design D, Firefox 159 "Nova" UI
+   Flat, square, one surface color, Geist Mono text, green accent.
+   - Horizontal tabs: URL bar (left) + tabs (right) on one row.
+   - Vertical tabs (sidebar.verticalTabs): full-width URL bar + tab sidebar.
+   Selectors checked against Firefox 159 omni.ja. Old themes: git history.
    ========================================================================== */
 
 :root {
-    --bg-dark: #202020 !important;
-    --bg-panel: #282a36 !important;
-    --bg-hover: #323544 !important;
-    --border-color: #44475a !important;
-    --accent-pink: #ff6ac1 !important;
-    --accent-green: #5af78e !important;
-    --text-main: #eff0eb !important;
-    --text-dim: #9aa0a6 !important;
+    --uc-bg: #1b1b1b;
+    --uc-bg-deep: #0f0f0f;
+    --uc-bg-hover: #262626;
+    --uc-line: #2e2e2e;
+    --uc-text: #eff0eb;
+    --uc-dim: #9aa0a6;
+    --uc-accent: #5af78e;
+    --uc-mono: "Geist Mono", monospace;
+    --uc-urlbar-w: 420px; /* horizontal mode: width of the URL block */
 
-    --tab-min-height: 28px !important;
-    --urlbar-toolbar-height: 32px !important;
-    --urlbar-height: 26px !important;
-    --urlbar-min-height: 26px !important;
+    /* Firefox tokens: flatten Nova's rounded shapes */
     --tab-border-radius: 0px !important;
+    --urlbar-border-radius: 0px !important;
+    --urlbarview-border-radius: 0px !important;
+    --urlbar-inner-border-radius: 0px !important;
     --toolbarbutton-border-radius: 0px !important;
     --arrowpanel-border-radius: 0px !important;
-    font-family: "GeistMono Nerd Font", "Geist Mono", monospace !important;
+    --panel-border-radius: 0px !important;
+    --chrome-content-separator-color: var(--uc-line) !important;
+
+    /* URL bar + its dropdown use the theme's field colors */
+    --toolbar-field-background-color: var(--uc-bg-deep) !important;
+    --toolbar-field-background-color-focus: var(--uc-bg-deep) !important;
+    --toolbar-field-text-color: var(--uc-text) !important;
+    --toolbar-field-text-color-focus: var(--uc-text) !important;
+    --toolbar-field-border-color-focus: var(--uc-accent) !important;
+    --focus-outline-color: var(--uc-accent) !important;
+    --urlbarview-background-color-hover: var(--uc-bg-hover) !important;
+    --urlbarview-background-color-selected: var(--uc-bg-hover) !important;
+    --urlbarview-text-color-selected: var(--uc-accent) !important;
+
+    scrollbar-color: var(--uc-line) var(--uc-bg) !important;
+    scrollbar-width: thin !important;
 }
 
-/* Global Typography: Geist Mono (matches Sway, Foot, Waybar) */
-*,
-#navigator-toolbox,
-#TabsToolbar,
-.tabbrowser-tab,
-.tab-label,
-#nav-bar,
-#urlbar,
-#urlbar-input,
-.urlbar-input,
-#PersonalToolbar,
-menupopup,
-panel,
-findbar,
-tooltip {
-    font-family: "GeistMono Nerd Font", "Geist Mono", monospace !important;
-}
-
-/* 1. Hide Sway-redundant window controls & titlebar spacers */
-.titlebar-buttonbox-container,
-.titlebar-buttonbox,
-.titlebar-button,
-#window-controls,
-.titlebar-spacer,
-#TabsToolbar .titlebar-spacer {
+/* 1. niri manages windows: no min/max/close buttons, no flexible spaces */
+.titlebar-buttonbox-container, .titlebar-spacer, toolbarspring,
+#forward-button[disabled] {
     display: none !important;
 }
 
-/* 2. Unified Dark Toolbars */
+/* 2. One surface color for toolbar + sidebar */
+#navigator-toolbox, #browser, #sidebar-container {
+    background-color: var(--uc-bg) !important;
+}
 #navigator-toolbox {
-    background-color: var(--bg-dark) !important;
-    border-bottom: 1px solid var(--border-color) !important;
-    box-shadow: none !important;
+    border-bottom: 1px solid var(--uc-line) !important;
 }
-
-#TabsToolbar,
-#nav-bar,
-#PersonalToolbar {
-    background-color: var(--bg-dark) !important;
+#nav-bar, #TabsToolbar, #PersonalToolbar {
+    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
 
-/* 3. Compact Flat Tabs */
-#TabsToolbar {
-    min-height: 28px !important;
-    height: 28px !important;
+/* 3. Content area + sidebar panels: square, no shadow */
+.browserContainer {
+    --content-area-start-radius: 0px !important;
+}
+#sidebar {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline-color: var(--uc-line) !important;
 }
 
-#tabbrowser-tabs {
-    --tab-min-height: 28px !important;
-    min-height: 28px !important;
+/* 4. URL bar: square box, accent border on focus */
+.urlbar-background {
+    border: 1px solid var(--uc-line) !important;
+    border-radius: 0 !important;
+    outline: none !important;
+}
+#urlbar-input {
+    font-family: var(--uc-mono) !important;
+    font-size: 12px !important;
+    color: var(--uc-text) !important;
 }
 
-.tabbrowser-tab {
-    min-height: 28px !important;
-    height: 28px !important;
-    padding-inline: 0px !important;
-}
-
+/* 5. Tabs: flat; active = underline (horizontal) or left bar (vertical) */
 .tab-background {
-    border-radius: 0px !important;
-    margin-block: 0px !important;
-    box-shadow: none !important;
+    background: transparent !important;
     border: none !important;
-    border-top: 2px solid transparent !important;
+    border-radius: 0 !important;
 }
-
-/* Inactive tabs: completely flat & muted */
-.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-background {
-    background-color: transparent !important;
-    border-top-color: transparent !important;
+.tabbrowser-tab:hover > .tab-stack > .tab-background {
+    background: var(--uc-bg-hover) !important;
 }
-
-.tabbrowser-tab:not([selected]):not([visuallyselected]):hover .tab-background {
-    background-color: rgba(255, 255, 255, 0.04) !important;
+.tab-background[multiselected] {
+    outline: 1px solid var(--uc-accent) !important;
+    outline-offset: -1px !important;
 }
-
-.tabbrowser-tab:not([selected]):not([visuallyselected]) .tab-label {
-    font-family: "Geist Mono", monospace !important;
-    font-size: 11.5px !important;
-    color: #777777 !important;
-    font-weight: 400 !important;
+#tabbrowser-tabs[orient="horizontal"] .tab-background {
+    margin-block: 0 !important;
+    &[selected] { box-shadow: inset 0 -2px 0 var(--uc-accent) !important; }
 }
-
-.tabbrowser-tab:not([selected]):not([visuallyselected]):hover .tab-label {
-    color: var(--text-main) !important;
+#tabbrowser-tabs[orient="vertical"] .tab-background[selected] {
+    background: var(--uc-bg-hover) !important;
+    box-shadow: inset 2px 0 0 var(--uc-accent) !important;
 }
-
-/* Active tab: clean 2px top pink border, matching Sway focused container (#282a36) */
-.tabbrowser-tab[selected] .tab-background,
-.tabbrowser-tab[selected="true"] .tab-background,
-.tabbrowser-tab[visuallyselected] .tab-background {
-    background-color: var(--bg-panel) !important;
-    border-top: 2px solid var(--accent-pink) !important;
-    box-shadow: none !important;
+.tab-label, #vertical-tabs-newtab-button {
+    font-family: var(--uc-mono) !important;
+    font-size: 12px !important;
+    color: var(--uc-dim) !important;
 }
-
-.tabbrowser-tab[selected] .tab-label,
-.tabbrowser-tab[selected="true"] .tab-label,
-.tabbrowser-tab[visuallyselected] .tab-label {
-    font-family: "Geist Mono", monospace !important;
-    font-size: 11.5px !important;
-    color: var(--text-main) !important;
-    font-weight: 600 !important;
+.tabbrowser-tab:is([selected], :hover) .tab-label {
+    color: var(--uc-text) !important;
 }
-
-/* Tab close button: only show on hover, flat minimal */
-.tab-close-button {
-    border-radius: 0px !important;
-    padding: 2px !important;
-    margin-inline-end: 2px !important;
-    opacity: 0.5 !important;
-}
-
 .tabbrowser-tab:not(:hover) .tab-close-button {
     display: none !important;
 }
 
-.tab-close-button:hover {
-    opacity: 1 !important;
-    background-color: rgba(255, 92, 87, 0.2) !important;
-    color: #ff5c57 !important;
+/* 6. Horizontal tabs only: URL bar + tabs on one row */
+:root:has(#tabbrowser-tabs[orient="horizontal"]) {
+    #navigator-toolbox {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+    }
+    #toolbar-menubar, #PersonalToolbar { order: 0; width: 100% !important; }
+    #PersonalToolbar { order: 3; }
+    #nav-bar {
+        order: 1;
+        flex: 0 0 auto !important;
+    }
+    #urlbar-container {
+        width: var(--uc-urlbar-w) !important;
+        min-width: 0 !important;
+        flex: none !important;
+    }
+    #TabsToolbar {
+        order: 2;
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+    }
 }
 
-/* Remove tab separators */
-.tabbrowser-tab::before,
-.tabbrowser-tab::after {
-    display: none !important;
+/* 7. Menus, panels, find bar */
+menupopup, panel {
+    --panel-background: var(--uc-bg) !important;
+    --panel-border-color: var(--uc-line) !important;
 }
-
-/* 4. Compact Navbar & Narrow, Centered URL Bar */
-#nav-bar {
-    min-height: 32px !important;
-    height: 32px !important;
-    padding-block: 0px !important;
-    padding-inline: 4px !important;
-    margin: 0 !important;
+menupopup, tooltip, .urlbarView {
+    font-family: var(--uc-mono) !important;
 }
-
-/* Narrow & center URL bar container */
-#urlbar-container {
-    --urlbar-container-height: 32px !important;
-    min-height: 32px !important;
-    max-width: 520px !important;
-    margin-inline: auto !important;
-    padding: 2px 0 !important;
+menupopup :is(menuitem, menu)[_moz-menuactive] {
+    background-color: var(--uc-bg-hover) !important;
+    color: var(--uc-accent) !important;
 }
-
-#urlbar {
-    min-height: 28px !important;
-    border-radius: 0px !important;
-}
-
-#urlbar-background {
-    background-color: var(--bg-panel) !important;
-    border-radius: 0px !important;
-    border: 1px solid var(--border-color) !important;
-    box-shadow: none !important;
-}
-
-#urlbar[focused="true"] > #urlbar-background {
-    border-color: var(--accent-pink) !important;
-    box-shadow: none !important;
-}
-
-/* Center link in URL bar */
-#urlbar-input {
-    color: var(--text-main) !important;
-    font-family: "Geist Mono", monospace !important;
-    font-size: 12px !important;
-    text-align: center !important;
-}
-
-#urlbar[focused="true"] #urlbar-input {
-    text-align: left !important;
-}
-
-/* 5. Minimal Flat Buttons & Icons */
-toolbarbutton {
-    border-radius: 0px !important;
-}
-
-toolbarbutton:hover {
-    background-color: var(--bg-hover) !important;
-}
-
-/* 6. Dark Square Menus & Panels */
-menupopup,
-panel {
-    --panel-background: var(--bg-panel) !important;
-    --panel-border-color: var(--border-color) !important;
-    --panel-border-radius: 0px !important;
-    border-radius: 0px !important;
-}
-
-menupopup menuitem,
-menupopup menu {
-    border-radius: 0px !important;
-}
-
-menupopup menuitem:hover,
-menupopup menu:hover {
-    background-color: var(--bg-hover) !important;
-    color: var(--accent-pink) !important;
-}
-
-/* 7. Findbar */
 findbar {
-    background-color: var(--bg-dark) !important;
-    border-top: 1px solid var(--accent-pink) !important;
-    border-radius: 0px !important;
-}
-
-/* 8. Thin Sleek Scrollbar */
-:root {
-    scrollbar-color: var(--border-color) var(--bg-dark) !important;
-    scrollbar-width: thin !important;
+    background-color: var(--uc-bg) !important;
+    border-top: 1px solid var(--uc-line) !important;
 }
