@@ -1,4 +1,5 @@
 Config(
-  prefix: ":sh",
-  shell: None,
+  // Any text that is not matched by another plugin becomes a GoldenDict lookup.
+  prefix: "",
+  shell: Some("/home/aquistus/.config/anyrun/goldendict-lookup.sh"),
 )

@@ -4,7 +4,7 @@
 
 @-moz-document url("about:blank"), url("about:newtab"), url("about:home") {
     body, #root, .activity-stream {
-        background-color: #202020 !important;
-        color: #eff0eb !important;
+        background-color: #141419 !important;
+        color: #f5f5f7 !important;
     }
 }

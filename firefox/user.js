@@ -322,3 +322,4 @@ user_pref("media.ffmpeg.low-latency.enabled", false);
 user_pref("media.hardware-video-decoding.force-enabled", false);
 user_pref("media.mediasource.experimental.enabled", false);
 user_pref("widget.dmabuf.force-enabled", false);
+user_pref("sidebar.verticalTabs", false); // qutefox layout needs the horizontal tab strip

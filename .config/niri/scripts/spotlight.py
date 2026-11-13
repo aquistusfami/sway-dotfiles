@@ -31,7 +31,7 @@ def _app_dirs():
     dirs, seen = [], set()
     data_dirs = [f"{HOME}/.local/share"]
     data_dirs += os.environ.get("XDG_DATA_DIRS", "/usr/local/share:/usr/share").split(":")
-    data_dirs += ["/run/current-system/sw/share"]
+    data_dirs += ["/usr/share"]
     for d in data_dirs:
         appdir = str(Path(d) / "applications")
         if appdir not in seen:

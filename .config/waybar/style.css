@@ -53,11 +53,11 @@ tooltip label {
 }
 
 .modules-left {
-    margin-left: 4px;
+    margin-left: 0px;
 }
 
 .modules-right {
-    margin-right: 4px;
+    margin-right: 0px;
 }
 
 #window-box, #system, #tray, #clock-power {

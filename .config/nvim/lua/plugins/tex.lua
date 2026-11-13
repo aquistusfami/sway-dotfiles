@@ -7,15 +7,9 @@ return {
       -- PDF Viewer: Zathura with SyncTeX
       vim.g.vimtex_view_method = "zathura"
 
-      -- Compiler: Modern Tectonic Engine
-      vim.g.vimtex_compiler_method = "tectonic"
-      vim.g.vimtex_compiler_tectonic = {
-        options = {
-          "--synctex",
-          "--keep-logs",
-          "--keep-intermediates",
-        },
-      }
+      -- Use the installed TeX toolchain, including Unicode fonts for Vietnamese.
+      vim.g.vimtex_compiler_method = "latexmk"
+      vim.g.vimtex_compiler_latexmk_engines = { ["_"] = "-xelatex" }
 
       -- Clean ergonomics: Don't pop up quickfix for minor warnings
       vim.g.vimtex_quickfix_mode = 0

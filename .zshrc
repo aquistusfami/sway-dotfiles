@@ -18,8 +18,8 @@ export NNN_COLORS="5236"
 export NNN_FCOLORS="c1e2272e006033f7c6d6abc4"
 
 # Paths
-export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="$HOME/.local/bin:$HOME/.gemini/antigravity-cli/bin:$DOTNET_ROOT:$DOTNET_ROOT/tools:$PATH"
+export DOTNET_ROOT="/usr/share/dotnet"
+export PATH="$HOME/.local/bin:$HOME/.gemini/antigravity-cli/bin:$HOME/.dotnet/tools:$PATH"
 
 # ------------------------------------------------------------------------------
 # 1. Directory Navigation & Shell Behavior
@@ -98,12 +98,30 @@ alias neofetch='fastfetch'
 alias fc='footclient'
 alias boost-off='echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost'
 alias boost-on='echo 1 | sudo tee /sys/devices/system/cpu/cpufreq/boost'
-
-# iCTSV & DRL Tool
-ctsv() {
-    (xdg-open /home/aquistus/bktouch_analysis/activities_2026_1.html &) 2>/dev/null
-    python3 /home/aquistus/bktouch_analysis/export_html_scored.py "$@"
+# y: mở yazi, thoát ra thì cd theo thư mục đang xem
+y() {
+  local tmp cwd
+  tmp=$(mktemp -t yazi-cwd.XXXXXX)
+  yazi "$@" --cwd-file="$tmp"
+  IFS= read -r -d '' cwd < "$tmp"
+  [[ -n $cwd && $cwd != $PWD ]] && builtin cd -- "$cwd"
+  rm -f -- "$tmp"
 }
+# perf: bật/tắt profile hiệu năng TLP; tắt thì về mặc định theo nguồn (sạc=balanced, pin=power-saver)
+perf() {
+  if [[ $(powerprofilesctl get) == performance ]]; then
+    [[ $(</sys/class/power_supply/AC/online) == 1 ]] && powerprofilesctl set balanced || powerprofilesctl set power-saver
+  else
+    powerprofilesctl set performance
+  fi
+  powerprofilesctl get
+}
+
+# Cập nhật hệ thống Arch (pacman + AUR)
+alias update='yay -Syu'
+alias cleanup='yay -Yc && sudo paccache -rk2'
+
+# iCTSV & DRL Tool (TUI/CLI đặt tại ~/.local/bin/ctsv — xem `ctsv help`)
 alias drl='ctsv'
 
 # ------------------------------------------------------------------------------
@@ -182,3 +200,6 @@ fi
 if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
 fi
+
+# opencode
+export PATH=/home/aquistus/.opencode/bin:$PATH

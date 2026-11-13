@@ -3,7 +3,7 @@
 
 profile dual {
     output HDMI-A-1 mode 2560x1440@59.951Hz position 0,0 scale 1.25
-    output eDP-1 mode 2880x1800@120Hz position 2048,0 scale 1.5
+    output eDP-1 mode 2880x1800@120Hz position 2048,0 scale 2.0
 }
 
 profile docked {
@@ -12,5 +12,5 @@ profile docked {
 }
 
 profile single {
-    output eDP-1 mode 2880x1800@120Hz position 0,0 scale 1.5
+    output eDP-1 mode 2880x1800@120Hz position 0,0 scale 2.0
 }

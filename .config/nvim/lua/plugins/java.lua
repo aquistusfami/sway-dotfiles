@@ -4,6 +4,7 @@ return {
     "mfussenegger/nvim-jdtls",
     opts = function(_, opts)
       opts.cmd = opts.cmd or { vim.fn.exepath("jdtls") }
+      table.insert(opts.cmd, "--java-executable=" .. vim.fn.expand("~/.local/share/jdks/temurin-25/bin/java"))
 
       -- Cap JDTLS heap at 512MB to strictly optimize RAM on 8GB systems
       table.insert(opts.cmd, "--jvm-arg=-Xms64m")
@@ -13,6 +14,11 @@ return {
 
       opts.settings = vim.tbl_deep_extend("force", opts.settings or {}, {
         java = {
+          configuration = {
+            runtimes = {
+              { name = "JavaSE-21", path = "/usr/lib/jvm/java-21-openjdk", default = true },
+            },
+          },
           signatureHelp = { enabled = true },
           contentProvider = { preferred = "fernflower" },
           completion = {

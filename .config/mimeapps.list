@@ -1,5 +1,5 @@
 [Default Applications]
-inode/directory=nnn.desktop
+inode/directory=yazi.desktop
 application/x-maple-worksheet=maple2022.desktop
 application/x-maple=maple2022.desktop
 x-scheme-handler/jetbrains=jetbrainsd.desktop
@@ -15,9 +15,11 @@ application/x-extension-xhtml=firefox.desktop
 application/x-extension-xht=firefox.desktop
 x-scheme-handler/logseq=Logseq.desktop
 x-scheme-handler/discord=vesktop.desktop
+text/markdown=code.desktop
 
 [Added Associations]
-inode/directory=nnn.desktop;
+inode/directory=yazi.desktop;
 x-scheme-handler/http=firefox.desktop;
 x-scheme-handler/https=firefox.desktop;
 x-scheme-handler/chrome=firefox.desktop;
+text/markdown=code.desktop;

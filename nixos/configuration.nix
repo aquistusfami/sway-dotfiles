@@ -20,7 +20,8 @@
   boot.loader = {
     systemd-boot = {
       enable = true;
-      configurationLimit = 5;
+      # Giữ 3 bộ kernel (ESP 256M nhỏ, 5 bộ làm đầy boot)
+      configurationLimit = 3;
     };
     efi.canTouchEfiVariables = true;
   };
@@ -32,6 +33,11 @@
   ];
   boot.blacklistedKernelModules = [ "sp5100_tco" ];
 
+  # Regulatory domain VN: ath11k (QCNFA765) mặc định world "00" gây lỗi
+  # "Failed to set the requested Country regulatory setting" và hạn chế kênh
+  # 12/13 (2.4GHz) & DFS (5GHz) khi dùng mạng trường/nhà
+  boot.extraModprobeConfig = "options cfg80211 ieee80211_regdom=VN";
+
   # Network Kernel Optimizations (BBR + Low Latency TCP)
   boot.kernel.sysctl = {
     # Google BBR Congestion Control & FQ Pacing
@@ -41,14 +47,12 @@
     # Chống tụt tốc độ sau khi kết nối nhàn rỗi (Low Latency)
     "net.ipv4.tcp_slow_start_after_idle" = 0;
 
-    # TCP Fast Open cho cả client và server (giảm 1 RTT)
-    "net.ipv4.tcp_fastopen" = 3;
+    # TCP Fast Open client-only (1): 3 (client+server) bị một số firewall/middlebox
+    # ở trường xử lý sai làm handshake TCP bị trễ trên mạng Wi-Fi
+    "net.ipv4.tcp_fastopen" = 1;
 
     # Tự động dò MTU tối ưu để tránh phân mảnh gói tin
     "net.ipv4.tcp_mtu_probing" = 1;
-
-    # Tái sử dụng socket TIME_WAIT an toàn
-    "net.ipv4.tcp_tw_reuse" = 1;
 
     # Mở rộng hàng đợi gói tin card mạng (chống drop packet khi tải nặng)
     "net.core.netdev_max_backlog" = 16384;
@@ -158,7 +162,7 @@
       RADEON_DPM_PERF_LEVEL_ON_AC = "auto";
       RADEON_DPM_PERF_LEVEL_ON_BAT = "auto";
 
-      PCIE_ASPM_ON_AC = "default";
+      PCIE_ASPM_ON_AC = "powersave";
       PCIE_ASPM_ON_BAT = "powersupersave";
 
       WIFI_PWR_ON_AC = "off";
@@ -170,6 +174,12 @@
       USB_AUTOSUSPEND = 1;
       SOUND_POWER_SAVE_ON_BAT = 1;
       SOUND_POWER_SAVE_CONTROLLER_ON_BAT = "Y";
+
+      # --- Vi chỉnh bổ sung cho pin ---
+      # Tắt hardware watchdog (-0.3W nhỏ) & tắt Wake-on-LAN; ASPM mạnh hơn cả khi cắm sạc
+      NMI_WATCHDOG = "0";
+      WOL_DISABLE = "Y";
+      SCHED_POWERSAVE_ON_BAT = 1;
 
       # Battery health charging thresholds
       START_CHARGE_THRESH_BAT0 = 75;
@@ -239,16 +249,34 @@
       wifi.powersave = false; # Tắt powersave để giảm ping spikes & jitter khi dùng Wi-Fi
     };
     firewall = {
-      allowedTCPPorts = [ 53317 5900 3000 ];
-      allowedUDPPorts = [ 53317 5900 3000 ];
+      # Mở 53317 (LocalSend) & 3000 (dev), CHỈ cho mạng LAN/RFC1918, không ra Internet.
+      # LƯU Ý: extraInputRules chỉ có tác dụng với backend nftables; hệ đang dùng
+      # backend iptables nên phải dùng extraCommands (iptables) mới có hiệu lực.
+      extraCommands = ''
+        for net in 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16; do
+          iptables -A nixos-fw -s "$net" -p tcp --dport 53317 -j nixos-fw-accept
+          iptables -A nixos-fw -s "$net" -p udp --dport 53317 -j nixos-fw-accept
+          iptables -A nixos-fw -s "$net" -p tcp --dport 3000 -j nixos-fw-accept
+          iptables -A nixos-fw -s "$net" -p udp --dport 3000 -j nixos-fw-accept
+        done
+        for net in fe80::/10 fd00::/8; do
+          ip6tables -A nixos-fw -s "$net" -p tcp --dport 53317 -j nixos-fw-accept
+          ip6tables -A nixos-fw -s "$net" -p udp --dport 53317 -j nixos-fw-accept
+          ip6tables -A nixos-fw -s "$net" -p tcp --dport 3000 -j nixos-fw-accept
+          ip6tables -A nixos-fw -s "$net" -p udp --dport 3000 -j nixos-fw-accept
+        done
+      '';
     };
   };
 
-  # Local DNS Caching & Security (0ms cho các domain đã truy vấn)
+  # Local DNS Caching (Tat DNSSEC & DoT de tranh loi captive portal o truong hoc/cong cong)
   services.resolved = {
     enable = true;
-    dnssec = "allow-downgrade";
-    dnsovertls = "opportunistic";
+    # Cú pháp mới (systemd 261+); tắt DNSSEC/DoT để tránh lỗi captive portal mạng trường
+    settings = {
+      Resolve.DNSSEC = false;
+      Resolve.DNSOverTLS = false;
+    };
   };
 
   # Disable unused modem service
@@ -458,6 +486,7 @@
     ripgrep
     fd
     tree-sitter
+    opencode
 
     # --- CLI Utilities & Monitoring ---
     fastfetch
@@ -478,6 +507,7 @@
     # --- Sway / Wayland Desktop Utilities ---
     waybar
     fuzzel
+    anyrun
     nnn
     adwaita-icon-theme
     mako
@@ -528,6 +558,7 @@
     pnpm
     appimage-run
     vulkan-tools
+    libva-utils
     vscode
     # --- Python Data Stack ---
     (python3.withPackages (ps: with ps; [
@@ -542,24 +573,9 @@
     tesseract
 
     # --- LaTeX & Academic Publishing ---
-    tectonic
-    texmaker
-    (texliveMedium.withPackages (ps: with ps; [
-      xargs
-      bigfoot
-      fontawesome5
-      babel-vietnamese
-      enumitem
-      vntex
-      moderncv
-      fontspec
-      latexmk
-      titlesec
-      mdframed
-      thmtools
-      needspace
-      zref
-    ]))
+    texstudio
+    texliveFull
+    pympress
 
     # --- DevOps, Cloud & Databases ---
     postgresql
@@ -605,7 +621,8 @@
   # ============================================================================
   # services.blueman.enable = true;      # Not needed: dotfiles use bluetooth-scanner (TUI) & bluetoothctl
   # services.fwupd.enable = true;        # Disabled: saves ~50MB RAM & background CPU
-  services.cloudflare-warp.enable = true;
+  # Bật thủ công khi cần bằng warp-cli; tắt service tránh vỡ captive portal mạng trường
+  services.cloudflare-warp.enable = false;
   # services.openssh.enable = true;
   # programs.steam.enable = true;
   # ============================================================================

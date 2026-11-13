@@ -16,6 +16,28 @@ lock = threading.Lock()
 running = True
 status_msg = "Scanning for Wi-Fi networks..."
 trigger_rescan_event = threading.Event()
+connectivity_state = "unknown"
+
+def split_terse(value):
+    """Split nmcli terse output without treating escaped colons as delimiters."""
+    fields = []
+    field = []
+    escaped = False
+    for char in value.rstrip("\n"):
+        if escaped:
+            field.append(char)
+            escaped = False
+        elif char == "\\":
+            escaped = True
+        elif char == ":":
+            fields.append("".join(field))
+            field = []
+        else:
+            field.append(char)
+    if escaped:
+        field.append("\\")
+    fields.append("".join(field))
+    return fields
 
 def get_wifi_icons(signal, is_secured):
     if signal >= 75:
@@ -35,8 +57,9 @@ def get_wifi_device_and_ip():
             text=True, stderr=subprocess.DEVNULL
         )
         for line in dev_out.splitlines():
-            if line.endswith(":wifi"):
-                wifi_dev = line.split(":", 1)[0].strip()
+            fields = split_terse(line)
+            if len(fields) >= 2 and fields[1] == "wifi":
+                wifi_dev = fields[0].strip()
                 break
     except Exception:
         wifi_dev = ""
@@ -48,12 +71,24 @@ def get_wifi_device_and_ip():
                 text=True, stderr=subprocess.DEVNULL
             )
             for line in ip_out.splitlines():
-                if "IP4.ADDRESS" in line and ":" in line:
-                    active_ip = line.split(":", 1)[1].strip()
+                fields = split_terse(line)
+                if len(fields) >= 2 and fields[0].startswith("IP4.ADDRESS"):
+                    active_ip = fields[1].strip()
                     return
         except Exception:
             pass
     active_ip = ""
+
+def detect_connectivity():
+    global connectivity_state
+    try:
+        out = subprocess.check_output(
+            ["nmcli", "networking", "connectivity"],
+            text=True, stderr=subprocess.DEVNULL, timeout=6
+        )
+        connectivity_state = out.strip() or "unknown"
+    except Exception:
+        pass
 
 def fetch_saved_connections():
     global saved_conns
@@ -64,8 +99,9 @@ def fetch_saved_connections():
         )
         saved = set()
         for line in out.splitlines():
-            if line.endswith(":802-11-wireless"):
-                name = line.rsplit(":802-11-wireless", 1)[0].strip()
+            fields = split_terse(line)
+            if len(fields) >= 2 and fields[1] == "802-11-wireless":
+                name = fields[0].strip()
                 if name:
                     saved.add(name)
         with lock:
@@ -83,6 +119,7 @@ def scan_worker():
         if first_run or loop_count % 4 == 0:
             fetch_saved_connections()
             get_wifi_device_and_ip()
+            detect_connectivity()
 
         # Query currently active connection name from NetworkManager
         nm_active_ssid = None
@@ -92,8 +129,9 @@ def scan_worker():
                 text=True, stderr=subprocess.DEVNULL
             )
             for line in act_out.splitlines():
-                if ":802-11-wireless:" in line:
-                    nm_active_ssid = line.split(":802-11-wireless:", 1)[0].strip()
+                fields = split_terse(line)
+                if len(fields) >= 3 and fields[1] == "802-11-wireless":
+                    nm_active_ssid = fields[0].strip()
                     break
         except Exception:
             pass
@@ -116,7 +154,7 @@ def scan_worker():
             found_active_key = None
 
             for line in out.splitlines():
-                parts = line.split(":", 4)
+                parts = split_terse(line)
                 if len(parts) < 5:
                     continue
                 in_use = parts[0].strip() == "*"
@@ -214,6 +252,10 @@ def connect_network(ssid, password=None):
                 subprocess.run(["notify-send", "-i", "network-wireless", "Wi-Fi", f"Connected: {ssid}"])
                 fetch_saved_connections()
                 get_wifi_device_and_ip()
+                def _recheck():
+                    time.sleep(3)
+                    detect_connectivity()
+                threading.Thread(target=_recheck, daemon=True).start()
                 trigger_rescan_event.set()
             else:
                 err = res.stderr.strip() or res.stdout.strip()
@@ -336,21 +378,18 @@ def curses_main(stdscr):
 
     selected_idx = 0
     scroll_offset = 0
-    spinner = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
-    spin_idx = 0
 
     try:
         while True:
-            spin_idx = (spin_idx + 1) % len(spinner)
             max_y, max_x = stdscr.getmaxyx()
             stdscr.erase()
 
             with lock:
                 items = list(networks.items())
                 cur_saved = set(saved_conns)
-                cur_dev = wifi_dev
                 cur_ip = active_ip
                 cur_active_conn = active_conn
+                cur_conn_state = connectivity_state
 
             # Sort: Connected first -> Saved -> Signal strength descending -> Name
             def sort_key(item):
@@ -368,8 +407,8 @@ def curses_main(stdscr):
             items.sort(key=sort_key)
             total_items = len(items)
 
-            list_start_y = 5
-            visible_rows = max(1, max_y - 8)
+            list_start_y = 2
+            visible_rows = max(1, max_y - 6)
 
             # Clamp selection and auto-scroll viewport
             if total_items == 0:
@@ -386,111 +425,83 @@ def curses_main(stdscr):
 
             visible_slice = items[scroll_offset : scroll_offset + visible_rows]
 
-            # Header Line 0: Title & Meta Info
-            stdscr.attron(curses.color_pair(1) | curses.A_BOLD)
-            stdscr.addstr(0, 1, f"  WI-FI MANAGER {spinner[spin_idx]}")
-            stdscr.attroff(curses.color_pair(1) | curses.A_BOLD)
+            # Header: title (left) + active connection (right)
+            stdscr.attron(curses.A_BOLD)
+            stdscr.addstr(0, 1, "Wi-Fi")
+            stdscr.attroff(curses.A_BOLD)
 
-            dev_label = f"Dev: {cur_dev}  •  " if cur_dev else ""
-            meta_str = f"{dev_label}{total_items} Networks"
-            if max_x - len(meta_str) - 2 > 24:
-                stdscr.addstr(0, max_x - len(meta_str) - 2, meta_str, curses.A_DIM)
-
-            # Header Line 1: Active Connection Capsule
             if cur_active_conn:
                 act_ssid, act_band = cur_active_conn
-                ip_part = f" • {cur_ip}" if cur_ip else ""
-                conn_header = f" ● Connected: {act_ssid} ({act_band}){ip_part}"
-                stdscr.attron(curses.color_pair(2) | curses.A_BOLD)
-                stdscr.addstr(1, 1, conn_header[:max_x-2])
-                stdscr.attroff(curses.color_pair(2) | curses.A_BOLD)
+                ip_part = f"  {cur_ip}" if cur_ip else ""
+                head = f"{act_ssid} · {act_band.replace(' GHz', '')}{ip_part}"
+                stdscr.attron(curses.color_pair(2))
+                stdscr.addstr(0, max(4, max_x - len(head) - 2), head)
+                stdscr.attroff(curses.color_pair(2))
             else:
-                stdscr.addstr(1, 1, " ○ Disconnected (No active network)"[:max_x-2], curses.A_DIM)
+                stdscr.addstr(0, max(4, max_x - 16), "disconnected", curses.A_DIM)
 
-            # Header Line 2: Divider
-            stdscr.addstr(2, 1, "─" * (max_x - 2), curses.A_DIM)
-
-            # Header Line 3: Table Column Headers
-            col_header = "   SIG   SEC   SSID                      BAND     SECURITY      STATUS          SIGNAL"
-            stdscr.attron(curses.color_pair(7) | curses.A_BOLD)
-            stdscr.addstr(3, 0, col_header[:max_x-1])
-            stdscr.attroff(curses.color_pair(7) | curses.A_BOLD)
-
-            # Header Line 4: Sub-divider
-            stdscr.addstr(4, 1, "─" * (max_x - 2), curses.A_DIM)
+            stdscr.addstr(1, 1, "─" * (max_x - 2), curses.A_DIM)
 
             if not items:
-                stdscr.attron(curses.color_pair(1))
-                stdscr.addstr(6, 3, "Scanning for Wi-Fi networks... Please wait...")
-                stdscr.attroff(curses.color_pair(1))
+                stdscr.addstr(3, 3, "Scanning for Wi-Fi networks…", curses.A_DIM)
 
             # Render rows
+            band_counts = {}
+            for (ssid, _band), _d in items:
+                band_counts[ssid] = band_counts.get(ssid, 0) + 1
+            ssid_w = max(18, min(34, max_x - 36))
+
             for row_i, ((ssid, band), data) in enumerate(visible_slice):
                 row_y = list_start_y + row_i
-                if row_y >= max_y - 3:
+                if row_y >= max_y - 4:
                     break
 
                 idx = scroll_offset + row_i
                 is_connected = data["in_use"]
                 is_saved = ssid in cur_saved
                 sig = data["signal"]
-                sig_icon = get_wifi_icons(sig, data["is_secured"])
-                lock_icon = "" if data["is_secured"] else ""
-                sec_label = data["security"] if data["security"] and data["security"] != "--" else "Open"
-                if len(sec_label) > 12:
-                    sec_label = sec_label[:12]
 
-                # Signal visual meter (4 bars)
-                if sig >= 75:
-                    bars = "▂▄▆█"
-                elif sig >= 50:
-                    bars = "▂▄▆_"
-                elif sig >= 25:
-                    bars = "▂▄__"
-                else:
-                    bars = "▂___"
-
-                status_tag = ""
-                if is_connected:
-                    status_tag = "✔ Connected"
-                elif is_saved:
-                    status_tag = "★ Saved"
-
-                display_ssid = ssid[:24]
-                row_content = f"{sig_icon} {bars}  {lock_icon}   {display_ssid:<24}  {band:<7}  {sec_label:<12}  {status_tag:<14} [{sig:>3}%]"
-                row_content = row_content[:max_x - 4]
+                band_suffix = f"  {band.replace(' GHz', 'GHz')}" if band_counts.get(ssid, 0) > 1 else ""
+                status = "Connected" if is_connected else ("Saved" if is_saved else "")
+                name = f"{ssid}{band_suffix}"
+                line = f" {name:<{ssid_w}} {sig:>3}% {status}"[:max_x - 4]
 
                 if idx == selected_idx:
                     stdscr.attron(curses.color_pair(4) | curses.A_BOLD)
-                    stdscr.addstr(row_y, 0, f" ▶ {row_content:<{max_x-4}} ")
+                    stdscr.addstr(row_y, 1, f" {line:<{max_x-4}}")
                     stdscr.attroff(curses.color_pair(4) | curses.A_BOLD)
                 else:
                     if is_connected:
-                        stdscr.attron(curses.color_pair(2) | curses.A_BOLD)
+                        stdscr.attron(curses.color_pair(2))
                     elif is_saved:
                         stdscr.attron(curses.color_pair(3))
                     else:
                         stdscr.attron(curses.color_pair(6))
-
-                    stdscr.addstr(row_y, 0, f"   {row_content}")
-
+                    stdscr.addstr(row_y, 1, f"  {line}")
                     if is_connected:
-                        stdscr.attroff(curses.color_pair(2) | curses.A_BOLD)
+                        stdscr.attroff(curses.color_pair(2))
                     elif is_saved:
                         stdscr.attroff(curses.color_pair(3))
                     else:
                         stdscr.attroff(curses.color_pair(6))
 
-            # Bottom Divider
+            # Bottom: separator / status (portal-aware) / hints
             stdscr.addstr(max_y - 3, 1, "─" * (max_x - 2), curses.A_DIM)
 
-            # Footer Line -2: Status message
-            stdscr.attron(curses.color_pair(1))
-            stdscr.addstr(max_y - 2, 1, f"󰋼 {status_msg}"[:max_x-2])
-            stdscr.attroff(curses.color_pair(1))
+            if cur_conn_state == "portal":
+                stdscr.attron(curses.color_pair(5) | curses.A_BOLD)
+                stdscr.addstr(max_y - 2, 1, "Captive portal detected — press [p] to sign in"[:max_x-2])
+                stdscr.attroff(curses.color_pair(5) | curses.A_BOLD)
+            elif cur_conn_state == "limited":
+                stdscr.attron(curses.color_pair(5))
+                stdscr.addstr(max_y - 2, 1, "Limited connectivity — press [p] to open portal"[:max_x-2])
+                stdscr.attroff(curses.color_pair(5))
+            else:
+                stdscr.attron(curses.color_pair(1))
+                stdscr.addstr(max_y - 2, 1, f"{status_msg}"[:max_x-2])
+                stdscr.attroff(curses.color_pair(1))
 
-            # Footer Line -1: Keyboard shortcuts with bracket styling
-            footer = " [Enter] Connect  [d] Disconnect  [u] Forget  [p] Portal  [r] Rescan  [q] Exit "
+            footer = "[Enter] connect   [d] disconnect   [u] forget   [p] portal   [r] rescan   [q] exit"
             stdscr.addstr(max_y - 1, 1, footer[:max_x-2], curses.A_DIM)
 
             stdscr.refresh()
@@ -531,8 +542,14 @@ def curses_main(stdscr):
                 status_msg = "Rescanning networks..."
                 trigger_rescan_event.set()
             elif ch in (ord('p'), ord('P')):
-                status_msg = "Opening Captive Portal..."
-                subprocess.Popen(["firefox", "http://connectivitycheck.gstatic.com/generate_204"])
+                status_msg = "Opening Captive Portal sign-in page..."
+                detect_connectivity()
+                act = active_conn
+                if act and act[0].startswith("Hust"):
+                    portal_url = "http://hust.edu.vn"
+                else:
+                    portal_url = "http://connectivitycheck.gstatic.com/generate_204"
+                subprocess.Popen(["firefox", portal_url])
             elif ch in (ord('n'), ord('N')):
                 subprocess.Popen(["foot", "-a", "termfloat", "-T", "Network Manager (NMTUI)", "nmtui"])
             elif ch in (curses.KEY_UP, ord('k')):
